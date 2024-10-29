@@ -15,3 +15,9 @@
 ## Docs
 
 1. [PyGame Docs](https://www.pygame.org/docs/#tutorials)
+
+## Git Best Practices
+
+1. Always git pull before working on something new.
+1. Work on a separate branch.
+2. Make a PR that closes and issue and request a review.
