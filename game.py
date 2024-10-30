@@ -12,28 +12,27 @@ class GameObject:
         self.speed = speed
         self.image = image
         self.pos = image.get_rect().move(0, height)
-    def move(self):
+    def moveAlien(self):
         self.pos = self.pos.move(self.speed, 0)
         if self.pos.right > 820:
             self.pos.left = 0
-
-def move(self, up=False, down=False, left=False, right=False):
-  if right:
-      self.pos.right += self.speed
-  if left:
-      self.pos.right -= self.speed
-  if down:
-      self.pos.top += self.speed
-  if up:
-      self.pos.top -= self.speed
-  if self.pos.right > WIDTH:
-      self.pos.left = 0
-  if self.pos.top > HEIGHT-SPRITE_HEIGHT:
-      self.pos.top = 0
-  if self.pos.right < SPRITE_WIDTH:
-      self.pos.right = WIDTH
-  if self.pos.top < 0:
-      self.pos.top = HEIGHT-SPRITE_HEIGHT
+    def move(self, up=False, down=False, left=False, right=False):
+        if right:
+            self.pos.right += self.speed
+        if left:
+            self.pos.right -= self.speed
+        if down:
+            self.pos.top += self.speed
+        if up:
+            self.pos.top -= self.speed
+        if self.pos.right > WIDTH:
+            self.pos.left = 0
+        if self.pos.top > HEIGHT-SPRITE_HEIGHT:
+            self.pos.top = 0
+        if self.pos.right < SPRITE_WIDTH:
+            self.pos.right = WIDTH
+        if self.pos.top < 0:
+            self.pos.top = HEIGHT-SPRITE_HEIGHT
 
 screen = pygame.display.set_mode((HEIGHT, WIDTH))
 clock = pygame.time.Clock()            #get a pygame clock object
@@ -64,7 +63,7 @@ while True:
             sys.exit()
     screen.blit(p.image, p.pos)
     for o in objects:
-        o.move()
+        o.moveAlien()
         screen.blit(o.image, o.pos)
     pygame.display.update()
     clock.tick(60)

@@ -10,6 +10,8 @@
 
 4. pip install -r requirements.txt
 
+### If you install a new package, **pip freeze -> requirements.txt**
+
   
 
 ## Docs
@@ -18,6 +20,6 @@
 
 ## Git Best Practices
 
-1. Always git pull before working on something new.
+1. Always **git pull** and **pip install -r requirements.txt** before working on something new.
 1. Work on a separate branch.
 2. Make a PR that closes and issue and request a review.
