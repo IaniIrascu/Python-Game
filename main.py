@@ -1,13 +1,13 @@
-import pygame
+import pygame as pg
 import sys
 sys.path.append('./assets')
-from main_menu import MainMenu
+from main_menu.main_menu import MainMenu
 from game import Game
 from level import Level
 from assets.colors import *
 
-pygame.init()  # initialize pygame
-clock = pygame.time.Clock()  # get a pygame clock object
+pg.init()  # initialize pg
+clock = pg.time.Clock()  # get a pg clock object
 
 game = Game()  # creating the game object
 menu = MainMenu()  # creating the menu scene
@@ -32,5 +32,5 @@ while True:
     if game_scenes_active["level"]:
         result = game.get_scene("Level").run()
 
-    pygame.display.update()
+    pg.display.update()
     clock.tick(60)

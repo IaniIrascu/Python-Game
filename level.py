@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 from game import Game
 from assets.colors import *
 
