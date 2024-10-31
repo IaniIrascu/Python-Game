@@ -6,8 +6,14 @@ from game import Game
 from level import Level
 from assets.colors import *
 
+
 pg.init()  # initialize pg
 clock = pg.time.Clock()  # get a pg clock object
+
+# music starts here
+pg.mixer.init()
+sound = pg.mixer.Sound("./SoEff/metin.mp3")
+sound.play()
 
 game = Game()  # creating the game object
 menu = MainMenu()  # creating the menu scene
@@ -24,6 +30,9 @@ while True:
     if game_scenes_active["main_menu"]:
         result = game.get_scene("Menu").run()
         if result == "Start":
+            sound.stop()
+            sound = pg.mixer.Sound("./SoEff/mario-forever-bowser-battle-music.mp3")
+            sound.play()
             game_scenes_active["main_menu"] = False
             game_scenes_active["level"] = True
         elif result == "Load":
