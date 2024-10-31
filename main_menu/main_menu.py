@@ -1,10 +1,8 @@
 import sys
+import pygame as pg
 
-import pygame
-from prompt_toolkit.key_binding.bindings.mouse import MOUSE_DOWN
-from pygame import MOUSEBUTTONDOWN
 
-from button import *
+from main_menu.button import *
 from game import Game
 
 class MainMenu(Game):
@@ -38,10 +36,10 @@ class MainMenu(Game):
         quit_button = self.buttons["Quit"]
         load_button = self.buttons["Load"]
 
-        for event in pygame.event.get():
-            if event.type == MOUSEBUTTONDOWN:
-                if pygame.mouse.get_pressed()[0]:
-                    mouse_pos = pygame.mouse.get_pos()
+        for event in pg.event.get():
+            if event.type == pg.MOUSEBUTTONDOWN:
+                if pg.mouse.get_pressed()[0]:
+                    mouse_pos = pg.mouse.get_pos()
                     print(mouse_pos)
                     # check if mouse is on start button
                     if (start_button.position[0] <= mouse_pos[0] <= start_button.position[0] + start_button.size[0] and

@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg 
 from colors import *
 
 class Button:
@@ -41,4 +41,4 @@ class Button:
         self.update_button()
 
     def update_button(self):
-        pygame.draw.rect(self.screen, self.color, (self.position[0], self.position[1], self.size[0], self.size[1]))
+        pg.draw.rect(self.screen, self.color, (self.position[0], self.position[1], self.size[0], self.size[1]))
