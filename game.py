@@ -2,19 +2,18 @@ import pygame as pg
 import sys
 from main_menu.main_menu import MainMenu
 from map.map import Map
+from sprites.sprites import Sprite
+from sprites.player import Player
 
-WINDOW_HEIGHT = 1280
-WINDOW_WIDTH = 720
+WINDOW_HEIGHT = 1920
+WINDOW_WIDTH = 1080
 
 class Game:
     def __init__(self):
-        self.screen = pg.display.set_mode((WINDOW_HEIGHT, WINDOW_WIDTH))
+        self.display_surface = pg.display.set_mode((WINDOW_HEIGHT, WINDOW_WIDTH))
         self.scenes = {}
         self.current_scene = None
-        pass
-
-    def get_screen(self):
-        return self.screen
+        self.all_sprites = pg.sprite.Group()
 
     # current scene
     def set_current_scene(self, scene_name):
@@ -54,7 +53,9 @@ class Game:
 
             if game_scenes_active["map"]:
                 result = self.get_scene("Map").run()
+                self.all_sprites.draw(self.display_surface)
             
+
             pg.display.update()
             clock.tick(60)
 
