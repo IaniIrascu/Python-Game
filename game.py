@@ -1,8 +1,14 @@
 import pygame as pg
+import sys
+from main_menu.main_menu import MainMenu
+from map.map import Map
+
+WINDOW_HEIGHT = 1280
+WINDOW_WIDTH = 720
 
 class Game:
     def __init__(self):
-        self.screen = pg.display.set_mode((0, 0), pg.FULLSCREEN)
+        self.screen = pg.display.set_mode((WINDOW_HEIGHT, WINDOW_WIDTH))
         self.scenes = {}
         self.current_scene = None
         pass
@@ -28,3 +34,34 @@ class Game:
     def delete_scene(self, scene_name):
         if scene_name in self.scenes:
             self.scenes.pop(scene_name)
+
+    def run(self):
+        pg.init()  # initialize pg
+        clock = pg.time.Clock()  # get a pg clock object
+        menu = MainMenu()  # creating the menu scene
+        map = Map()
+        self.add_scene("Menu", menu)
+        self.add_scene("Map", map)
+        game_scenes_active = {"main_menu": True, "map": False}
+        while True:
+            if game_scenes_active["main_menu"]:
+                result = self.get_scene("Menu").run()
+                if result == "Start":
+                    game_scenes_active["main_menu"] = False
+                    game_scenes_active["map"] = True
+                elif result == "Load":
+                    game_scenes_active["main_menu"] = False
+
+            if game_scenes_active["map"]:
+                result = self.get_scene("Map").run()
+            
+            pg.display.update()
+            clock.tick(60)
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    sys.exit()
+                if event.type == pg.KEYDOWN:
+                    pg.quit()
+                    sys.exit()
