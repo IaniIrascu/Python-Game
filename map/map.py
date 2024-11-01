@@ -7,8 +7,12 @@ TILE_SIZE = 64
 class Map:
     def __init__(self):
         self.display_surface = pg.display.get_surface()
-        self.maps = import_tmx("..", "maps", "assets")
+        self.maps = import_tmx("map", "assets", "maps")
+
+    def test(self):
+        for key, value in self.maps:
+            print(key, value)
     
-    def render(self, position):
+    def render(self):
         for x, y, image in self.maps.get_layer_by_name("Terrain").tiles():
             Sprite((x * TILE_SIZE, y * TILE_SIZE), image, self.all_sprites)

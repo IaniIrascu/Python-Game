@@ -1,6 +1,7 @@
 import sys
 import pygame as pg
 from main_menu.button import *
+from utils.colors import *
 
 class MainMenu():
     def __init__(self):
@@ -26,14 +27,15 @@ class MainMenu():
                 if pg.mouse.get_pressed()[0]:
                     mouse_pos = pg.mouse.get_pos()
                     print(mouse_pos)
-                    # check if mouse is on start button
+
                     if (start_button.position[0] <= mouse_pos[0] <= start_button.position[0] + start_button.size[0] and
                         start_button.position[1] <= mouse_pos[1] <= start_button.position[1] + start_button.size[1]):
                         return "Start"
+
                     if (load_button.position[0] <= mouse_pos[0] <= load_button.position[0] + load_button.size[0] and
                         load_button.position[1] <= mouse_pos[1] <= load_button.position[1] + load_button.size[1]):
                         return "Load"
-                    # check if button is on quit button
+
                     if (quit_button.position[0] <= mouse_pos[0] <= quit_button.position[0] + quit_button.size[0] and
                         quit_button.position[1] <= mouse_pos[1] <= quit_button.position[1] + quit_button.size[1]):
-                        sys.exit()
+                        return "Quit"
