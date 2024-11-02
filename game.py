@@ -40,21 +40,22 @@ class Game:
         game_scenes_active = {"main_menu": True, "map": False, "choose_save": False}
 
         while True:
-            map.test()
-            if game_scenes_active["main_menu"]:
-                result = self.get_scene("Menu").run()
-                if result == "Start":
-                    game_scenes_active["main_menu"] = False
-                    game_scenes_active["map"] = True
-                elif result == "Load":
-                    game_scenes_active["main_menu"] = False
-                    game_scenes_active["choose_save"] = True
-                elif result == "Quit":
-                    pg.quit()
-                    sys.exit()
+            # uncomment when buttons work
+
+            # if game_scenes_active["main_menu"]:
+            #     result = self.get_scene("Menu").run()
+            #     if result == "Start":
+            #         game_scenes_active["main_menu"] = False
+            #         game_scenes_active["map"] = True
+            #     elif result == "Load":
+            #         game_scenes_active["main_menu"] = False
+            #         game_scenes_active["choose_save"] = True
+            #     elif result == "Quit":
+            #         pg.quit()
+            #         sys.exit()
 
             if game_scenes_active["map"]:
-                result = self.get_scene("Map").render()
+                self.get_scene("Map").render()
                 self.all_sprites.draw(self.display_surface)
             
             pg.display.update()
