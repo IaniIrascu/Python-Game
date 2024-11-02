@@ -59,7 +59,7 @@ pluggy==0.13.0
 ply==3.11
 py==1.10.0
 pycurl==7.45.3
-pygame==2.6.1
+pygame-ce==2.5.2
 Pygments==2.11.2
 PyGObject==3.42.1
 PyJWT==2.3.0
@@ -72,6 +72,7 @@ pytest==6.2.5
 python-apt==2.4.0+ubuntu3
 python-dateutil==2.9.0.post0
 pythran==0.10.0
+PyTMX==3.32
 pytz==2022.1
 PyYAML==5.4.1
 requests==2.31.0
