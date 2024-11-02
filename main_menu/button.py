@@ -1,13 +1,19 @@
-import pygame as pg 
+import pygame as pg
+import pygame.font
 from colors import *
 
+DEFAULT_SIZE = (200, 100)
+DEFAULT_BUTTON_COLOR = BLACK
+DEFAULT_POSITION = (0, 0)
+
 class Button:
-    def __init__(self, screen, name, color, position, size):
-        self.name = name
+    def __init__(self, display_surface = None, position = DEFAULT_POSITION, size = DEFAULT_SIZE, color = DEFAULT_BUTTON_COLOR):
         self.position = position
         self.size = size
         self.color = color
-        self.screen = screen
+        self.display_surface = display_surface
+        self.button_surface = pygame.Surface(size)
+        self.rect = pygame.Rect(position[0], position[1], size[0], size[1])
         pass
 
     # getters
@@ -26,19 +32,45 @@ class Button:
     # setters
     def set_name(self, name):
         self.name = name
-        self.update_button()
 
     def set_position(self, position):
         self.position = position
-        self.update_button()
 
     def set_size(self, size):
         self.size = size
-        self.update_button()
 
     def set_color(self, color):
         self.color = color
-        self.update_button()
 
-    def update_button(self):
-        pg.draw.rect(self.screen, self.color, (self.position[0], self.position[1], self.size[0], self.size[1]))
+    #CREATING THE BUTTONS
+    def add_surface_over_button(self, surface):
+        surface_rect = surface.get_rect()
+        surface_rect.center = (self.button_surface.get_width() // 2, self.button_surface.get_height() // 2)
+        self.button_surface.blit(surface, surface_rect)
+        if self.display_surface is not None:
+            self.display_surface.blit(self.button_surface, self.position)
+        else:
+            print("No display surface for your button")
+
+    def create_button(self):
+        if self.display_surface is not None:
+            self.display_surface.blit(self.button_surface, self.position)
+        else:
+            print("No display surface for your button")
+
+    def add_text(self, font, text, font_color):
+        # Adding the text over the buttons
+        text_surface = font.render(text, True, font_color, None)
+        #Adding text over button
+        self.add_surface_over_button(text_surface)
+
+    def add_image(self, image_name, scale_factor = 1):
+        # Adding the image over the buttons surface
+        image_surface = pg.image.load(image_name).convert_alpha()
+        image_surface = pg.transform.scale(image_surface, (scale_factor * self.size[0], scale_factor * self.size[1]))
+        #Adding the image on the button
+        self.add_surface_over_button(image_surface)
+
+
+
+

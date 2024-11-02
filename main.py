@@ -1,3 +1,4 @@
+import pygame
 import pygame as pg
 import sys
 sys.path.append('./assets')
@@ -6,11 +7,12 @@ from game import Game
 from level import Level
 from assets.colors import *
 
-pg.init()  # initialize pg
+pg.init() # initialize pg
+pygame.mixer.init()
 clock = pg.time.Clock()  # get a pg clock object
 
 game = Game()  # creating the game object
-menu = MainMenu()  # creating the menu scene
+menu = MainMenu(game.screen, clock)  # creating the menu scene
 level = Level()
 
 game.add_scene("Menu", menu)  # adding menu to game)
