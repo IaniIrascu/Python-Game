@@ -32,6 +32,10 @@ class Game:
         pg.init()
         clock = pg.time.Clock()
 
+        pg.mixer.init()
+        pg.mixer.music.load("./utils/sounds/metin.mp3")
+        pg.mixer.music.play(-1)
+
         menu = MainMenu()
         map = Map()
         map.render
