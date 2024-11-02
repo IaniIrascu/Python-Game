@@ -38,7 +38,6 @@ class Game:
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)
         game_scenes_active = {"main_menu": True, "map": False, "choose_save": False}
-
         while True:
             # uncomment when buttons work
 
@@ -53,10 +52,13 @@ class Game:
             #     elif result == "Quit":
             #         pg.quit()
             #         sys.exit()
+            # if game_scenes_active["map"]:
+            self.get_scene("Map").render(self.all_sprites)
 
-            if game_scenes_active["map"]:
-                self.get_scene("Map").render()
-                self.all_sprites.draw(self.display_surface)
+            for sprite in self.all_sprites:
+                if not isinstance(sprite.image, pg.Surface):
+                    print(f"Invalid image for sprite: {sprite}")
+            self.all_sprites.draw(self.display_surface)
             
             pg.display.update()
             clock.tick(60)
