@@ -36,33 +36,27 @@ class Game:
         pg.mixer.music.load("./utils/sounds/metin.mp3")
         pg.mixer.music.play(-1)
 
-        menu = MainMenu()
+        menu = MainMenu(self.display_surface, clock)
         map = Map()
         map.render
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)
         game_scenes_active = {"main_menu": True, "map": False, "choose_save": False}
         while True:
-            # uncomment when buttons work
-
-            # if game_scenes_active["main_menu"]:
-            #     result = self.get_scene("Menu").run()
-            #     if result == "Start":
-            #         game_scenes_active["main_menu"] = False
-            #         game_scenes_active["map"] = True
-            #     elif result == "Load":
-            #         game_scenes_active["main_menu"] = False
-            #         game_scenes_active["choose_save"] = True
-            #     elif result == "Quit":
-            #         pg.quit()
-            #         sys.exit()
-            # if game_scenes_active["map"]:
-            self.get_scene("Map").render(self.all_sprites)
-
-            for sprite in self.all_sprites:
-                if not isinstance(sprite.image, pg.Surface):
-                    print(f"Invalid image for sprite: {sprite}")
-            self.all_sprites.draw(self.display_surface)
+            if game_scenes_active["main_menu"]:
+                result = self.get_scene("Menu").run()
+                if result == "Start":
+                    game_scenes_active["main_menu"] = False
+                    game_scenes_active["map"] = True
+                elif result == "Load":
+                    game_scenes_active["main_menu"] = False
+                    game_scenes_active["choose_save"] = True
+                elif result == "Quit":
+                    pg.quit()
+                    sys.exit()
+            if game_scenes_active["map"]:
+                self.get_scene("Map").render(self.all_sprites)
+                self.all_sprites.draw(self.display_surface)
             
             pg.display.update()
             clock.tick(60)
