@@ -1,5 +1,5 @@
-import random
 import sys
+from os.path import join
 import pygame as pg
 from utils.functions import *
 import pygame.mouse
@@ -17,7 +17,7 @@ class MainMenu:
         self.background_surface = pg.Surface((display_surface.get_width(), display_surface.get_height()))
         self.buttons = {}
         self.clock = clock
-        self.font = pygame.font.Font('./assets/Minecraft.ttf', 32)
+        self.font = pygame.font.Font(join(".", "main_menu", "assets", "minecraft.ttf"), 32)
 
     # Modifying menu background
     def set_menu_background(self, background):
@@ -38,7 +38,7 @@ class MainMenu:
     def run(self):
 
         # Setting up the background
-        background = pg.image.load('./assets/Pokemon_background.jpg')
+        background = pg.image.load(join(".", "main_menu", "assets", "Pokemon_background.jpg"))
         background = pg.transform.scale(background, (self.display_surface.get_width(), self.display_surface.get_height()))
         self.background_surface.blit(background, (0, 0))
 
@@ -72,15 +72,15 @@ class MainMenu:
         settings_button = self.buttons["Settings"]
 
         # Animation for buttons
-        pop_sfx = pg.mixer.Sound('./assets/pop_sfx.mp3')
+        pop_sfx = pg.mixer.Sound(join(".", "main_menu", "assets", "pop_sfx.mp3"))
         self.display_surface.blit(self.background_surface, (0, 0))
         for button_name in self.buttons:
             pg.display.update()
             if button_name == "Settings":
-                self.buttons[button_name].add_image('./assets/button.jpg', 1)
-                self.buttons[button_name].add_image('./assets/settings.png', 2.5)
+                self.buttons[button_name].add_image(join(".", "main_menu", "assets", "button.jpg"), 1)
+                self.buttons[button_name].add_image(join(".", "main_menu", "assets", "settings.png"), 2.5)
             else:
-                self.buttons[button_name].add_image('./assets/button.jpg', 1)
+                self.buttons[button_name].add_image(join(".", "main_menu", "assets", "button.jpg"), 1)
                 self.buttons[button_name].add_text(self.font, button_name, WHITE)
             self.display_surface.blit(self.button_surface, (0 ,0))
             pop_sfx.play()

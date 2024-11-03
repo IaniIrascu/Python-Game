@@ -1,6 +1,6 @@
 import pygame as pg
 import pygame.font
-from colors import *
+from utils.colors import *
 
 DEFAULT_SIZE = (200, 100)
 DEFAULT_BUTTON_COLOR = BLACK
