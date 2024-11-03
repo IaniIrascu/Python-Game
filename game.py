@@ -17,6 +17,7 @@ class Game:
 
     # returns the object related to the name
     def get_scene(self, scene_name):
+        # returns the object related to the name
         return self.scenes[scene_name]
 
     def add_scene(self, scene_name, scene):
