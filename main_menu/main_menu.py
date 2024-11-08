@@ -11,12 +11,11 @@ button_sizes = {"Start": (200, 100),
                 "Settings": (75, 75)}
 
 class MainMenu:
-    def __init__(self, display_surface = None, clock = None):
+    def __init__(self, display_surface = None):
         self.display_surface = display_surface
         self.button_surface = pg.Surface((display_surface.get_width(), display_surface.get_height()), pg.SRCALPHA)  # Transparent surface
         self.background_surface = pg.Surface((display_surface.get_width(), display_surface.get_height()))
         self.buttons = {}
-        self.clock = clock
         self.font = pygame.font.Font(join(".", "main_menu", "assets", "minecraft.ttf"), 32)
 
     # Modifying menu background
@@ -35,12 +34,15 @@ class MainMenu:
         if button_name in self.buttons:
             self.buttons.pop(button_name)
 
-    def run(self):
+    def run(self, clock):
 
         # Setting up the background
         background = pg.image.load(join(".", "main_menu", "assets", "pokemon_background.jpg"))
         background = pg.transform.scale(background, (self.display_surface.get_width(), self.display_surface.get_height()))
         self.background_surface.blit(background, (0, 0))
+
+        # reset button_surface
+        self.button_surface.blit(background, (0, 0))
 
         # creating the buttons if menu was run for the first time
         if not self.buttons:
@@ -112,4 +114,4 @@ class MainMenu:
                             pg.quit()
                             sys.exit()
             pg.display.update()
-            self.clock.tick(60)
+            clock.tick(60)
