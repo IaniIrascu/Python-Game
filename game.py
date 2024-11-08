@@ -4,6 +4,7 @@ from main_menu.main_menu import MainMenu
 from map.map import Map
 from sprites.sprites import Sprite
 from sprites.player import Player
+from inamici.inamici import Inamic
 
 WINDOW_HEIGHT = 1920
 WINDOW_WIDTH = 1080
@@ -38,7 +39,10 @@ class Game:
 
         menu = MainMenu(self.display_surface, clock)
         map = Map()
-        map.render
+
+        inamic1 = Inamic(self.display_surface, (100, 100), None, 100, 100, "IDK")
+        inamic1.animation_frames("./inamici/assets/Charmadillo.png")
+
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)
         game_scenes_active = {"main_menu": True, "map": False, "choose_save": False}
@@ -57,6 +61,7 @@ class Game:
             if game_scenes_active["map"]:
                 self.get_scene("Map").render(self.all_sprites)
                 self.all_sprites.draw(self.display_surface)
+
             
             pg.display.update()
             clock.tick(60)

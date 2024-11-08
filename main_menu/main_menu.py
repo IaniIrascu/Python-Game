@@ -38,7 +38,7 @@ class MainMenu:
     def run(self):
 
         # Setting up the background
-        background = pg.image.load(join(".", "main_menu", "assets", "Pokemon_background.jpg"))
+        background = pg.image.load(join(".", "main_menu", "assets", "pokemon_background.jpg"))
         background = pg.transform.scale(background, (self.display_surface.get_width(), self.display_surface.get_height()))
         self.background_surface.blit(background, (0, 0))
 
