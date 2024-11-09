@@ -5,7 +5,7 @@ from main_menu.main_menu import MainMenu
 from map.map import Map
 from sprites.sprites import Sprite
 from sprites.player import Player
-from inamici.inamici import Inamic
+from pokemoni.pokemon import Pokemon
 from battle_screen.battle_screen import Battle_screen
 
 WINDOW_HEIGHT = 1920
@@ -31,7 +31,6 @@ class Game:
             self.scenes.pop(scene_name)
 
     def run(self):
-
         pg.init()
         clock = pg.time.Clock()
 
@@ -44,14 +43,14 @@ class Game:
         map = Map()
 
         # Creare lista inamici
-        enemies = []
-        enemies_file_names = ["Atrox.png", "Charmadillo.png", "Cindrill.png", "Cleaf.png", "Draem.png", "Finiette.png",
+        pokemons = []
+        pokemons_file_names = ["Atrox.png", "Charmadillo.png", "Cindrill.png", "Cleaf.png", "Draem.png", "Finiette.png",
                               "Finsta.png", "Friolera.png", "Gulfin.png", "Ivieron.png", "Jacana.png", "Larvea.png",
                               "Pluma.png", "Plumette.png", "Pouch.png", "Sparchu.png"]
 
-        for i, enemy_name in enumerate(enemies_file_names):
-            enemies.append(Inamic())
-            enemies[i].animation_frames("./inamici/assets/" + enemy_name)
+        for i, enemy_name in enumerate(pokemons_file_names):
+            pokemons.append(Pokemon())
+            pokemons[i].animation_frames("./pokemoni/assets/" + enemy_name, 2)
 
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)
@@ -72,10 +71,14 @@ class Game:
                     sys.exit()
             if game_scenes_active["battle_screen"]:
                 # Se aleg 3 inamici random din lista
-                battle_enemies = [enemies[random.randint(0, len(enemies) - 1)],
-                                  enemies[random.randint(0, len(enemies) - 1)],
-                                  enemies[random.randint(0, len(enemies) - 1)]]
+                battle_enemies = [pokemons[random.randint(0, len(pokemons) - 1)],
+                                  pokemons[random.randint(0, len(pokemons) - 1)],
+                                  pokemons[random.randint(0, len(pokemons) - 1)]]
+                player_pokemons = [pokemons[random.randint(0, len(pokemons) - 1)],
+                                  pokemons[random.randint(0, len(pokemons) - 1)],
+                                  pokemons[random.randint(0, len(pokemons) - 1)]]
                 battle_screen.load_enemies(battle_enemies)
+                battle_screen.load_player_pokemons(player_pokemons)
                 # Se ruleaza battle screen
                 result = self.get_scene("Battle_screen").run(clock)
                 if result == "MainMenu":
@@ -85,8 +88,6 @@ class Game:
                 self.get_scene("Map").render(self.all_sprites)
                 self.all_sprites.draw(self.display_surface)
 
-
-            
             pg.display.update()
             clock.tick(60)
 

@@ -29,6 +29,9 @@ class Button:
     def get_name(self):
         return self.name
 
+    def get_button_surface(self):
+        return self.button_surface
+
     # setters
     def set_name(self, name):
         self.name = name
@@ -42,19 +45,18 @@ class Button:
     def set_color(self, color):
         self.color = color
 
+    def set_button_surface(self, size):
+        self.button_surface = pygame.Surface(size)
+
     #CREATING THE BUTTONS
     def add_surface_over_button(self, surface):
         surface_rect = surface.get_rect()
         surface_rect.center = (self.button_surface.get_width() // 2, self.button_surface.get_height() // 2)
         self.button_surface.blit(surface, surface_rect)
-        if self.display_surface is not None:
-            self.display_surface.blit(self.button_surface, self.position)
-        else:
-            print("No display surface for your button")
 
-    def create_button(self):
+    def create_button(self, scale_factor = 1):
         if self.display_surface is not None:
-            self.display_surface.blit(self.button_surface, self.position)
+            self.display_surface.blit(pg.transform.scale_by(self.button_surface, scale_factor), self.position)
         else:
             print("No display surface for your button")
 
@@ -70,6 +72,7 @@ class Button:
         image_surface = pg.transform.scale(image_surface, (scale_factor * self.size[0], scale_factor * self.size[1]))
         #Adding the image on the button
         self.add_surface_over_button(image_surface)
+
 
 
 

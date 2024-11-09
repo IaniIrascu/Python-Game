@@ -5,12 +5,13 @@ ANIMATION_FRAMES = 8
 FRAMESPERWIDTH = 4
 FRAMESPERHEIGHT = 2
 
-class Inamic():
+class Pokemon():
     def __init__(self, health = 0, energy = 0, name = "NoName"):
         self.health = health
         self.energy = energy
         self.name = name
-        self.frames = []
+        self.animations = [] # This is a list of lists of frames
+        self.frames = [] # This one contains all the frames
         self.size = None
 
     def get_frame(self, frame_no):
@@ -19,7 +20,7 @@ class Inamic():
         print("Frame not in list")
 
     # Functia creeaza frame-urile de animatie si le pune intr-o lista de frame-uri
-    def animation_frames(self, image):
+    def animation_frames(self, image, scale = 1):
         image = pg.image.load(image)
         frame_width = int(image.get_width() / FRAMESPERWIDTH)
         frame_height = int(image.get_height() / FRAMESPERHEIGHT)
@@ -29,9 +30,10 @@ class Inamic():
                 index = int(FRAMESPERWIDTH * (i / frame_height) + j / frame_width)
                 self.frames.append(pg.Surface((frame_width, frame_height), pg.SRCALPHA))
                 self.frames[index].blit(image, (0, 0), (j, i, frame_width, frame_height))
+                pg.transform.scale(self.frames[index], (frame_width * scale, frame_height * scale))
 
     # Animatie
-    # def start_animation(self, display_surface, clock):
+    # def (self, display_surface, clock):
     #     i = 0
     #     time_between_frames = 100
     #     last_update = 0
