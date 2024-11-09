@@ -48,9 +48,9 @@ class Game:
                               "Finsta.png", "Friolera.png", "Gulfin.png", "Ivieron.png", "Jacana.png", "Larvea.png",
                               "Pluma.png", "Plumette.png", "Pouch.png", "Sparchu.png"]
 
-        for i, enemy_name in enumerate(pokemons_file_names):
-            pokemons.append(Pokemon())
-            pokemons[i].animation_frames("./pokemoni/assets/" + enemy_name, 2)
+        for i, pokemon_name in enumerate(pokemons_file_names):
+            pokemons.append(Pokemon(name = pokemon_name))
+            pokemons[i].animation_frames("./pokemoni/assets/" + pokemon_name, 2)
 
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)

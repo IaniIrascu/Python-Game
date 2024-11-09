@@ -147,7 +147,6 @@ class MainMenu:
                                 create_settings_button_surface(self.buttons)
                             else:
                                 create_text_button_surface(self.buttons, button_name, self.font)
-
                     else:
                         reset_buttons_original(self.buttons, button_name, self.font)
 
