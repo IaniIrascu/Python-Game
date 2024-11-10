@@ -60,7 +60,9 @@ class Game:
             pokemons[i].set_health(pokemons_info[pokemon_name]["health"])
             pokemons[i].set_energy(pokemons_info[pokemon_name]["energy"])
             pokemons[i].set_size(pokemons_info[pokemon_name]["size"])
+            pokemons[i].set_attack(pokemons_info[pokemon_name]["attack"])
             pokemons[i].animation_frames("./pokemoni/assets/" + pokemon_name)
+            pokemons[i].attack_frames_animation("./pokemoni/attacks/assets/" + pokemons_info[pokemon_name]["attacksprites"])
 
             # Creare ability_screen
             ability_screen = Ability_screen()

@@ -4,8 +4,12 @@ from main_menu.button import Button
 from utils.colors import *
 
 def create_text_button_surface(buttons, button_name, font):
-    buttons[button_name].add_image("./main_menu/assets/button.jpg")
-    buttons[button_name].add_text(font, button_name, BLACK)
+    if button_name != "X":
+        buttons[button_name].add_image("./main_menu/assets/button.jpg")
+        buttons[button_name].add_text(font, button_name, BLACK)
+    else:
+        buttons["X"].get_button_surface().set_colorkey((0, 0, 0))
+        buttons["X"].add_text(font, button_name, (1, 1, 1))
 
 class Ability_screen():
     def __init__(self):
@@ -42,16 +46,13 @@ class Ability_screen():
         buttons = []
         attack_button = Button(display_surface = self.button_surface,
                               position = (60, self.button_surface.get_height() / 4),
-                              size = (self.size[0] - 150, self.size[1] / 6),
-                              color = RED)
+                              size = (self.size[0] - 150, self.size[1] / 6))
         special_ability_button = Button(display_surface=self.button_surface,
-                                        position=(60, self.button_surface.get_height() / 2),
-                                        size = (self.size[0] - 150, self.size[1] / 6),
-                                        color = RED)
+                                        position=(60, 3 * self.button_surface.get_height() / 4),
+                                        size = (self.size[0] - 150, self.size[1] / 6))
         x_button = Button(display_surface = self.button_surface,
-                          position = (60, 3 * self.button_surface.get_height() / 4),
-                          size = (self.size[0] - 150, self.size[1] / 6),
-                          color = RED)
+                          position = (self.button_surface.get_width() - 125, 40),
+                          size = (45, 45))
 
         buttons.append(attack_button)
         buttons.append(special_ability_button)
@@ -60,7 +61,7 @@ class Ability_screen():
         # Adding buttons to dictionary
         self.add_button("Attack", attack_button)
         self.add_button("Special", special_ability_button)
-        self.add_button("XButton", x_button)
+        self.add_button("X", x_button)
 
         for button_name in self.buttons:
             # Se creeaza butonul

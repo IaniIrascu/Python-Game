@@ -1,6 +1,8 @@
 import pygame as pg
 import sys
 
+SPEEDOFANIMATION = 1 / 8  # Valoare intre (0 si 1)
+
 def check_button_pressed(mouse_pos, ability_screen, ability_screen_position):
     buttons = ability_screen.get_buttons()
     for button_name in buttons:
@@ -19,7 +21,7 @@ class Battle_screen():
         self.enemies = []
         self.player_pokemons = []
         self.positions_on_screen = [(175, self.display_surface.get_height() / 2 - 100),
-                                    (self.display_surface.get_width() - 175 - 350, self.display_surface.get_height() / 2 - 100)]
+                                    (self.display_surface.get_width() - 525, self.display_surface.get_height() / 2 - 100)]
         self.active_pokemons = [None, None]
 
     def load_enemies(self, enemies):
@@ -66,9 +68,15 @@ class Battle_screen():
         for index in range(number_of_enemies):
             dead_enemy.append(False)
 
+        # Variabile cu care determin daca meniul de abilitati este vizibil sau daca se porneste animatia de attack
         add_ability_surface = False
+        add_attack = [False, False]
+        # Frameul la care incepe animatia de atac
+        initial_frame = 0
+
+        # Pozitia meniului cu abilitati
         ability_screen_position = (self.pokemons_surface.get_width() / 2 - 200, 100)
-        print(self.enemies)
+
         while True:
             # creare enemies_surface cu frame-urile aferente
             self.pokemons_surface.blit(self.background_surface, (0, 0))
@@ -76,24 +84,42 @@ class Battle_screen():
                 if not dead_pokemon[index]:
                     self.active_pokemons[0] = player_pokemon
                     active_pokemon_index = index
-                    self.pokemons_surface.blit(pg.transform.flip(player_pokemon.get_frame(int(frame / 16) % 4 + 1), flip_x = True, flip_y = False),
-                                               self.positions_on_screen[0])
+                    # Player attacking
+                    if add_attack[0]:
+                        self.pokemons_surface.blit(pg.transform.flip(player_pokemon.get_frame(int((frame - initial_frame) * SPEEDOFANIMATION) % 4 + 5), flip_x=True, flip_y=False),
+                            self.positions_on_screen[0])
+
+                    # Player idling
+                    else:
+                        self.pokemons_surface.blit(pg.transform.flip(player_pokemon.get_frame(int(frame * SPEEDOFANIMATION) % 4 + 1), flip_x=True, flip_y=False),
+                            self.positions_on_screen[0])
+
+                    # Player selected pokemon
                     if selected[0]:
                         self.pokemons_surface.blit(select_square,
                                                    self.positions_on_screen[0])
+
+                    # Player opened ability menu
                     if add_ability_surface:
                         self.pokemons_surface.blit(self.active_pokemons[0].get_ability_screen().get_ability_screen_surface(),
                                                   ability_screen_position)
                     break
                 else:
+                    # No alive pokemon was found
                     self.active_pokemons[0] = None
 
             for index, enemy in enumerate(self.enemies):
                 if not dead_enemy[index]:
                     self.active_pokemons[1] = enemy
                     active_enemy_index = index
-                    self.pokemons_surface.blit(enemy.get_frame(int(frame / 16) % 4 + 1),
-                                               self.positions_on_screen[1])
+                    # Enemy attacking
+                    if add_attack[1]:
+                        self.pokemons_surface.blit(self.active_pokemons[1].get_frame(int((frame - initial_frame) * SPEEDOFANIMATION) % 4 + 5),
+                                                   self.positions_on_screen[1])
+                    # Enemy idling
+                    else:
+                        self.pokemons_surface.blit(enemy.get_frame(int(frame * SPEEDOFANIMATION) % 4 + 1),
+                                                   self.positions_on_screen[1])
                     if selected[1]:
                         self.pokemons_surface.blit(select_square,
                                                    self.positions_on_screen[1])
@@ -101,6 +127,45 @@ class Battle_screen():
                 else:
                     self.active_pokemons[1] = None
 
+            # Se porneste animatia de atac pentru 48 de frame-uri
+            if add_attack[0]:
+                if int((frame - initial_frame) * SPEEDOFANIMATION) <= 3:
+                    self.pokemons_surface.blit(self.active_pokemons[0].get_attack_frame(int((frame - initial_frame) * SPEEDOFANIMATION) % 4 + 1),
+                                               self.positions_on_screen[1])
+                else:
+                    add_attack[0] = False
+                    add_attack[1] = True
+                    health = self.active_pokemons[1].get_health()
+                    health -= (self.active_pokemons[0].get_attack() + 30)  # Atac pokemon
+                    # Verify if enemy died after the last attack
+                    if health <= 0:
+                        add_attack[1] = False  # Inamicul nu mai ataca
+                        dead_enemy[active_enemy_index] = True  # Inamicul moare
+                        if dead_enemy[len(self.enemies) - 1]: # Daca a murit ultimul inamic se trece in meniu
+                            return "MainMenu"
+                    else:
+                        self.active_pokemons[1].set_health(health)
+
+                        # Se incepe atacul inamicului
+                        initial_frame = frame
+
+            # Atacul inamicului
+            if add_attack[1]:
+                if int((frame - initial_frame) * SPEEDOFANIMATION) <= 3:
+                    self.pokemons_surface.blit(self.active_pokemons[1].get_attack_frame(int((frame - initial_frame) * SPEEDOFANIMATION) % 4 + 1),
+                                               self.positions_on_screen[0])
+                else:
+                    add_attack[1] = False
+                    health = self.active_pokemons[0].get_health()
+                    health -= self.active_pokemons[1].get_attack() # Atac inamic
+                    if health <= 0:
+                        dead_pokemon[active_pokemon_index] = True # Pokemonul moare
+                        if dead_pokemon[len(self.player_pokemons) - 1]: # Ultimul pokemon e mort
+                            return "MainMenu"
+                    else:
+                        self.active_pokemons[0].set_health(health)
+
+            # Se verifica daca toti pokemonii mei sunt morti sau toti inamicii sunt morti
             if self.active_pokemons[0] is None or self.active_pokemons[1] is None:
                 return "MainMenu"
 
@@ -133,8 +198,14 @@ class Battle_screen():
                 if add_ability_surface:
                     if event.type == pg.MOUSEBUTTONDOWN:
                         if pg.mouse.get_pressed()[0] == 1:
-                            result = check_button_pressed(mouse_pos, self.active_pokemons[0].get_ability_screen(), ability_screen_position)
-                            if result == "XButton":
+                            result = check_button_pressed(mouse_pos,
+                                                          self.active_pokemons[0].get_ability_screen(),
+                                                          ability_screen_position)
+                            if result == "X":
+                                add_ability_surface = False
+                            if result == "Attack" and add_attack[0] == False:
+                                add_attack[0] = True
+                                initial_frame = frame
                                 add_ability_surface = False
 
                 pokemon_rect = pg.Rect(self.positions_on_screen[1][0],
