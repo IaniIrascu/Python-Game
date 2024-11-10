@@ -101,8 +101,7 @@ class MainMenu:
         for button_name in self.buttons:
             reset_buttons_original(self.buttons, button_name, self.font)
 
-        # Animation for buttons
-        pop_sfx = pg.mixer.Sound(join(".", "main_menu", "assets", "pop_sfx.mp3"))
+        # pop_sfx = pg.mixer.Sound(join(".", "main_menu", "assets", "pop_sfx.mp3"))
         self.display_surface.blit(self.background_surface, (0, 0))
 
         for button_name in self.buttons:
@@ -115,7 +114,6 @@ class MainMenu:
             # Adding the button to the all button surface
             self.buttons[button_name].create_button()
             self.display_surface.blit(self.button_surface, (0 ,0))
-            # Play sound and wait half a second
 
         pg.display.update()
 

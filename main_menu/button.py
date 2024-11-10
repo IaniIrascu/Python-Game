@@ -60,6 +60,9 @@ class Button:
         else:
             print("No display surface for your button")
 
+    def add_color(self):
+        self.button_surface.fill(self.color)
+
     def add_text(self, font, text, font_color):
         # Adding the text over the buttons
         text_surface = font.render(text, True, font_color, None)

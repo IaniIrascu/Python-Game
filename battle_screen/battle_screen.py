@@ -1,6 +1,5 @@
 import pygame as pg
 import sys
-from pokemoni.pokemon import Pokemon
 
 class Battle_screen():
     def __init__(self, display_surface):
@@ -9,6 +8,8 @@ class Battle_screen():
         self.background_surface = pg.Surface(display_surface.get_size(), pg.SRCALPHA)
         self.enemies = []
         self.player_pokemons = []
+        self.positions_on_screen = [(150, 400), (1300, 400)]
+        self.active_pokemons = [None, None]
 
     def load_enemies(self, enemies):
         self.enemies = enemies
@@ -16,31 +17,32 @@ class Battle_screen():
     def load_player_pokemons(self, player_pokemons):
         self.player_pokemons = player_pokemons
 
+    def get_active_pokemons(self):
+        return self.active_pokemons
+
+    def get_enemies(self):
+        return self.enemies
+
+    def get_player_pokemons(self):
+        return self.player_pokemons
+
+    # RUN
     def run(self, clock):
         # Creare suprafata background
         background = pg.image.load('./battle_screen/assets/forest.png')
         background = pg.transform.scale(background, (self.display_surface.get_width(), self.display_surface.get_height()))
         self.background_surface.blit(background, (0, 0))
 
-        active_pokemon = self.player_pokemons[0]
-        active_enemy = self.enemies[0]
         active_pokemon_index = 0
         active_enemy_index = 0
-        enemy_position = (1300, 400)
-        player_pokemon_position = (150, 400)
-
+        self.active_pokemons = [self.player_pokemons[0], self.enemies[0]]
         frame = 0
 
-        arrow = pg.image.load('./battle_screen/assets/sageata.png')
-        arrow.set_colorkey((255, 255, 255))
-        arrow.convert_alpha()
-
-        # Sageti pentru evidentierea alegerii pokemonului
-        left_arrow = pg.transform.scale(arrow, (50, 50))
-        right_arrow = pg.transform.rotate(left_arrow, 180)
-
-        add_arrow = [False, False]
-        arrow_pos = (0, 0)
+        select_square = pg.image.load('./battle_screen/assets/select.png')
+        select_square.set_colorkey((255, 255, 255))
+        select_square.convert_alpha()
+        select_square = pg.transform.scale(select_square, self.active_pokemons[0].get_size())
+        selected = [False, False]
 
         # Numarul de inamici si nr de pokemoni pe care ii are playerul activi in momentul acela
         number_of_enemies = len(self.enemies)
@@ -58,29 +60,32 @@ class Battle_screen():
             self.pokemons_surface.blit(self.background_surface, (0, 0))
             for index, enemy in enumerate(self.enemies):
                 if not dead_enemy[index]:
-                    active_enemy = enemy
+                    self.active_pokemons[1] = enemy
                     active_enemy_index = index
-                    self.pokemons_surface.blit(enemy.get_frame(int(frame / 16) % 4 + 1), enemy_position)
+                    self.pokemons_surface.blit(enemy.get_frame(int(frame / 16) % 4 + 1),
+                                               self.positions_on_screen[1])
+                    if selected[1]:
+                        self.pokemons_surface.blit(select_square,
+                                                   self.positions_on_screen[1])
                     break
                 else:
-                    active_enemy = None
+                    self.active_pokemons[1] = None
 
             for index, player_pokemon in enumerate(self.player_pokemons):
                 if not dead_pokemon[index]:
-                    active_pokemon = player_pokemon
+                    self.active_pokemons[0] = player_pokemon
                     active_pokemon_index = index
-                    self.pokemons_surface.blit(pg.transform.flip(player_pokemon.get_frame(int(frame / 16) % 4 + 1), flip_x = True, flip_y = False), player_pokemon_position)
+                    self.pokemons_surface.blit(pg.transform.flip(player_pokemon.get_frame(int(frame / 16) % 4 + 1), flip_x = True, flip_y = False),
+                                               self.positions_on_screen[0])
+                    if selected[0]:
+                        self.pokemons_surface.blit(select_square,
+                                                   self.positions_on_screen[0])
                     break
                 else:
-                    active_pokemon = None
+                    self.active_pokemons[0] = None
 
-            if active_pokemon is None or active_enemy is None:
+            if self.active_pokemons[0] is None or self.active_pokemons[0] is None:
                 return "MainMenu"
-
-            if add_arrow[0]:
-                self.pokemons_surface.blit(left_arrow, arrow_pos)
-            elif add_arrow[1]:
-                self.pokemons_surface.blit(right_arrow, arrow_pos)
 
             # Combinare suprafete si afisare
             self.display_surface.blit(self.pokemons_surface, (0, 0))
@@ -96,35 +101,32 @@ class Battle_screen():
 
                 # checking if pokemon is clicked or if cursor is on it
                 # add an arrow to indicate that the pokemon was selected
-                pokemon_rect = pg.Rect(player_pokemon_position[0],
-                                       player_pokemon_position[1],
-                                       active_pokemon.get_size()[0],
-                                       active_pokemon.get_size()[1])
+                pokemon_rect = pg.Rect(self.positions_on_screen[0][0],
+                                       self.positions_on_screen[0][1],
+                                       self.active_pokemons[0].get_size()[0],
+                                       self.active_pokemons[0].get_size()[1])
                 if pokemon_rect.collidepoint(mouse_pos):
                     if event.type == pg.MOUSEBUTTONDOWN:
                         if pg.mouse.get_pressed()[0] == 1:
-                            dead_pokemon[active_pokemon_index] = True
+                            self.active_pokemons[0].set_ability_screen(self.pokemons_surface)
+                            self.active_pokemons[0].get_ability_screen().run()
                             print(active_pokemon_index)
-                    add_arrow[0] = True
-                    arrow_pos = (player_pokemon_position[0] + active_pokemon.get_size()[0],
-                                 player_pokemon_position[1] + active_pokemon.get_size()[1] / 2 - 25)
+                    selected[0] = True
                 else:
-                    add_arrow[0] = False
+                    selected[0] = False
 
-                pokemon_rect = pg.Rect(enemy_position[0],
-                                       enemy_position[1],
-                                       active_enemy.get_size()[0],
-                                       active_enemy.get_size()[1])
+                pokemon_rect = pg.Rect(self.positions_on_screen[1][0],
+                                       self.positions_on_screen[1][1],
+                                       self.active_pokemons[1].get_size()[0],
+                                       self.active_pokemons[1].get_size()[1])
                 if pokemon_rect.collidepoint(mouse_pos):
                     if event.type == pg.MOUSEBUTTONDOWN:
                         if pg.mouse.get_pressed()[0] == 1:
                             dead_enemy[active_enemy_index] = True
                             print(active_enemy_index)
-                    add_arrow[1] = True
-                    arrow_pos = (enemy_position[0] - 50,
-                                 enemy_position[1] + active_enemy.get_size()[1] / 2 - 25)
+                    selected[1] = True
                 else:
-                    add_arrow[1] = False
+                    selected[1] = False
 
             pg.display.update()
             frame += 1
