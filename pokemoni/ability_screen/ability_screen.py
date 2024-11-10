@@ -4,16 +4,26 @@ from main_menu.button import Button
 from utils.colors import *
 
 def create_text_button_surface(buttons, button_name, font):
-    buttons[button_name].add_color()
+    buttons[button_name].add_image("./main_menu/assets/button.jpg")
     buttons[button_name].add_text(font, button_name, BLACK)
 
 class Ability_screen():
     def __init__(self):
-        self.size = (300, 600)
+        self.size = (400, 700)
         self.buttons = {}
-        self.button_surface = pg.Surface(self.size)
-        self.background_surface = pg.Surface(self.size)
+        self.button_surface = pg.Surface(self.size, pg.SRCALPHA)
+        self.background_surface = pg.Surface(self.size, pg.SRCALPHA)
+        self.ability_screen_surface = pg.Surface(self.size, pg.SRCALPHA)
         self.font = pg.font.Font("./main_menu/assets/minecraft.ttf", 32)
+
+    def get_ability_screen_surface(self):
+        return self.ability_screen_surface
+
+    def get_size(self):
+        return self.size
+
+    def get_buttons(self):
+        return self.buttons
 
     # Adding and deleting button
     def add_button(self, button_name, button):
@@ -26,20 +36,22 @@ class Ability_screen():
 
     def create_ability_screen(self):
         # Setting up the background and creating the background surface
-        background = pg.image.load("./battle_screen/ability_screen/assets/ability_screen_ackground.png")
+        background = pg.image.load("./pokemoni/ability_screen/assets/Untitled.png")
         background = pg.transform.scale(background, self.size)
-        self.background_surface.blit(background, (0, 0))
 
         buttons = []
         attack_button = Button(display_surface = self.button_surface,
-                              position = (self.button_surface.get_width() - 25, self.button_surface.get_height() / 3),
-                              size = (self.size[0] - 50, self.size[1] / 4))
+                              position = (60, self.button_surface.get_height() / 4),
+                              size = (self.size[0] - 150, self.size[1] / 6),
+                              color = RED)
         special_ability_button = Button(display_surface=self.button_surface,
-                                        position=(self.button_surface.get_width() - 25, self.button_surface.get_height() / 2),
-                                        size = (self.size[0] - 50, self.size[1] / 4))
+                                        position=(60, self.button_surface.get_height() / 2),
+                                        size = (self.size[0] - 150, self.size[1] / 6),
+                                        color = RED)
         x_button = Button(display_surface = self.button_surface,
-                          position = (self.button_surface.get_width() - 25, 2 * self.button_surface.get_height() / 3),
-                          size = (self.size[0] - 50, self.size[1] / 4))
+                          position = (60, 3 * self.button_surface.get_height() / 4),
+                          size = (self.size[0] - 150, self.size[1] / 6),
+                          color = RED)
 
         buttons.append(attack_button)
         buttons.append(special_ability_button)
@@ -51,8 +63,11 @@ class Ability_screen():
         self.add_button("XButton", x_button)
 
         for button_name in self.buttons:
+            # Se creeaza butonul
             create_text_button_surface(self.buttons, button_name, self.font)
-            # Adding the button to the all button surface
+            # Se copieaza butoanele pe suprafata de butoane
             self.buttons[button_name].create_button()
 
+        self.background_surface.blit(background, (0, 0))
         self.background_surface.blit(self.button_surface, (0 ,0))
+        self.ability_screen_surface.blit(self.background_surface, (0, 0))

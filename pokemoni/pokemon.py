@@ -1,6 +1,6 @@
 import pygame as pg
 import sys
-from battle_screen.ability_screen.ability_screen import Ability_screen
+from pokemoni.ability_screen.ability_screen import Ability_screen
 
 ANIMATION_FRAMES = 8
 FRAMESPERWIDTH = 4
@@ -8,8 +8,8 @@ FRAMESPERHEIGHT = 2
 
 class Pokemon():
     def __init__(self, name = "NoName"):
-        self.health = health
-        self.energy = energy
+        self.health = None
+        self.energy = None
         self.name = name
         # self.animations = [] # This is a list of lists of frames
         self.frames = [] # This one contains all the frames
@@ -32,13 +32,16 @@ class Pokemon():
         return self.ability_screen
 
     # Setters
-    def set_ability_screen(self, display_surface):
-        self.ability_screen = Ability_screen(display_surface)
+    def set_name(self, name):
+        self.name = name
 
-    def set_position(self, position):
-        self.position = position
+    def set_ability_screen(self, ability_screen):
+        self.ability_screen = ability_screen
 
-    def set_heath(self, health):
+    def set_size(self, size):
+        self.size = size
+
+    def set_health(self, health):
         self.health = health
 
     def set_energy(self, energy):

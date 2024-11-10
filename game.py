@@ -6,14 +6,16 @@ from map.map import Map
 from sprites.sprites import Sprite
 from sprites.player import Player
 from pokemoni.pokemon import Pokemon
+from pokemoni.ability_screen.ability_screen import Ability_screen
 from battle_screen.battle_screen import Battle_screen
+from pokemons_information import *
 
 WINDOW_HEIGHT = 1920
 WINDOW_WIDTH = 1080
 
 class Game:
     def __init__(self):
-        self.display_surface = pg.display.set_mode((WINDOW_HEIGHT, WINDOW_WIDTH))
+        self.display_surface = pg.display.set_mode((0, 0), pg.FULLSCREEN)
         self.scenes = {}
         self.current_scene = None
         self.all_sprites = pg.sprite.Group()
@@ -42,21 +44,29 @@ class Game:
         battle_screen = Battle_screen(self.display_surface)
         map = Map()
 
-        # Creare lista inamici
-        pokemons = []
-        pokemons_file_names = ["Atrox.png", "Charmadillo.png", "Cindrill.png", "Cleaf.png", "Draem.png", "Finiette.png",
-                              "Finsta.png", "Friolera.png", "Gulfin.png", "Ivieron.png", "Jacana.png", "Larvea.png",
-                              "Pluma.png", "Plumette.png", "Pouch.png", "Sparchu.png"]
-
-        for i, pokemon_name in enumerate(pokemons_file_names):
-            pokemons.append(Pokemon(name = pokemon_name))
-            pokemons[i].animation_frames("./pokemoni/assets/" + pokemon_name, 2)
-
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)
         self.add_scene("Battle_screen", battle_screen)
 
         game_scenes_active = {"main_menu": True, "map": False, "choose_save": False, "battle_screen": False}
+
+        # Creare lista pokemoni
+        pokemons = []
+
+        # Creating the pokemons
+        for i, pokemon_name in enumerate(pokemons_info):
+            pokemons.append(Pokemon())
+            pokemons[i].set_name(pokemon_name)
+            pokemons[i].set_health(pokemons_info[pokemon_name]["health"])
+            pokemons[i].set_energy(pokemons_info[pokemon_name]["energy"])
+            pokemons[i].set_size(pokemons_info[pokemon_name]["size"])
+            pokemons[i].animation_frames("./pokemoni/assets/" + pokemon_name)
+
+            # Creare ability_screen
+            ability_screen = Ability_screen()
+            ability_screen.create_ability_screen()
+            pokemons[i].set_ability_screen(ability_screen)
+
         while True:
             if game_scenes_active["main_menu"]:
                 result = self.get_scene("Menu").run(clock)

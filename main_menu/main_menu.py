@@ -121,7 +121,9 @@ class MainMenu:
             # Updating the screen with the changes made during the last frame
             # Adding the background surface, creating and adding the button surface
             self.button_surface.blit(self.background_surface, (0, 0))
+            # Functia da copy_paste la butoane pe suprafata de butoane
             create_button_surface_instant(self.buttons)
+            # Se copieaza suprafata de butoane pe display ea continand si backgroundul
             self.display_surface.blit(self.button_surface.convert_alpha(), (0, 0))
 
             # Looking for events
@@ -137,10 +139,13 @@ class MainMenu:
                         position = self.buttons[button_name].get_position()
                         # if size == normal size
                         if size[0] == button_sizes[button_name][0] and size[1] == button_sizes[button_name][1]:
+                            # Modificari pentru a oferi impresia ca butonul creste
                             self.buttons[button_name].set_position((position[0] - size[0] * (scale_factor - 1) / 2,
                                                                 position[1] - size[1] * (scale_factor - 1) / 2))
                             self.buttons[button_name].set_size((size[0] * scale_factor, size[1] * scale_factor))
                             self.buttons[button_name].set_button_surface((size[0] * scale_factor, size[1] * scale_factor))
+
+                            # Aici sunt adaugate noile butoane
                             if button_name == "Settings":
                                 create_settings_button_surface(self.buttons)
                             else:

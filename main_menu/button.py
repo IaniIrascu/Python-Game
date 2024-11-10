@@ -3,7 +3,7 @@ import pygame.font
 from utils.colors import *
 
 DEFAULT_SIZE = (200, 100)
-DEFAULT_BUTTON_COLOR = BLACK
+DEFAULT_BUTTON_COLOR = WHITE
 DEFAULT_POSITION = (0, 0)
 
 class Button:
