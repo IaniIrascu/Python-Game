@@ -94,7 +94,10 @@ class Game:
             pokemons[i].set_damage(5)
             pokemons[i].set_level(1)
             pokemons[i].set_ability_screen(ability_screen)
-            pokemons[i].set_attack(attack1)
+            if i % 2 == 0:
+                pokemons[i].set_attack(attack1)
+            else:
+                pokemons[i].set_attack(attack2)
 
 
         # # Creating some pokemons

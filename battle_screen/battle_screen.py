@@ -3,7 +3,7 @@ import sys
 from pokemoni.ability_screen import *
 from utils.colors import *
 
-SPEEDOFANIMATION = 1 / 8  # Valoare intre (0 si 1)
+SPEEDOFANIMATION = 1 / 4  # Valoare intre (0 si 1)
 
 def check_button_pressed(mouse_pos, ability_screen, ability_screen_position):
     buttons = ability_screen.get_buttons()
@@ -226,6 +226,7 @@ class Battle_screen:
                     self.pokemons_surface.blit(self.enemies[active_enemy_index].get_attack().get_attack_frames().get_attack_frame(frame_to_get),
                                                self.positions_on_screen[0])
                 else:
+                    self.player_pokemons[active_pokemon_index].add_effect_on_itself(self.enemies[active_enemy_index].get_attack().get_effect())
                     add_attack[1] = False
                     health = self.player_pokemons[active_pokemon_index].get_health()
                     health -= self.enemies[active_enemy_index].get_damage() # Atac inamic
@@ -262,7 +263,7 @@ class Battle_screen:
                     sys.quit()
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
-                        return "MainMenu"
+                        return "MainMenu"  # AICI AR TREBUI SA FIE ESCAPE MENU, DAR CAND SE FACE
                 mouse_pos = pg.mouse.get_pos()
 
                 # checking if pokemon is clicked or if cursor is on it
