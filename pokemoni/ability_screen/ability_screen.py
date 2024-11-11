@@ -11,7 +11,7 @@ def create_text_button_surface(buttons, button_name, font):
         buttons["X"].get_button_surface().set_colorkey((0, 0, 0))
         buttons["X"].add_text(font, button_name, (1, 1, 1))
 
-class Ability_screen():
+class AbilityScreen:
     def __init__(self):
         self.size = (400, 700)
         self.buttons = {}
