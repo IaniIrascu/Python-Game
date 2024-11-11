@@ -63,6 +63,20 @@ class AttacksFrames:
 class Attack:
     def __init__(self):
         self.attackFrames = None  # Aceasta variabila retine un obiect in cadrul ei
+        self.effect = None
+        self.name = None
+
+    def set_effect(self, effect):
+        self.effect = effect
+
+    def set_name(self, name):
+        self.name = name
+
+    def get_effect(self):
+        return self.effect
+
+    def get_name(self):
+        return self.name
 
     def set_attack_frames(self, attackFramesClass):
         self.attackFrames = attackFramesClass

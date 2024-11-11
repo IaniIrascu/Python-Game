@@ -7,7 +7,7 @@ from sprites.sprites import Sprite
 from sprites.player import Player
 from pokemoni.pokemon import *
 from pokemoni.attacks.attack import *
-from pokemoni.ability_screen.ability_screen import *
+from pokemoni.effects.effect import *
 from pokemons_information import *
 
 from pokemoni.ability_screen.ability_screen import AbilityScreen
@@ -55,7 +55,6 @@ class Game:
 
         # Creare lista pokemoni
         pokemons = []
-
         # Creating some ability screens
         ability_screen = AbilityScreen()
         ability_screen.create_ability_screen()
@@ -64,9 +63,19 @@ class Game:
         attacks_frames = AttacksFrames()
         attacks_frames.load_all_attacks_frames("./pokemoni/attacks/assets")
 
+        # Creating some effects
+        effect1 = Effect()
+        effect2 = Effect()
+
+        effect1.change_effectIcon()
+        effect2.change_effectIcon()
+
         # Creating some attacks
         attack1 = Attack()
         attack2 = Attack()
+
+        attack1.set_effect(effect1)
+        attack2.set_effect(effect2)
 
         attack1.set_attack_frames(attacks_frames.get_attack_frames("scratch.png"))
         attack2.set_attack_frames(attacks_frames.get_attack_frames("fire.png"))
@@ -75,58 +84,75 @@ class Game:
         pokemons_frames = PokemonsFrames()
         pokemons_frames.load_all_pokemon_frames("./pokemoni/assets")
 
-        # Creating some pokemons
-        pokemon1 = Pokemon()
-        pokemon2 = Pokemon()
-        pokemon3 = Pokemon()
-        pokemon4 = Pokemon()
-        pokemon5 = Pokemon()
-        pokemon6 = Pokemon()
+        for i, pokemon_name in enumerate(pokemons_info):
+            pokemons.append(Pokemon())
+            pokemons[i].set_pokemon_frames(pokemons_frames.get_pokemon_frames(pokemon_name))
+            pokemons[i].set_health(pokemons_info[pokemon_name]["health"])
+            pokemons[i].set_maxHealth(pokemons_info[pokemon_name]["health"])
+            pokemons[i].set_energy(pokemons_info[pokemon_name]["energy"])
+            pokemons[i].set_maxEnergy(pokemons_info[pokemon_name]["energy"])
+            pokemons[i].set_damage(5)
+            pokemons[i].set_level(1)
+            pokemons[i].set_ability_screen(ability_screen)
+            pokemons[i].set_attack(attack1)
 
-        pokemon1.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Charmadillo.png"))
-        pokemon1.set_health(100)
-        pokemon1.set_damage(500)
-        pokemon1.set_level(1)
-        pokemon1.set_ability_screen(ability_screen)
-        pokemon1.set_attack(attack1)
 
-        pokemon2.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Gulfin.png"))
-        pokemon2.set_health(120)
-        pokemon2.set_damage(40)
-        pokemon2.set_level(1)
-        pokemon2.set_ability_screen(ability_screen)
-        pokemon2.set_attack(attack2)
+        # # Creating some pokemons
+        # pokemon1 = Pokemon()
+        # pokemon2 = Pokemon()
+        # pokemon3 = Pokemon()
+        # pokemon4 = Pokemon()
+        # pokemon5 = Pokemon()
+        # pokemon6 = Pokemon()
+        #
+        # pokemon1.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Charmadillo.png"))
+        # pokemon1.set_health(100)
+        # pokemon1.set_maxHealth(100)
+        # pokemon1.set_energy(100)
+        # pokemon1.set_maxEnergy(100)
+        # pokemon1.set_damage(10)
+        # pokemon1.set_level(1)
+        # pokemon1.set_ability_screen(ability_screen)
+        # pokemon1.set_attack(attack1)
+        #
+        # pokemon2.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Gulfin.png"))
+        # pokemon2.set_health(120)
+        # pokemon2.set_maxHealth(120)
+        # pokemon2.set_damage(40)
+        # pokemon2.set_level(1)
+        # pokemon2.set_ability_screen(ability_screen)
+        # pokemon2.set_attack(attack2)
+        #
+        # pokemon3.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Pouch.png"))
+        # pokemon3.set_health(160)
+        # pokemon3.set_damage(80)
+        # pokemon3.set_level(1)
+        # pokemon3.set_ability_screen(ability_screen)
+        # pokemon3.set_attack(attack2)
+        #
+        # pokemon4.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Friolera.png"))
+        # pokemon4.set_health(200)
+        # pokemon4.set_damage(40)
+        # pokemon4.set_level(1)
+        # pokemon4.set_ability_screen(ability_screen)
+        # pokemon4.set_attack(attack2)
+        #
+        # pokemon5.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Jacana.png"))
+        # pokemon5.set_health(180)
+        # pokemon5.set_damage(60)
+        # pokemon5.set_level(1)
+        # pokemon5.set_ability_screen(ability_screen)
+        # pokemon5.set_attack(attack2)
+        #
+        # pokemon6.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Larvea.png"))
+        # pokemon6.set_health(150)
+        # pokemon6.set_damage(40)
+        # pokemon6.set_level(1)
+        # pokemon6.set_ability_screen(ability_screen)
+        # pokemon6.set_attack(attack1)
 
-        pokemon3.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Pouch.png"))
-        pokemon3.set_health(160)
-        pokemon3.set_damage(80)
-        pokemon3.set_level(1)
-        pokemon3.set_ability_screen(ability_screen)
-        pokemon3.set_attack(attack2)
-
-        pokemon4.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Friolera.png"))
-        pokemon4.set_health(200)
-        pokemon4.set_damage(40)
-        pokemon4.set_level(1)
-        pokemon4.set_ability_screen(ability_screen)
-        pokemon4.set_attack(attack2)
-
-        pokemon5.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Jacana.png"))
-        pokemon5.set_health(180)
-        pokemon5.set_damage(60)
-        pokemon5.set_level(1)
-        pokemon5.set_ability_screen(ability_screen)
-        pokemon5.set_attack(attack2)
-
-        pokemon6.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Larvea.png"))
-        pokemon6.set_health(150)
-        pokemon6.set_damage(40)
-        pokemon6.set_level(1)
-        pokemon6.set_ability_screen(ability_screen)
-        pokemon6.set_attack(attack1)
-
-        inventory = [pokemon1, pokemon2, pokemon3]
-        enemies = [pokemon4, pokemon5, pokemon6]
+        inventory = [pokemons[0], pokemons[1], pokemons[2]]
+        enemies = [pokemons[3], pokemons[4], pokemons[5]]
 
         # Creating the pokemons
         # for i, pokemon_name in enumerate(pokemons_info):

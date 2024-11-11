@@ -82,20 +82,36 @@ class PokemonsFrames:
 
 # POKEMONUL
 class Pokemon:
-    def __init__(self):
+    def __init__(self, maxHealth = 0, maxEnergy = 0):
         self.pokemonFrames = None
+        self.name = None
         self.attack = None
         self.isDead = False
         self.isActive = False
         self.level = None
         self.health = None
+        self.maxHealth = maxHealth
         self.damage = None
+        self.maxEnergy = maxEnergy
+        self.energy = None
         self.experience = None
         self.specialAbility = None
         self.ability_screen = None
-        self.effectOnItself = None
+        self.effectsOnItself = []
 
     # Setters
+    def set_maxHealth(self, maxHealth):
+        self.maxHealth = maxHealth
+
+    def set_maxEnergy(self, maxEnergy):
+        self.maxEnergy = maxEnergy
+
+    def set_energy(self, energy):
+        self.energy = energy
+
+    def set_name(self, name):
+        self.name = name
+
     def set_health(self, health):
         self.health = health
 
@@ -120,10 +136,22 @@ class Pokemon:
     def set_attack(self, attack):
         self.attack = attack
 
-    def set_effect_on_itself(self, effect):
-        self.effectOnItself = effect
+    def add_effect_on_itself(self, effect):
+        self.effectsOnItself.append(effect)
 
     # Getters
+    def get_maxHealth(self):
+        return self.maxHealth
+
+    def get_maxEnergy(self):
+        return self.maxEnergy
+
+    def get_energy(self):
+        return self.energy
+
+    def get_name(self):
+        return self.name
+
     def get_experience(self):
         return self.experience
 
@@ -151,8 +179,8 @@ class Pokemon:
     def get_attack(self):
         return self.attack
 
-    def get_effect_on_itself(self):
-        return self.effectOnItself
+    def get_effects(self):
+        return self.effectsOnItself
 
     # Functia aceasta modifica experienta pe care o primeste un caracter dupa ce omoara un inamic
     def gain_experience(self, pokemon):

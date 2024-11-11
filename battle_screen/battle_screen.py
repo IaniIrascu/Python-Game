@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 from pokemoni.ability_screen import *
+from utils.colors import *
 
 SPEEDOFANIMATION = 1 / 8  # Valoare intre (0 si 1)
 
@@ -14,7 +15,24 @@ def check_button_pressed(mouse_pos, ability_screen, ability_screen_position):
         if button_rect.collidepoint(mouse_pos):
             return button_name
 
-class Battle_screen():
+# NU SCHIMBATI NUMERE PRIN PROGRAM
+def change_health_bar(health_bar, bars_surface, percentage):
+    removeFromBar = (health_bar.get_width() - 115) * percentage
+    width = health_bar.get_width()
+    height = health_bar.get_height()
+    health_bar.fill((0, 0, 0, 0))
+    health_bar.fill(RED, (90, 37, width - 115 - removeFromBar, height / 3))
+    health_bar.blit(bars_surface, (0, 0), (0, 0, width, height))
+
+def change_energy_bar(energy_bar, bars_surface, percentage):
+    removeFromBar = (energy_bar.get_width() - 115) * percentage
+    width = energy_bar.get_width()
+    height = energy_bar.get_height()
+    energy_bar.fill((0, 0, 0, 0))
+    energy_bar.fill(BLUE, (90, 37, width - 115 - removeFromBar, height / 3))
+    energy_bar.blit(bars_surface, (0, 0), (0, height, width, height))
+
+class Battle_screen:
     def __init__(self, display_surface):
         self.display_surface = display_surface
         self.pokemons_surface = pg.Surface(display_surface.get_size(), pg.SRCALPHA)
@@ -23,6 +41,7 @@ class Battle_screen():
         self.player_pokemons = []
         self.positions_on_screen = [(175, self.display_surface.get_height() / 2 - 100),
                                     (self.display_surface.get_width() - 525, self.display_surface.get_height() / 2 - 100)]
+
 
     def load_enemies(self, enemies):
         self.enemies = enemies
@@ -71,6 +90,19 @@ class Battle_screen():
         # Pozitia meniului cu abilitati
         ability_screen_position = (self.pokemons_surface.get_width() / 2 - 200, 100)
 
+        bars = pg.image.load('./battle_screen/assets/Bars.png')
+        bars.convert_alpha()
+        bars = pg.transform.scale_by(bars, 1 / 4)
+        bars_width = bars.get_width()
+        bars_height = bars.get_height() / 2
+
+        # HEALTH BAR
+        health_bar = pg.Surface((bars_width, bars_height), pg.SRCALPHA)
+        health_bar_enemy = pg.Surface((bars_width, bars_height), pg.SRCALPHA)
+        # ENERGY BAR
+        energy_bar = pg.Surface((bars_width, bars_height), pg.SRCALPHA)
+        energy_bar_enemy = pg.Surface((bars_width, bars_height), pg.SRCALPHA)
+
         while True:
             # creare enemies_surface cu frame-urile aferente
             self.pokemons_surface.blit(self.background_surface, (0, 0))
@@ -80,7 +112,6 @@ class Battle_screen():
                     active_pokemon_index = index
 
                     # Player attacking
-                    if add_attack[0] or add_special[0]:
                     if add_attack[0] or add_special[0]:
                         frame_to_get = int((frame - initial_frame) * SPEEDOFANIMATION) % 4 + 1
                         self.pokemons_surface.blit(pg.transform.flip(player_pokemon.get_pokemon_frames().get_attack_frame(frame_to_get), flip_x=True, flip_y = False),
@@ -101,6 +132,29 @@ class Battle_screen():
                     if add_ability_surface:
                         self.pokemons_surface.blit(player_pokemon.get_ability_screen().get_ability_screen_surface(),
                                                    ability_screen_position)
+
+                    # Adding the effects
+                    effects = self.player_pokemons[active_pokemon_index].get_effects()
+                    for i, effect in enumerate(effects):
+                        self.pokemons_surface.blit(effect.get_effectIcon(),
+                                                   (self.positions_on_screen[0][0] - 60,
+                                                    self.positions_on_screen[0][1] + (i * self.player_pokemons[0].get_pokemon_frames().get_size()[0]) / len(effects)))
+
+                    # Adding the names + lv
+
+                    # Adding hp_bar
+                    percentage = self.player_pokemons[active_pokemon_index].get_health() / self.player_pokemons[active_pokemon_index].get_maxHealth()
+                    change_health_bar(health_bar, bars, 1 - percentage)
+                    # print(self.player_pokemons[active_pokemon_index].get_health())
+                    # print(1 - percentage)
+                    percentage = self.player_pokemons[active_pokemon_index].get_energy() / self.player_pokemons[active_pokemon_index].get_maxEnergy()
+                    change_energy_bar(energy_bar, bars, 1 - percentage)
+                    self.pokemons_surface.blit(health_bar,
+                                               (self.positions_on_screen[0][0] + self.player_pokemons[active_pokemon_index].get_pokemon_frames().get_size()[0] /2 - 160,
+                                                self.positions_on_screen[0][1] + self.player_pokemons[active_pokemon_index].get_pokemon_frames().get_size()[1]))
+                    self.pokemons_surface.blit(energy_bar,
+                                               (self.positions_on_screen[0][0] + self.player_pokemons[active_pokemon_index].get_pokemon_frames().get_size()[0] /2 - 160,
+                                                self.positions_on_screen[0][1] + self.player_pokemons[active_pokemon_index].get_pokemon_frames().get_size()[1] + 100))
                     break
 
             for index, enemy in enumerate(self.enemies):
@@ -120,6 +174,25 @@ class Battle_screen():
                     if selected[1]:
                         self.pokemons_surface.blit(select_square,
                                                    self.positions_on_screen[1])
+
+                    # Adding the effects
+                    effects = self.enemies[active_enemy_index].get_effects()
+                    for i, effect in enumerate(effects):
+                        self.pokemons_surface.blit(effect.get_effectIcon(),
+                                                   (self.positions_on_screen[1][0] + self.enemies[0].get_pokemon_frames().get_size()[1] + 60,
+                                                    self.positions_on_screen[1][1] + (i * self.enemies[0].get_pokemon_frames().get_size()[0]) / len(effects)))
+
+                    # Adding hp_bar
+                    percentage = self.enemies[active_enemy_index].get_health() / self.enemies[active_enemy_index].get_maxHealth()
+                    change_health_bar(health_bar_enemy, bars, 1 - percentage)
+                    percentage = self.enemies[active_enemy_index].get_energy() / self.enemies[active_enemy_index].get_maxEnergy()
+                    change_energy_bar(energy_bar_enemy, bars, 1 - percentage)
+                    self.pokemons_surface.blit(health_bar_enemy,
+                                               (self.positions_on_screen[1][0] + self.enemies[active_enemy_index].get_pokemon_frames().get_size()[0] / 2 - 160,
+                                                self.positions_on_screen[1][1] + self.enemies[active_enemy_index].get_pokemon_frames().get_size()[1]))
+                    self.pokemons_surface.blit(energy_bar_enemy,
+                                               (self.positions_on_screen[1][0] + self.enemies[active_enemy_index].get_pokemon_frames().get_size()[0] / 2 - 160,
+                                                self.positions_on_screen[1][1] + self.enemies[active_enemy_index].get_pokemon_frames().get_size()[1] + 100))
                     break
 
             # Se porneste animatia de atac pentru 48 de frame-uri
@@ -129,10 +202,11 @@ class Battle_screen():
                     self.pokemons_surface.blit(self.player_pokemons[active_pokemon_index].get_attack().get_attack_frames().get_attack_frame(frame_to_get),
                                                self.positions_on_screen[1])
                 else:
+                    self.enemies[active_enemy_index].add_effect_on_itself(self.player_pokemons[active_pokemon_index].get_attack().get_effect())
                     add_attack[0] = False
                     add_attack[1] = True
                     health = self.enemies[active_enemy_index].get_health()
-                    health -= (self.player_pokemons[active_pokemon_index].get_damage() + 30)  # Atac pokemon
+                    health -= (self.player_pokemons[active_pokemon_index].get_damage() + 10)  # Atac pokemon
                     # Verify if enemy died after the last attack
                     if health <= 0:
                         add_attack[1] = False  # Inamicul nu mai ataca
@@ -140,7 +214,7 @@ class Battle_screen():
                         if self.enemies[number_of_enemies - 1].get_isDead(): # Daca a murit ultimul inamic se trece in meniu
                             return "MainMenu"
                     else:
-                        self.player_pokemons[active_pokemon_index].set_health(health)
+                        self.enemies[active_enemy_index].set_health(health)
 
                         # Se incepe atacul inamicului
                         initial_frame = frame

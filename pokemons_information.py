@@ -1,7 +1,7 @@
 default_size = (350, 350)
 default_health = 100
 default_energy = 100
-default_attack = 40
+default_attack = 5
 default_attacksprite = "scratch.png"
 
 pokemons_info = {
