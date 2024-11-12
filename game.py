@@ -2,18 +2,16 @@ import pygame as pg
 import sys
 from main_menu.main_menu import MainMenu
 from map.map import Map
-from sprites.sprites import Sprite
+from sprites.sprites import Sprite, Group
 from sprites.player import Player
-
-WINDOW_HEIGHT = 1920
-WINDOW_WIDTH = 1080
+from utils.constants import WINDOW_HEIGHT, WINDOW_WIDTH
 
 class Game:
     def __init__(self):
         self.display_surface = pg.display.set_mode((WINDOW_HEIGHT, WINDOW_WIDTH))
         self.scenes = {}
         self.current_scene = None
-        self.all_sprites = pg.sprite.Group()
+        self.all_sprites = Group()
 
     # returns the object related to the name
     def get_scene(self, scene_name):
@@ -38,10 +36,10 @@ class Game:
 
         menu = MainMenu(self.display_surface, clock)
         map = Map()
-        map.render
+        map.render(self.all_sprites, 'house')
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)
-        game_scenes_active = {"main_menu": True, "map": False, "choose_save": False}
+        game_scenes_active = {"main_menu": False, "map": True, "choose_save": False}
         while True:
             if game_scenes_active["main_menu"]:
                 result = self.get_scene("Menu").run()
@@ -55,16 +53,16 @@ class Game:
                     pg.quit()
                     sys.exit()
             if game_scenes_active["map"]:
-                self.get_scene("Map").render(self.all_sprites)
-                self.all_sprites.draw(self.display_surface)
+                dt = clock.tick(60) / 1000
+                self.get_scene("Map").update
+                self.all_sprites.update(dt)
+                self.display_surface.fill('grey')
+                self.all_sprites.draw(map.player.rect.center)
             
             pg.display.update()
             clock.tick(60)
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    pg.quit()
-                    sys.exit()
-                if event.type == pg.KEYDOWN:
                     pg.quit()
                     sys.exit()
