@@ -60,7 +60,7 @@ class AttacksFrames:
         if image_name in self.attacksFrames:
             self.attacksFrames.pop(image_name)
 
-class Attack:
+class SpecialAttack:
     def __init__(self):
         self.attackFrames = None  # Aceasta variabila retine un obiect in cadrul ei
         self.effect = None

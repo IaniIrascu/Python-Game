@@ -88,8 +88,8 @@ class Game:
             effects[i].set_color(effects_information[effect_name]["color"])
 
         # Creating some attacks
-        attack1 = Attack()
-        attack2 = Attack()
+        attack1 = SpecialAttack()
+        attack2 = SpecialAttack()
 
         attack1.set_effect(search_effect(effects, "Poison"))
         attack2.set_effect(search_effect(effects, "Burned"))
@@ -108,7 +108,7 @@ class Game:
             pokemons[i].set_maxHealth(pokemons_info[pokemon_name]["health"])
             pokemons[i].set_energy(pokemons_info[pokemon_name]["energy"])
             pokemons[i].set_maxEnergy(pokemons_info[pokemon_name]["energy"])
-            pokemons[i].set_damage(5)
+            pokemons[i].set_damage(45)
             pokemons[i].set_level(1)
             pokemons[i].set_ability_screen(ability_screen)
             if i % 2 == 0:

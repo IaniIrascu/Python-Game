@@ -45,10 +45,10 @@ class AbilityScreen:
 
         buttons = []
         attack_button = Button(display_surface = self.button_surface,
-                              position = (60, self.button_surface.get_height() / 4),
+                              position = (60, self.button_surface.get_height() / 5),
                               size = (self.size[0] - 150, self.size[1] / 6))
         special_ability_button = Button(display_surface=self.button_surface,
-                                        position=(60, 3 * self.button_surface.get_height() / 4),
+                                        position=(60, 2 * self.button_surface.get_height() / 4),
                                         size = (self.size[0] - 150, self.size[1] / 6))
         x_button = Button(display_surface = self.button_surface,
                           position = (self.button_surface.get_width() - 125, 40),

@@ -194,4 +194,7 @@ class Pokemon:
 
     def remove_one_turn_from_effects(self):
         for i, effect in enumerate(self.effectsOnItself):
-            effect.set_number_of_turns_left(effect.get_number_of_turns_left() - 1)
+            if effect.get_justApplied() == False:
+                effect.set_number_of_turns_left(effect.get_number_of_turns_left() - 1)
+            else:
+                effect.set_justApplied(False)
