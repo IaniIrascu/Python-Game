@@ -2,8 +2,9 @@ import pygame as pg
 import sys
 from pokemoni.ability_screen import *
 from utils.colors import *
+from pokemoni.effects.effect import Effect
 
-SPEEDOFANIMATION = 1 / 4  # Valoare intre (0 si 1)
+SPEEDOFANIMATION = 1 / 8  # Valoare intre (0 si 1)
 
 def check_button_pressed(mouse_pos, ability_screen, ability_screen_position):
     buttons = ability_screen.get_buttons()
@@ -31,6 +32,10 @@ def change_energy_bar(energy_bar, bars_surface, percentage):
     energy_bar.fill((0, 0, 0, 0))
     energy_bar.fill(BLUE, (90, 37, width - 115 - removeFromBar, height / 3))
     energy_bar.blit(bars_surface, (0, 0), (0, height, width, height))
+
+def calculate_damage(pokemon, enemy) {
+
+}
 
 class Battle_screen:
     def __init__(self, display_surface):
@@ -195,14 +200,29 @@ class Battle_screen:
                                                 self.positions_on_screen[1][1] + self.enemies[active_enemy_index].get_pokemon_frames().get_size()[1] + 100))
                     break
 
-            # Se porneste animatia de atac pentru 48 de frame-uri
+            # Atacul tau
             if add_attack[0]:
                 if int((frame - initial_frame) * SPEEDOFANIMATION) <= 3:
                     frame_to_get = int((frame - initial_frame) * SPEEDOFANIMATION) % 4 + 1
                     self.pokemons_surface.blit(self.player_pokemons[active_pokemon_index].get_attack().get_attack_frames().get_attack_frame(frame_to_get),
                                                self.positions_on_screen[1])
                 else:
-                    self.enemies[active_enemy_index].add_effect_on_itself(self.player_pokemons[active_pokemon_index].get_attack().get_effect())
+                    # Se creeaza efectul
+                    effect_ref = self.player_pokemons[active_pokemon_index].get_attack().get_effect()
+                    effect_to_add = Effect()
+                    effect_to_add.set_name(effect_ref.get_name())
+                    effect_to_add.set_number_of_turns(effect_ref.get_number_of_turns())
+                    effect_to_add.set_number_of_turns_left(effect_ref.get_number_of_turns())
+                    effect_to_add.change_effectIcon(color = effect_ref.get_color())
+
+                    # Se adauga efectul la lista
+                    self.enemies[active_enemy_index].add_effect_on_itself(effect_to_add)
+
+                    # Se modifica numarul de ture ramase pentru effect
+                    self.player_pokemons[active_pokemon_index].check_what_effect_is_over()
+                    self.player_pokemons[active_pokemon_index].remove_one_turn_from_effects()
+
+                    # Se continua cu prelucrarile pentru atac
                     add_attack[0] = False
                     add_attack[1] = True
                     health = self.enemies[active_enemy_index].get_health()
@@ -226,7 +246,22 @@ class Battle_screen:
                     self.pokemons_surface.blit(self.enemies[active_enemy_index].get_attack().get_attack_frames().get_attack_frame(frame_to_get),
                                                self.positions_on_screen[0])
                 else:
-                    self.player_pokemons[active_pokemon_index].add_effect_on_itself(self.enemies[active_enemy_index].get_attack().get_effect())
+                    # Se creeaza efectul
+                    effect_ref = self.enemies[active_enemy_index].get_attack().get_effect()
+                    effect_to_add = Effect()
+                    effect_to_add.set_name(effect_ref.get_name())
+                    effect_to_add.set_number_of_turns(effect_ref.get_number_of_turns())
+                    effect_to_add.set_number_of_turns_left(effect_ref.get_number_of_turns())
+                    effect_to_add.change_effectIcon(color=effect_ref.get_color())
+
+                    # Se adauga efectul la lista
+                    self.player_pokemons[active_pokemon_index].add_effect_on_itself(effect_to_add)
+
+                    # Se modifica numarul de ture ramase pentru effect
+                    self.enemies[active_enemy_index].check_what_effect_is_over()
+                    self.enemies[active_enemy_index].remove_one_turn_from_effects()
+
+                    # Se continua atacul
                     add_attack[1] = False
                     health = self.player_pokemons[active_pokemon_index].get_health()
                     health -= self.enemies[active_enemy_index].get_damage() # Atac inamic

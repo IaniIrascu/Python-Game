@@ -16,6 +16,21 @@ from battle_screen.battle_screen import Battle_screen
 WINDOW_HEIGHT = 1920
 WINDOW_WIDTH = 1080
 
+def search_effect(effects, effect_name):
+    for effect in effects:
+        if effect.get_name() == effect_name:
+            return effect
+
+def search_pokemon(pokemons, pokemon_name):
+    for pokemon in pokemons:
+        if pokemon.get_name() == pokemon_name:
+            return pokemon
+
+def search_attack(attacks, attack_name):
+    for attack in attacks:
+        if attack.get_name() == attack_name:
+            return attack
+
 class Game:
     def __init__(self):
         self.display_surface = pg.display.set_mode((0, 0), pg.FULLSCREEN)
@@ -64,19 +79,20 @@ class Game:
         attacks_frames.load_all_attacks_frames("./pokemoni/attacks/assets")
 
         # Creating some effects
-        effect1 = Effect()
-        effect2 = Effect()
-
-        effect1.change_effectIcon()
-        effect2.change_effectIcon()
+        effects = []
+        for i, effect_name in enumerate(effects_information):
+            effects.append(Effect())
+            effects[i].set_name(effect_name)
+            effects[i].set_number_of_turns(effects_information[effect_name]["no_of_turns"])
+            effects[i].change_effectIcon(color = effects_information[effect_name]["color"])
+            effects[i].set_color(effects_information[effect_name]["color"])
 
         # Creating some attacks
         attack1 = Attack()
         attack2 = Attack()
 
-        attack1.set_effect(effect1)
-        attack2.set_effect(effect2)
-
+        attack1.set_effect(search_effect(effects, "Poison"))
+        attack2.set_effect(search_effect(effects, "Burned"))
         attack1.set_attack_frames(attacks_frames.get_attack_frames("scratch.png"))
         attack2.set_attack_frames(attacks_frames.get_attack_frames("fire.png"))
 
@@ -87,6 +103,7 @@ class Game:
         for i, pokemon_name in enumerate(pokemons_info):
             pokemons.append(Pokemon())
             pokemons[i].set_pokemon_frames(pokemons_frames.get_pokemon_frames(pokemon_name))
+            pokemons[i].set_name(pokemon_name)
             pokemons[i].set_health(pokemons_info[pokemon_name]["health"])
             pokemons[i].set_maxHealth(pokemons_info[pokemon_name]["health"])
             pokemons[i].set_energy(pokemons_info[pokemon_name]["energy"])

@@ -137,6 +137,7 @@ class Pokemon:
         self.attack = attack
 
     def add_effect_on_itself(self, effect):
+        effect.set_number_of_turns_left(effect.get_number_of_turns())
         self.effectsOnItself.append(effect)
 
     # Getters
@@ -185,3 +186,12 @@ class Pokemon:
     # Functia aceasta modifica experienta pe care o primeste un caracter dupa ce omoara un inamic
     def gain_experience(self, pokemon):
         self.experience += (pokemon.get_level() * 10)
+
+    def check_what_effect_is_over(self):
+        for i, effect in enumerate(self.effectsOnItself):
+            if effect.get_number_of_turns_left() == 0:
+                self.effectsOnItself.pop(i)
+
+    def remove_one_turn_from_effects(self):
+        for i, effect in enumerate(self.effectsOnItself):
+            effect.set_number_of_turns_left(effect.get_number_of_turns_left() - 1)
