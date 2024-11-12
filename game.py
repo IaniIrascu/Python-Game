@@ -31,9 +31,9 @@ class Game:
         pg.init()
         clock = pg.time.Clock()
 
-        # pg.mixer.init()
-        # pg.mixer.music.load("./utils/sounds/metin.mp3")
-        # pg.mixer.music.play(-1)
+        pg.mixer.init()
+        pg.mixer.music.load("./utils/sounds/metin.mp3")
+        pg.mixer.music.play(-1)
 
         menu = MainMenu(self.display_surface, clock)
         map = Map()
@@ -41,7 +41,7 @@ class Game:
         self.player = map.player
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)
-        game_scenes_active = {"main_menu": False, "map": True, "choose_save": False}
+        game_scenes_active = {"main_menu": True, "map": False, "choose_save": False}
         while True:
             if game_scenes_active["main_menu"]:
                 result = self.get_scene("Menu").run()

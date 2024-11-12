@@ -17,5 +17,4 @@ class Map:
         
         for obj in self.maps["world"].get_layer_by_name("Entities"):
             if obj.name == "Player" and obj.properties["pos"] == 'fire':
-                print(obj.x, obj.y)
                 self.player = Player(self.display_surface, (obj.x, obj.y), group)

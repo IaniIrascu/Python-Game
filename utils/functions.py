@@ -1,8 +1,7 @@
 import pygame as pg
 import sys
 
-def close_game():
-    for event in pg.event.get():
-        if event.type == pg.QUIT:
-            pg.quit()
-            sys.exit()
+def close_game(event):
+    if event.type == pg.QUIT:
+        pg.quit()
+        sys.exit()

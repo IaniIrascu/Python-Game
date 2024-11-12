@@ -6,7 +6,6 @@ class Player(pg.sprite.Sprite):
         self.image = pg.surface.Surface((100, 100))
         self.image.fill('red')
         self.rect = self.image.get_frect(center = position)
-        print(self.rect.center)
         self.direction = pg.math.Vector2(0, 0)
         self.speed = 400
     
