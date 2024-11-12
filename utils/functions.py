@@ -1,11 +1,8 @@
-import pygame
+import pygame as pg
 import sys
 
-def close_game(event):
-    if event.type == pygame.QUIT:
-        pygame.quit()
-        sys.exit()
-    if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_ESCAPE:
-            pygame.quit()
+def close_game():
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
+            pg.quit()
             sys.exit()

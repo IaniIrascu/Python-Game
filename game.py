@@ -12,6 +12,7 @@ class Game:
         self.scenes = {}
         self.current_scene = None
         self.all_sprites = Group()
+        self.player = None
 
     # returns the object related to the name
     def get_scene(self, scene_name):
@@ -30,13 +31,14 @@ class Game:
         pg.init()
         clock = pg.time.Clock()
 
-        pg.mixer.init()
-        pg.mixer.music.load("./utils/sounds/metin.mp3")
-        pg.mixer.music.play(-1)
+        # pg.mixer.init()
+        # pg.mixer.music.load("./utils/sounds/metin.mp3")
+        # pg.mixer.music.play(-1)
 
         menu = MainMenu(self.display_surface, clock)
         map = Map()
         map.render(self.all_sprites, 'house')
+        self.player = map.player
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)
         game_scenes_active = {"main_menu": False, "map": True, "choose_save": False}
@@ -53,14 +55,13 @@ class Game:
                     pg.quit()
                     sys.exit()
             if game_scenes_active["map"]:
-                dt = clock.tick(60) / 1000
-                self.get_scene("Map").update
-                self.all_sprites.update(dt)
+                dt = clock.tick(120) / 1000
                 self.display_surface.fill('grey')
-                self.all_sprites.draw(map.player.rect.center)
+                self.all_sprites.draw(self.player.rect.center)
+                self.all_sprites.update(dt)
             
             pg.display.update()
-            clock.tick(60)
+            clock.tick(120)
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:

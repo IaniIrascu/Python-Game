@@ -1,7 +1,6 @@
 import pygame as pg
 from utils.importers import import_tmx
 from sprites.sprites import Sprite
-from pytmx.util_pygame import load_pygame
 from sprites.player import Player
 from utils.constants import TILE_SIZE
 
@@ -17,9 +16,6 @@ class Map:
             Sprite(surface, (x * TILE_SIZE, y * TILE_SIZE), group)
         
         for obj in self.maps["world"].get_layer_by_name("Entities"):
-            if obj.name == "Player" and obj.properties["pos"] == player_start_pos:
+            if obj.name == "Player" and obj.properties["pos"] == 'fire':
+                print(obj.x, obj.y)
                 self.player = Player(self.display_surface, (obj.x, obj.y), group)
-
-    def update():
-        pass               
-            

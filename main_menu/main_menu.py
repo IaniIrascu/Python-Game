@@ -84,7 +84,7 @@ class MainMenu:
                 self.buttons[button_name].add_text(self.font, button_name, WHITE)
             self.display_surface.blit(self.button_surface, (0 ,0))
             pop_sfx.play()
-            pg.time.wait(500)
+            pg.time.wait(400)
 
         while True:
             self.display_surface.blit(self.background_surface, (0, 0))
