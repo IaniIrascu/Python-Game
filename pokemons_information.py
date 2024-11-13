@@ -28,7 +28,6 @@ pokemons_info = {
 effects_information = {
     "Poison": {"color": colors.PURPLE},
     "Restoration": {"color": colors.PINK},
-    "Stunned": {"color": colors.DARK_GRAY},
     "Bleeding": {"color": colors.RED},
     "Weakness": {"color": colors.YELLOW},
     "Burned": {"color": colors.BLACK},
@@ -39,7 +38,6 @@ effects_information = {
 effects_descriptions = [
     "Pokemon takes damage 10% of the total remaining health, at the end of pokemon turn 0" 
     "Pokemon get 10% * remaining turns for the effect of his total health 0"
-    "Theres a 15%(max 100%) chance the pokemon skip its turn after this effect 0 (works)"
     "Pokemon gets 10% * remaining turns more damage 0"
     "Pokemon deals 10 * remaining turns less damage 0"
     "Pokemon loses 5% * remaining turns of his energy"
@@ -54,12 +52,12 @@ attacks_information = {
 },
 "Charmadillo.png": {
     "attack": "Rock Burn",
-    "special_attack": {"name": "Earth Wraith", "effects": ["Burned", "Stunned"]},
+    "special_attack": {"name": "Earth Wraith", "effects": ["Burned"]},
     "frames": "explosion.png"
 },
 "Cindrill.png": {
     "attack": "Stony Fire",
-    "special_attack": {"name": "Magma burst", "effects": ["Burned", "Stunned"]},
+    "special_attack": {"name": "Magma burst", "effects": ["Burned"]},
     "frames": "fire.png"
 },
 "Cleaf.png": {
@@ -69,12 +67,12 @@ attacks_information = {
 },
 "Draem.png": {
     "attack": "Paw Slap",
-    "special_attack": {"name": "Star Dust", "effects": ["Stunned"]},
+    "special_attack": {"name": "Star Dust", "effects": [""]},
     "frames": "scratch.png"
 },
 "Finiette.png": {
     "attack": "Water Splash",
-    "special_attack": {"name": "Tsunami Fury", "effects": ["Wet", "Stunned"]},
+    "special_attack": {"name": "Tsunami Fury", "effects": ["Wet"]},
     "frames": "splash.png"
 },
 "Finsta.png": {
@@ -119,12 +117,12 @@ attacks_information = {
 },
 "Pouch.png": {
     "attack": "Capi Slap",
-    "special_attack": {"name": "Capi Sssslap", "effects": ["Stunned"]},
+    "special_attack": {"name": "Capi Sssslap", "effects": [""]},
     "frames": "scratch.png"
 },
 "Sparchu.png": {
     "attack": "Hot Bruise",
-    "special_attack": {"name": "Earthquake", "effects": ["Stunned"]},
+    "special_attack": {"name": "Earthquake", "effects": [""]},
     "frames": "fire.png"
 }
 }
