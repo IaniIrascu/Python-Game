@@ -19,7 +19,7 @@ class AbilityScreen:
         self.button_surface = pg.Surface(self.size, pg.SRCALPHA)
         self.background_surface = pg.Surface(self.size, pg.SRCALPHA)
         self.ability_screen_surface = pg.Surface(self.size, pg.SRCALPHA)
-        self.font = pg.font.Font("./main_menu/assets/minecraft.ttf", 32)
+        self.font = pg.font.Font("./main_menu/assets/minecraft.ttf", 24)
 
     def get_ability_screen_surface(self):
         return self.ability_screen_surface
@@ -87,14 +87,21 @@ class AbilityScreen:
         background = pg.image.load("./pokemoni/ability_screen/assets/Untitled.png")
         background = pg.transform.scale(background, self.size)
 
+        self.buttons["Attack"].set_name(pokemon.get_attack().get_name())
+        self.buttons["Special"].set_name(pokemon.get_special_attack().get_name() + "(" + str(pokemon.get_special_attack().get_energy_cost()) + ")")
+        self.buttons["Name"].set_name(pokemon.get_name().replace(".png", "") + " lv. " + str(pokemon.get_level()))
+        self.buttons["X"].set_name("X")
+        self.buttons["Switch"].set_name("Switch")
+
         for button_name in self.buttons:
-            self.buttons["Attack"].set_name(pokemon.get_attack().get_name())
-            self.buttons["Special"].set_name(pokemon.get_special_attack().get_name())
-            self.buttons["Name"].set_name(pokemon.get_name().replace(".png", ""))
-            self.buttons["X"].set_name("X")
-            self.buttons["Switch"].set_name("Switch")
             # Se creeaza butonul
             create_text_button_surface(self.buttons, button_name, self.font)
+            if button_name == "Special":
+                numberofefects = len(pokemon.get_special_attack().get_effects())
+                for i, effect in enumerate(pokemon.get_special_attack().get_effects()):
+                    button_surface = self.buttons["Special"].get_button_surface()
+                    button_surface.blit(effect.get_effectIcon(),
+                                        (button_surface.get_width() / 2 - numberofefects * 10 + i * 20, 70), (0, 0, 15, 15))
             # Se copieaza butoanele pe suprafata de butoane
             self.buttons[button_name].create_button()
 

@@ -124,7 +124,7 @@ class Game:
             pokemons[i].set_attack(attacks[i])
             pokemons[i].set_special_attack(special_attacks[i])
 
-        inventory = [pokemons[2], pokemons[1], pokemons[2]]
+        inventory = [pokemons[2], pokemons[1], pokemons[3]]
         enemies = [pokemons[5], pokemons[4], pokemons[7]]
 
         # Creating the pokemons

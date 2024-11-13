@@ -31,7 +31,7 @@ effects_information = {
     "Bleeding": {"color": colors.RED},
     "Weakness": {"color": colors.YELLOW},
     "Burned": {"color": colors.BLACK},
-    "Wet": {"color": colors.BLUE},
+    "Stunned": {"color": colors.GREEN},
 }
 
 # DESCRIERI EFECTE
@@ -41,7 +41,7 @@ effects_descriptions = [
     "Pokemon gets 10% * remaining turns more damage 0"
     "Pokemon deals 10 * remaining turns less damage 0"
     "Pokemon loses 5% * remaining turns of his energy"
-    "Cleans the last negative effect applied"
+    "Pokemon have a chance to miss an attack 0"
 ]
 
 attacks_information = {
@@ -57,7 +57,7 @@ attacks_information = {
 },
 "Cindrill.png": {
     "attack": "Stony Fire",
-    "special_attack": {"name": "Magma burst", "effects": ["Burned"]},
+    "special_attack": {"name": "Magma burst", "effects": ["Poison"]},
     "frames": "fire.png"
 },
 "Cleaf.png": {
@@ -67,17 +67,17 @@ attacks_information = {
 },
 "Draem.png": {
     "attack": "Paw Slap",
-    "special_attack": {"name": "Star Dust", "effects": [""]},
+    "special_attack": {"name": "Star Dust", "effects": ["Bleeding", "Restoration"]},
     "frames": "scratch.png"
 },
 "Finiette.png": {
     "attack": "Water Splash",
-    "special_attack": {"name": "Tsunami Fury", "effects": ["Wet"]},
+    "special_attack": {"name": "Tsunami Fury", "effects": ["Burned", "Restoration"]},
     "frames": "splash.png"
 },
 "Finsta.png": {
     "attack": "Bubble Pop",
-    "special_attack": {"name": "Playful Wave", "effects": ["Wet"]},
+    "special_attack": {"name": "Playful Wave", "effects": ["Bleeding"]},
     "frames": "splash.png"
 },
 "Friolera.png": {
@@ -117,12 +117,12 @@ attacks_information = {
 },
 "Pouch.png": {
     "attack": "Capi Slap",
-    "special_attack": {"name": "Capi Sssslap", "effects": [""]},
+    "special_attack": {"name": "Capi Sssslap", "effects": []},
     "frames": "scratch.png"
 },
 "Sparchu.png": {
     "attack": "Hot Bruise",
-    "special_attack": {"name": "Earthquake", "effects": [""]},
+    "special_attack": {"name": "Earthquake", "effects": []},
     "frames": "fire.png"
 }
 }

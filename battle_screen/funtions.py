@@ -20,7 +20,7 @@ def change_health_bar(health_bar, bars_surface, percentage, text_surface):
     height = health_bar.get_height()
     health_bar.fill((0, 0, 0, 0))
     health_bar.fill(RED, (90, 37, width - 115 - removeFromBar, height / 3))
-    health_bar.blit(text_surface, (160, 45))
+    health_bar.blit(text_surface, (145, 45))
     health_bar.blit(bars_surface, (0, 0), (0, 0, width, height))
 
 def change_energy_bar(energy_bar, bars_surface, percentage, text_surface):
@@ -29,7 +29,7 @@ def change_energy_bar(energy_bar, bars_surface, percentage, text_surface):
     height = energy_bar.get_height()
     energy_bar.fill((0, 0, 0, 0))
     energy_bar.fill(BLUE, (90, 37, width - 115 - removeFromBar, height / 3))
-    energy_bar.blit(text_surface, (160, 45))
+    energy_bar.blit(text_surface, (145, 45))
     energy_bar.blit(bars_surface, (0, 0), (0, height, width, height))
 
 def remove_effects_turns(effects, effects_names):
@@ -44,10 +44,15 @@ def calculate_damage(attacking_pokemon, attacked_pokemon):
         effect_name = effect.get_name()
         if effect_name == "Bleeding":
             damage += attacking_pokemon.get_damage() * 0.1 * effect.get_number_of_turns_left()
-    for effect in attacking_pokemon.get_effects():
-        effect_name = effect.get_name()
         if effect_name == "Weakness":
             damage -= attacking_pokemon.get_damage() * 0.1 * effect.get_number_of_turns_left()
+        if effect_name == "Stunned":
+            chance = 5 * effect.get_number_of_turns_left()
+            if chance > 100:
+                chance = 100
+            randomnumber = random.randint(1, 100)
+            if randomnumber > chance:
+                return 0
     if damage < 0:
         damage = 0
     return damage
@@ -57,9 +62,9 @@ def calculate_passive_damage(pokemon):
     for effect in pokemon.get_effects():
         effect_name = effect.get_name()
         if effect_name == "Restoration":
-            damage -= pokemon.get_maxHealth() * 0.15 * effect.get_number_of_turns_left()
+            damage -= pokemon.get_maxHealth() * 0.5 * effect.get_number_of_turns_left()
         if effect_name == "Poison":
-            damage += 0.1 * pokemon.get_health()
+            damage += 0.1 * pokemon.get_health() * effect.get_number_of_turns_left()
     return damage
 
 def modify_health(pokemon, damage):
@@ -71,12 +76,6 @@ def modify_health(pokemon, damage):
         pokemon.set_health(pokemon.get_maxHealth())
     else:
         pokemon.set_health(health)
-
-def render_all_procentages_as_text():
-    text_surfaces = []
-    for i in range(0, 101):
-        text_surfaces.append(FONT.render(str(i) + "%", True, WHITE, None))
-    return text_surfaces
 
 def reset_pokemons(player_pokemons, enemies):
     for pokemon in player_pokemons:
@@ -104,6 +103,14 @@ def passive_update_pokemon(pokemon, last_pokemon, effects_end_of_turn):
         if last_pokemon.get_isDead():  # Daca a murit ultimul inamic se trece in meniu
             return "MainMenu"
         return "DEAD"
+    # Check if lose energy
+    for effect in pokemon.get_effects():
+        if effect.get_name() == "Burned":
+            energy = pokemon.get_energy()
+            energy -= 0.05 * effect.get_number_of_turns_left() * energy
+            if energy <= 0:
+                energy = 0
+            pokemon.set_energy(energy)
     # Check if effect applied to itself is over
     remove_effects_turns(pokemon.get_effects(), effects_end_of_turn)
     pokemon.check_what_effect_is_over()

@@ -79,8 +79,6 @@ class Battle_screen:
         bars_width = bars.get_width()
         bars_height = bars.get_height() / 2
 
-        # Render procentages text surfaces one time per battle
-        text_surfaces = render_all_procentages_as_text()
         # HEALTH BAR
         health_bar = pg.Surface((bars_width, bars_height), pg.SRCALPHA)
         health_bar_enemy = pg.Surface((bars_width, bars_height), pg.SRCALPHA)
@@ -92,10 +90,10 @@ class Battle_screen:
         bar_changed = [[True, True], [True, True]]
 
         # Effects name
-        effects_end_of_turn = ["Poison", "Weakness", "Burned", "Restoration", "Stunned", "Wet"]
-        effects_when_attacked = ["Bleeding", "Immunity"]
-        negative_effects = ["Poison", "Weakness", "Burned", "Stunned", "Bleeding"]
-        positive_effects = ["Restoration", "Wet"]
+        effects_end_of_turn = ["Poison", "Weakness", "Burned", "Restoration", "Stunned"]
+        effects_when_attacked = ["Bleeding"]
+        negative_effects = ["Poison", "Weakness", "Burned", "Bleeding", "Stunned"]
+        positive_effects = ["Restoration"]
         while True:
             # creare enemies_surface cu frame-urile aferente
             self.pokemons_surface.blit(self.background_surface, (0, 0))
@@ -138,12 +136,18 @@ class Battle_screen:
                     # Adding hp_bar
                     if bar_changed[0][0]:
                         percentage = self.player_pokemons[active_pokemon_index].get_health() / self.player_pokemons[active_pokemon_index].get_maxHealth()
-                        change_health_bar(health_bar, bars, 1 - percentage, text_surfaces[math.floor(percentage * 100)])
+                        change_health_bar(health_bar,
+                                          bars,
+                                          1 - percentage,
+                                          FONT.render(str(self.player_pokemons[active_pokemon_index].get_health()) + "/" + str(self.player_pokemons[active_pokemon_index].get_maxHealth()), True, WHITE, None))
                         bar_changed[0][0] = False
                     # Adding energy bar
                     if bar_changed[0][1]:
                         percentage = self.player_pokemons[active_pokemon_index].get_energy() / self.player_pokemons[active_pokemon_index].get_maxEnergy()
-                        change_energy_bar(energy_bar, bars, 1 - percentage, text_surfaces[math.floor(percentage * 100)])
+                        change_energy_bar(energy_bar,
+                                          bars,
+                                          1 - percentage,
+                                          FONT.render(str(self.player_pokemons[active_pokemon_index].get_energy()) + "/" + str(self.player_pokemons[active_pokemon_index].get_maxEnergy()), True, WHITE, None))
                         bar_changed[0][1] = False
                     self.pokemons_surface.blit(health_bar,
                                                (self.positions_on_screen[0][0] + self.player_pokemons[active_pokemon_index].get_pokemon_frames().get_size()[0] /2 - 160,
@@ -181,12 +185,18 @@ class Battle_screen:
                     # Adding hp_bar
                     if bar_changed[1][0]:
                         percentage = self.enemies[active_enemy_index].get_health() / self.enemies[active_enemy_index].get_maxHealth()
-                        change_health_bar(health_bar_enemy, bars, 1 - percentage, text_surfaces[math.floor(percentage * 100)])
+                        change_health_bar(health_bar_enemy,
+                                          bars,
+                                          1 - percentage,
+                                          FONT.render(str(self.enemies[active_enemy_index].get_health()) + "/" + str(self.enemies[active_enemy_index].get_maxHealth()), True, WHITE, None))
                         bar_changed[1][0] = False
 
                     if bar_changed[1][1]:
                         percentage = self.enemies[active_enemy_index].get_energy() / self.enemies[active_enemy_index].get_maxEnergy()
-                        change_energy_bar(energy_bar_enemy, bars, 1 - percentage, text_surfaces[math.floor(percentage * 100)])
+                        change_energy_bar(energy_bar_enemy,
+                                          bars,
+                                          1 - percentage,
+                                          FONT.render(str(self.enemies[active_enemy_index].get_energy()) + "/" + str(self.enemies[active_enemy_index].get_maxEnergy()), True, WHITE, None))
                         bar_changed[1][1] = False
 
                     self.pokemons_surface.blit(health_bar_enemy,
@@ -229,6 +239,7 @@ class Battle_screen:
                         attack_playing = False
 
                     bar_changed[0][0] = True
+                    bar_changed[0][1] = True
 
                     add_attack[0] = False
                     if not add_special[0]:
@@ -274,7 +285,7 @@ class Battle_screen:
 
             if wait_a_bit[0] and attack_playing:
                 # Wait for 50 frames
-                if int((frame - initial_frame)) <= 40:
+                if int((frame - initial_frame)) <= 100:
                     pass
                 else:
                     # Se pregatesc verificarile daca inamicul isi poate folosi atacul special
@@ -321,6 +332,7 @@ class Battle_screen:
                         reset_pokemons(self.player_pokemons, self.enemies)
                         return "MainMenu"
                     bar_changed[1][0] = True
+                    bar_changed[1][1] = True
 
                     # Se continua atacul
                     add_attack[1] = False
@@ -364,7 +376,7 @@ class Battle_screen:
 
             if wait_a_bit[1] and attack_playing:
                 # Wait for 40 frames
-                if int((frame - initial_frame)) <= 40:
+                if int((frame - initial_frame)) <= 100:
                     pass
                 else:
                     attack_playing = False
