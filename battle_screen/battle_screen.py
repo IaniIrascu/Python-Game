@@ -4,8 +4,11 @@ from pokemoni.ability_screen import *
 from utils.colors import *
 from pokemoni.effects.effect import Effect
 import random
+import math
+import builtins
 
-SPEEDOFANIMATION = 0.1  # Valoare intre (0 si 1)
+SPEEDOFANIMATION = 0.12  # Valoare intre (0 si 1)
+FONT = pg.font.Font("./main_menu/assets/minecraft.ttf", 24)
 
 def check_button_pressed(mouse_pos, ability_screen, ability_screen_position):
     buttons = ability_screen.get_buttons()
@@ -18,21 +21,60 @@ def check_button_pressed(mouse_pos, ability_screen, ability_screen_position):
             return button_name
 
 # NU SCHIMBATI NUMERE PRIN PROGRAM
-def change_health_bar(health_bar, bars_surface, percentage):
+def change_health_bar(health_bar, bars_surface, percentage, text_surface):
     removeFromBar = (health_bar.get_width() - 115) * percentage
     width = health_bar.get_width()
     height = health_bar.get_height()
     health_bar.fill((0, 0, 0, 0))
     health_bar.fill(RED, (90, 37, width - 115 - removeFromBar, height / 3))
+    health_bar.blit(text_surface, (160, 45))
     health_bar.blit(bars_surface, (0, 0), (0, 0, width, height))
 
-def change_energy_bar(energy_bar, bars_surface, percentage):
+def change_energy_bar(energy_bar, bars_surface, percentage, text_surface):
     removeFromBar = (energy_bar.get_width() - 115) * percentage
     width = energy_bar.get_width()
     height = energy_bar.get_height()
     energy_bar.fill((0, 0, 0, 0))
     energy_bar.fill(BLUE, (90, 37, width - 115 - removeFromBar, height / 3))
+    energy_bar.blit(text_surface, (160, 45))
     energy_bar.blit(bars_surface, (0, 0), (0, height, width, height))
+
+def remove_effects_turns(effects, effects_names):
+    for effect in effects:
+        if effect.get_name() in effects_names:
+            effect.set_number_of_turns_left(effect.get_number_of_turns_left() - 1)
+            effect.change_effectIcon(color=effect.get_color(), number=effect.get_number_of_turns_left())
+
+def calculate_damage(attacking_pokemon, attacked_pokemon):
+    damage = 0
+    damage = attacking_pokemon.get_damage()
+    for effect in attacked_pokemon.get_effects():
+        effect_name = effect.get_name()
+        if effect_name == "Bleeding":
+            damage = attacking_pokemon.get_damage() * (1 + 0.1 * effect.get_number_of_turns_left())
+    return damage
+
+def calculate_passive_damage(pokemon):
+    damage = 0
+    for effect in pokemon.get_effects():
+        effect_name = effect.get_name()
+        if effect_name == "Poison":
+            damage = 0.1 * pokemon.get_health()
+    return damage
+
+def modify_health(pokemon, damage):
+    health = pokemon.get_health()
+    health -= damage
+    if health <= 0:
+        return "DEAD"
+    else:
+        pokemon.set_health(health)
+
+def render_all_procentages_as_text():
+    text_surfaces = []
+    for i in builtins.range(0, 101):
+        text_surfaces.append(FONT.render(str(i) + "%", True, WHITE, None))
+    return text_surfaces
 
 class Battle_screen:
     def __init__(self, display_surface):
@@ -85,7 +127,6 @@ class Battle_screen:
         add_ability_surface = False
         add_attack = [False, False]
         add_special = [False, False]
-        final_turns = [False, False]
         wait_a_bit = [False, False]
 
         attack_playing = False
@@ -101,12 +142,18 @@ class Battle_screen:
         bars_width = bars.get_width()
         bars_height = bars.get_height() / 2
 
+        # Render procentages text surfaces one time per battle
+        text_surfaces = render_all_procentages_as_text()
         # HEALTH BAR
         health_bar = pg.Surface((bars_width, bars_height), pg.SRCALPHA)
         health_bar_enemy = pg.Surface((bars_width, bars_height), pg.SRCALPHA)
         # ENERGY BAR
         energy_bar = pg.Surface((bars_width, bars_height), pg.SRCALPHA)
         energy_bar_enemy = pg.Surface((bars_width, bars_height), pg.SRCALPHA)
+
+        # Effects name
+        effects_end_of_turn = ["Poison", "Weakness", "Burned", "Restoration", "Stunned"]
+        effects_when_attacked = ["Bleeding", "Immunity"]
 
         while True:
             # creare enemies_surface cu frame-urile aferente
@@ -149,11 +196,11 @@ class Battle_screen:
 
                     # Adding hp_bar
                     percentage = self.player_pokemons[active_pokemon_index].get_health() / self.player_pokemons[active_pokemon_index].get_maxHealth()
-                    change_health_bar(health_bar, bars, 1 - percentage)
+                    change_health_bar(health_bar, bars, 1 - percentage, text_surfaces[math.floor(percentage * 100)])
                     # print(self.player_pokemons[active_pokemon_index].get_health())
                     # print(1 - percentage)
                     percentage = self.player_pokemons[active_pokemon_index].get_energy() / self.player_pokemons[active_pokemon_index].get_maxEnergy()
-                    change_energy_bar(energy_bar, bars, 1 - percentage)
+                    change_energy_bar(energy_bar, bars, 1 - percentage, text_surfaces[math.floor(percentage * 100)])
                     self.pokemons_surface.blit(health_bar,
                                                (self.positions_on_screen[0][0] + self.player_pokemons[active_pokemon_index].get_pokemon_frames().get_size()[0] /2 - 160,
                                                 self.positions_on_screen[0][1] + self.player_pokemons[active_pokemon_index].get_pokemon_frames().get_size()[1]))
@@ -189,9 +236,9 @@ class Battle_screen:
 
                     # Adding hp_bar
                     percentage = self.enemies[active_enemy_index].get_health() / self.enemies[active_enemy_index].get_maxHealth()
-                    change_health_bar(health_bar_enemy, bars, 1 - percentage)
+                    change_health_bar(health_bar_enemy, bars, 1 - percentage, text_surfaces[math.floor(percentage * 100)])
                     percentage = self.enemies[active_enemy_index].get_energy() / self.enemies[active_enemy_index].get_maxEnergy()
-                    change_energy_bar(energy_bar_enemy, bars, 1 - percentage)
+                    change_energy_bar(energy_bar_enemy, bars, 1 - percentage, text_surfaces[math.floor(percentage * 100)])
                     self.pokemons_surface.blit(health_bar_enemy,
                                                (self.positions_on_screen[1][0] + self.enemies[active_enemy_index].get_pokemon_frames().get_size()[0] / 2 - 160,
                                                 self.positions_on_screen[1][1] + self.enemies[active_enemy_index].get_pokemon_frames().get_size()[1]))
@@ -207,8 +254,38 @@ class Battle_screen:
                     self.pokemons_surface.blit(self.player_pokemons[active_pokemon_index].get_attack().get_attack_frames().get_attack_frame(frame_to_get),
                                                self.positions_on_screen[1])
                 else:
+                    # ACTIVE DAMAGE
+                    damage = calculate_damage(self.player_pokemons[active_pokemon_index], self.enemies[active_enemy_index])
+                    if modify_health(self.enemies[active_enemy_index], damage) == "DEAD":
+                        add_attack[1] = False
+                        add_special[1] = False
+                        wait_a_bit[1] = False
+                        attack_playing = False
+                        self.enemies[active_enemy_index].set_isDead(True)  # Inamicul moare
+                        if self.enemies[
+                            number_of_enemies - 1].get_isDead():  # Daca a murit ultimul inamic se trece in meniu
+                            return "MainMenu"
+
+                    # PASSIVE DAMAGE AFTER ATTACKING
+                    damage = calculate_passive_damage(self.player_pokemons[active_pokemon_index])
+                    if modify_health(self.player_pokemons[active_pokemon_index], damage) == "DEAD":
+                        self.player_pokemons[active_pokemon_index].set_isDead(True)  # Inamicul moare
+                        if self.player_pokemons[
+                            number_of_player_pokemons - 1].get_isDead():  # Daca a murit ultimul inamic se trece in meniu
+                            return "MainMenu"
+
+                    # Check if effect applied to itself is over
+                    remove_effects_turns(self.player_pokemons[active_pokemon_index].get_effects(), effects_end_of_turn)
+                    self.player_pokemons[active_pokemon_index].check_what_effect_is_over()
+
+                    # Check if effect on the other pokemon is over after attack
+                    remove_effects_turns(self.enemies[active_enemy_index].get_effects(), effects_when_attacked)
+                    self.enemies[active_enemy_index].check_what_effect_is_over()
+
                     add_attack[0] = False
-                    final_turns[0] = True
+                    if not add_special[0]:
+                        initial_frame = frame
+                        wait_a_bit[0] = True
 
             if add_special[0] and not add_attack[0]:
                 # Se creeaza efectul
@@ -218,7 +295,7 @@ class Battle_screen:
                 for effect in self.enemies[active_enemy_index].get_effects():
                     if effect.get_name() == effect_ref.get_name():
                         effect.set_number_of_turns_left(effect.get_number_of_turns())
-                        effect.set_justApplied(True)
+                        effect.change_effectIcon(color=effect_ref.get_color(), number=effect_ref.get_number_of_turns())
                         check_effect = True
 
                 if not check_effect:
@@ -227,41 +304,12 @@ class Battle_screen:
                     effect_to_add.set_number_of_turns(effect_ref.get_number_of_turns())
                     effect_to_add.set_number_of_turns_left(effect_ref.get_number_of_turns())
                     effect_to_add.change_effectIcon(color=effect_ref.get_color(), number = effect_ref.get_number_of_turns())
-                    effect_to_add.set_justApplied(True)
 
                     # Se adauga efectul la lista
                     self.enemies[active_enemy_index].add_effect_on_itself(effect_to_add)
 
-                add_special[0] = False
-
-            if final_turns[0]:
-                # Aici mai pot fi puse chestii
-
-                # Se modifica numarul de ture ramase pentru effect
-                self.player_pokemons[active_pokemon_index].remove_one_turn_from_effects()
-                self.player_pokemons[active_pokemon_index].check_what_effect_is_over()
-
-                for effect in self.player_pokemons[active_pokemon_index].get_effects():
-                    effect.change_effectIcon(color=effect.get_color(), number=effect.get_number_of_turns_left())
-
-                # Se alege un atac random al inamicului
-                health = self.enemies[active_enemy_index].get_health()
-                health -= (self.player_pokemons[active_pokemon_index].get_damage() + 10)  # Atac pokemon
-                # Verify if enemy died after the last attack
-                if health <= 0:
-                    add_attack[1] = False
-                    add_special[1] = False
-                    wait_a_bit[1] = False
-                    attack_playing = False
-                    self.enemies[active_enemy_index].set_isDead(True)  # Inamicul moare
-                    if self.enemies[number_of_enemies - 1].get_isDead(): # Daca a murit ultimul inamic se trece in meniu
-                        return "MainMenu"
-                else:
-                    self.enemies[active_enemy_index].set_health(health)
-
-                # Se incepe wait-ul
                 initial_frame = frame
-                final_turns[0] = False
+                add_special[0] = False
                 if not self.enemies[active_enemy_index].get_isDead():
                     wait_a_bit[0] = True
                 else:
@@ -273,10 +321,13 @@ class Battle_screen:
                     pass
                 else:
                     enemy_attack = random.randint(0, 1)
-                    if enemy_attack == 0:
+                    attack_energy_cost = self.enemies[active_enemy_index].get_attack().get_energy_cost()
+                    enemy_energy = self.enemies[active_enemy_index].get_energy()
+                    if enemy_attack == 0 or enemy_energy < attack_energy_cost:
                         add_attack[1] = True
                         add_special[1] = False
                     else:
+                        self.enemies[active_enemy_index].set_energy(enemy_energy - attack_energy_cost)
                         add_attack[1] = True
                         add_special[1] = True
                     wait_a_bit[0] = False
@@ -289,9 +340,33 @@ class Battle_screen:
                     self.pokemons_surface.blit(self.enemies[active_enemy_index].get_attack().get_attack_frames().get_attack_frame(frame_to_get),
                                                self.positions_on_screen[0])
                 else:
+                    # ACTIVE DAMAGE
+                    damage = calculate_damage(self.enemies[active_enemy_index], self.player_pokemons[active_pokemon_index]) + 20
+                    if modify_health(self.player_pokemons[active_pokemon_index], damage) == "DEAD":
+                        self.player_pokemons[active_pokemon_index].set_isDead(True)  # Inamicul moare
+                        if self.player_pokemons[
+                            number_of_player_pokemons - 1].get_isDead():  # Daca a murit ultimul inamic se trece in meniu
+                            return "MainMenu"
+
+                    # PASSIVE DAMAGE AFTER ATTACK
+                    damage = calculate_passive_damage(self.enemies[active_enemy_index])
+                    if modify_health(self.enemies[active_enemy_index], damage) == "DEAD":
+                        self.enemies[active_enemy_index].set_isDead(True)  # Inamicul moare
+                        if self.enemies[
+                            number_of_enemies - 1].get_isDead():  # Daca a murit ultimul inamic se trece in meniu
+                            return "MainMenu"
+
+                    # Check if effect applied to itself is over
+                    remove_effects_turns(self.enemies[active_enemy_index].get_effects(), effects_end_of_turn)
+                    self.enemies[active_enemy_index].check_what_effect_is_over()
+
+                    # Check if effect on the other pokemon is over
+                    remove_effects_turns(self.player_pokemons[active_pokemon_index].get_effects(), effects_when_attacked)
+                    self.player_pokemons[active_pokemon_index].check_what_effect_is_over()
                     # Se continua atacul
                     add_attack[1] = False
-                    final_turns[1] = True
+                    if not add_special[1]:
+                        wait_a_bit[1] = True
 
             if add_special[1] and not add_attack[1]:
                 # Se creeaza efectul
@@ -301,6 +376,7 @@ class Battle_screen:
                 for effect in self.player_pokemons[active_pokemon_index].get_effects():
                     if effect.get_name() == effect_ref.get_name():
                         effect.set_number_of_turns_left(effect.get_number_of_turns())
+                        effect.change_effectIcon(color=effect_ref.get_color(), number=effect_ref.get_number_of_turns())
                         effect.set_justApplied(True)
                         check_effect = True
 
@@ -316,25 +392,6 @@ class Battle_screen:
                     self.player_pokemons[active_pokemon_index].add_effect_on_itself(effect_to_add)
 
                 add_special[1] = False
-
-            if final_turns[1]:
-                # Se modifica numarul de ture ramase pentru effect
-                self.enemies[active_enemy_index].remove_one_turn_from_effects()
-                self.enemies[active_enemy_index].check_what_effect_is_over()
-
-                for effect in self.enemies[active_enemy_index].get_effects():
-                    effect.change_effectIcon(color=effect.get_color(), number=effect.get_number_of_turns_left())
-
-                health = self.player_pokemons[active_pokemon_index].get_health()
-                health -= self.enemies[active_enemy_index].get_damage()  # Atac inamic
-                if health <= 0:
-                    self.player_pokemons[active_pokemon_index].set_isDead(True)  # Pokemonul moare
-                    if self.player_pokemons[number_of_player_pokemons - 1].get_isDead():  # Ultimul pokemon e mort
-                        return "MainMenu"
-                else:
-                    self.player_pokemons[active_pokemon_index].set_health(health)
-
-                final_turns[1] = False
                 wait_a_bit[1] = True
 
             if wait_a_bit[1]:
@@ -394,14 +451,17 @@ class Battle_screen:
                             result = check_button_pressed(mouse_pos,
                                                           self.player_pokemons[active_pokemon_index].get_ability_screen(),
                                                           ability_screen_position)
+                            pokemon_energy = self.player_pokemons[active_pokemon_index].get_energy()
+                            attack_energy_cost = self.player_pokemons[active_pokemon_index].get_attack().get_energy_cost()
                             if result == "X":
                                 add_ability_surface = False
-                            if result == "Attack" and add_attack[0] == False:
+                            if result == "Attack":
                                 attack_playing = True
                                 add_attack[0] = True
                                 initial_frame = frame
                                 add_ability_surface = False
-                            if result == "Special" and add_special[0] == False:
+                            if result == "Special" and attack_energy_cost <= pokemon_energy:
+                                self.player_pokemons[active_pokemon_index].set_energy(pokemon_energy - attack_energy_cost)
                                 attack_playing = True
                                 add_special[0] = True
                                 add_attack[0] = True
@@ -425,4 +485,5 @@ class Battle_screen:
             frame += 1
             if frame > 1000000000:
                 return "MainMenu"
+            print(clock.get_fps())
             clock.tick(60)

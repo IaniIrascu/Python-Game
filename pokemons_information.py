@@ -37,11 +37,11 @@ effects_information = {
 
 # DESCRIERI EFECTE
 effects_descriptions = [
-    "For every poison effect on the pokemon, that pokemon takes (5 * number_of_poison)% damage of the total remaining health"
-    "For every healing effect applied, recover (3 * number_of_healing) % health of the total hp)"
-    "(15 * nr_stunned) % skip turn"
-    "more damage"
-    "less damage"
-    "burn lose (5 * nr burned)% energy"
-    "cleans last applied negative effect"
+    "Pokemon takes damage 10% of the total remaining health, at the end of pokemon turn"
+    "Pokemon get 10% * remaining turns for the effect of his total health"
+    "Theres a 50% change the pokemon skip its turn after this effect"
+    "Pokemon gets 10% * remaining turns more damage"
+    "Pokemon deals 10 * remaining turns less damage"
+    "Pokemon loses 5% * remaining turns of his energy"
+    "Cleans the last negative effect applied"
 ]

@@ -1,5 +1,4 @@
 import pygame as pg
-from battle_screen.battle_screen import Battle_screen
 from main_menu.button import Button
 from utils.colors import *
 

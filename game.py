@@ -92,9 +92,11 @@ class Game:
         attack2 = SpecialAttack()
 
         attack1.set_effect(search_effect(effects, "Poison"))
-        attack2.set_effect(search_effect(effects, "Burned"))
+        attack2.set_effect(search_effect(effects, "Poison"))
         attack1.set_attack_frames(attacks_frames.get_attack_frames("scratch.png"))
         attack2.set_attack_frames(attacks_frames.get_attack_frames("fire.png"))
+        attack1.set_energy_cost(20)
+        attack2.set_energy_cost(30)
 
         # Loading all pokemons
         pokemons_frames = PokemonsFrames()
@@ -108,7 +110,7 @@ class Game:
             pokemons[i].set_maxHealth(pokemons_info[pokemon_name]["health"])
             pokemons[i].set_energy(pokemons_info[pokemon_name]["energy"])
             pokemons[i].set_maxEnergy(pokemons_info[pokemon_name]["energy"])
-            pokemons[i].set_damage(45)
+            pokemons[i].set_damage(10)
             pokemons[i].set_level(1)
             pokemons[i].set_ability_screen(ability_screen)
             if i % 2 == 0:
