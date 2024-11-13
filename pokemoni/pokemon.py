@@ -86,6 +86,7 @@ class Pokemon:
         self.pokemonFrames = None
         self.name = None
         self.attack = None
+        self.specialAttack = None
         self.isDead = False
         self.isActive = False
         self.level = None
@@ -96,10 +97,12 @@ class Pokemon:
         self.energy = None
         self.experience = None
         self.specialAbility = None
-        self.ability_screen = None
         self.effectsOnItself = []
 
     # Setters
+    def set_special_attack(self, specialAttack):
+        self.specialAttack = specialAttack
+
     def set_maxHealth(self, maxHealth):
         self.maxHealth = maxHealth
 
@@ -137,10 +140,12 @@ class Pokemon:
         self.attack = attack
 
     def add_effect_on_itself(self, effect):
-        effect.set_number_of_turns_left(effect.get_number_of_turns())
         self.effectsOnItself.append(effect)
 
     # Getters
+    def get_special_attack(self):
+        return self.specialAttack
+
     def get_maxHealth(self):
         return self.maxHealth
 
@@ -188,6 +193,6 @@ class Pokemon:
         self.experience += (pokemon.get_level() * 10)
 
     def check_what_effect_is_over(self):
-        for i, effect in enumerate(self.effectsOnItself):
-            if effect.get_number_of_turns_left() == 0:
+        for i in range(len(self.effectsOnItself) - 1, -1, -1):
+            if self.effectsOnItself[i].get_number_of_turns_left() == 0:
                 self.effectsOnItself.pop(i)

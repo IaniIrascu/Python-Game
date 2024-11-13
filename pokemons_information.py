@@ -26,22 +26,105 @@ pokemons_info = {
 }
 
 effects_information = {
-    "Poison": {"color": colors.PURPLE, "no_of_turns": 2},
-    "Restoration": {"color": colors.PINK, "no_of_turns": 2},
-    "Stunned": {"color": colors.DARK_GRAY, "no_of_turns": 1},
-    "Bleeding": {"color": colors.RED, "no_of_turns": 3},
-    "Weakness": {"color": colors.YELLOW, "no_of_turns": 2},
-    "Burned": {"color": colors.BLACK, "no_of_turns": 3},
-    "Wet": {"color": colors.BLUE, "no_of_turns": 3},
+    "Poison": {"color": colors.PURPLE},
+    "Restoration": {"color": colors.PINK},
+    "Stunned": {"color": colors.DARK_GRAY},
+    "Bleeding": {"color": colors.RED},
+    "Weakness": {"color": colors.YELLOW},
+    "Burned": {"color": colors.BLACK},
+    "Wet": {"color": colors.BLUE},
 }
 
 # DESCRIERI EFECTE
 effects_descriptions = [
-    "Pokemon takes damage 10% of the total remaining health, at the end of pokemon turn"
-    "Pokemon get 10% * remaining turns for the effect of his total health"
-    "Theres a 50% change the pokemon skip its turn after this effect"
-    "Pokemon gets 10% * remaining turns more damage"
-    "Pokemon deals 10 * remaining turns less damage"
+    "Pokemon takes damage 10% of the total remaining health, at the end of pokemon turn 0" 
+    "Pokemon get 10% * remaining turns for the effect of his total health 0"
+    "Theres a 15%(max 100%) chance the pokemon skip its turn after this effect 0 (works)"
+    "Pokemon gets 10% * remaining turns more damage 0"
+    "Pokemon deals 10 * remaining turns less damage 0"
     "Pokemon loses 5% * remaining turns of his energy"
     "Cleans the last negative effect applied"
 ]
+
+attacks_information = {
+"Atrox.png": {
+    "attack": "Snake Bite",
+    "special_attack": {"name": "Venom splash", "effects": ["Weakness", "Poison"]},
+    "frames": "scratch.png"
+},
+"Charmadillo.png": {
+    "attack": "Rock Burn",
+    "special_attack": {"name": "Earth Wraith", "effects": ["Burned", "Stunned"]},
+    "frames": "explosion.png"
+},
+"Cindrill.png": {
+    "attack": "Stony Fire",
+    "special_attack": {"name": "Magma burst", "effects": ["Burned", "Stunned"]},
+    "frames": "fire.png"
+},
+"Cleaf.png": {
+    "attack": "Wing Flap",
+    "special_attack": {"name": "Venus Flytrap", "effects": ["Poison", "Bleeding"]},
+    "frames": "green.png"
+},
+"Draem.png": {
+    "attack": "Paw Slap",
+    "special_attack": {"name": "Star Dust", "effects": ["Stunned"]},
+    "frames": "scratch.png"
+},
+"Finiette.png": {
+    "attack": "Water Splash",
+    "special_attack": {"name": "Tsunami Fury", "effects": ["Wet", "Stunned"]},
+    "frames": "splash.png"
+},
+"Finsta.png": {
+    "attack": "Bubble Pop",
+    "special_attack": {"name": "Playful Wave", "effects": ["Wet"]},
+    "frames": "splash.png"
+},
+"Friolera.png": {
+    "attack": "Ice Spike",
+    "special_attack": {"name": "Winters Blessing", "effects": ["Restoration", "Poison"]},
+    "frames": "ice.png"
+},
+"Gulfin.png": {
+    "attack": "Slip Splash",
+    "special_attack": {"name": "Crack the Ocean", "effects": ["Bleeding"]},
+    "frames": "splash.png"
+},
+"Ivieron.png": {
+    "attack": "Nature's Claw",
+    "special_attack": {"name": "Hunter's Pursue", "effects": ["Poison", "Bleeding"]},
+    "frames": "green.png"
+},
+"Jacana.png": {
+    "attack": "Little Pinch",
+    "special_attack": {"name": "Sky Feather", "effects": ["Poison"]},
+    "frames": "scratch.png"
+},
+"Larvea.png": {
+    "attack": "Head Smash",
+    "special_attack": {"name": "Forest Trap", "effects": ["Bleeding", "Weakness"]},
+    "frames": "green.png"
+},
+"Pluma.png": {
+    "attack": "Feral bite",
+    "special_attack": {"name": "Jungle Rawr", "effects": ["Restoration", "Poison", "Bleeding"]},
+    "frames": "green.png"
+},
+"Plumette.png": {
+    "attack": "Leaf's Cut",
+    "special_attack": {"name": "Jungle's Hearth", "effects": ["Bleeding"]},
+    "frames": "green.png"
+},
+"Pouch.png": {
+    "attack": "Capi Slap",
+    "special_attack": {"name": "Capi Sssslap", "effects": ["Stunned"]},
+    "frames": "scratch.png"
+},
+"Sparchu.png": {
+    "attack": "Hot Bruise",
+    "special_attack": {"name": "Earthquake", "effects": ["Stunned"]},
+    "frames": "fire.png"
+}
+}

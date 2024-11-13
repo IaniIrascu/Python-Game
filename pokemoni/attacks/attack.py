@@ -63,12 +63,12 @@ class AttacksFrames:
 class SpecialAttack:
     def __init__(self):
         self.attackFrames = None  # Aceasta variabila retine un obiect in cadrul ei
-        self.effect = None
+        self.effects = None
         self.name = None
         self.energy_cost = None
 
-    def set_effect(self, effect):
-        self.effect = effect
+    def set_effects(self, effects):
+        self.effects = effects
 
     def set_name(self, name):
         self.name = name
@@ -76,8 +76,8 @@ class SpecialAttack:
     def set_energy_cost(self, cost):
         self.energy_cost = cost
 
-    def get_effect(self):
-        return self.effect
+    def get_effects(self):
+        return self.effects
 
     def get_name(self):
         return self.name
@@ -87,6 +87,23 @@ class SpecialAttack:
 
     def set_attack_frames(self, attackFramesClass):
         self.attackFrames = attackFramesClass
+
+    def get_attack_frames(self):
+        return self.attackFrames
+
+class Attack:
+    def __init__(self):
+        self.attackFrames = None
+        self.name = None
+
+    def set_name(self, name):
+        self.name = name
+
+    def set_attack_frames(self, attackFrames):
+        self.attackFrames = attackFrames
+
+    def get_name(self):
+        return self.name
 
     def get_attack_frames(self):
         return self.attackFrames

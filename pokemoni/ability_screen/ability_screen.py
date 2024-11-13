@@ -3,12 +3,14 @@ from main_menu.button import Button
 from utils.colors import *
 
 def create_text_button_surface(buttons, button_name, font):
-    if button_name != "X":
+    if button_name != "X" and button_name != "Name":
         buttons[button_name].add_image("./main_menu/assets/button.jpg")
-        buttons[button_name].add_text(font, button_name, BLACK)
+        buttons[button_name].add_text(font, buttons[button_name].get_name(), BLACK)
     else:
-        buttons["X"].get_button_surface().set_colorkey((0, 0, 0))
-        buttons["X"].add_text(font, button_name, (1, 1, 1))
+        buttons[button_name].set_color((217,160,102))
+        buttons[button_name].add_color()
+        buttons[button_name].get_button_surface().set_colorkey((0, 0, 0))
+        buttons[button_name].add_text(font, buttons[button_name].get_name(), (1, 1, 1))
 
 class AbilityScreen:
     def __init__(self):
@@ -38,31 +40,59 @@ class AbilityScreen:
             self.buttons.pop(button_name)
 
     def create_ability_screen(self):
-        # Setting up the background and creating the background surface
+        # # Setting up the background and creating the background surface
         background = pg.image.load("./pokemoni/ability_screen/assets/Untitled.png")
         background = pg.transform.scale(background, self.size)
-
         buttons = []
         attack_button = Button(display_surface = self.button_surface,
-                              position = (60, self.button_surface.get_height() / 5),
+                              position = (60, 200),
                               size = (self.size[0] - 150, self.size[1] / 6))
         special_ability_button = Button(display_surface=self.button_surface,
-                                        position=(60, 2 * self.button_surface.get_height() / 4),
+                                        position=(60, 350),
                                         size = (self.size[0] - 150, self.size[1] / 6))
+        switch_pokemon_button = Button(display_surface=self.button_surface,
+                                       position=(60, 500),
+                                       size = (self.size[0] - 150, self.size[1] / 6))
         x_button = Button(display_surface = self.button_surface,
                           position = (self.button_surface.get_width() - 125, 40),
                           size = (45, 45))
+        name_button = Button(display_surface=self.button_surface,
+                             position = (40, 80),
+                             size = (self.button_surface.get_width() - 100, self.size[1] / 10))
 
         buttons.append(attack_button)
         buttons.append(special_ability_button)
         buttons.append(x_button)
+        buttons.append(name_button)
+        buttons.append(switch_pokemon_button)
 
         # Adding buttons to dictionary
         self.add_button("Attack", attack_button)
         self.add_button("Special", special_ability_button)
         self.add_button("X", x_button)
+        self.add_button("Name", name_button)
+        self.add_button("Switch", switch_pokemon_button)
 
         for button_name in self.buttons:
+            # Se creeaza butonul
+            create_text_button_surface(self.buttons, button_name, self.font)
+            # Se copieaza butoanele pe suprafata de butoane
+            self.buttons[button_name].create_button()
+
+        self.background_surface.blit(background, (0, 0))
+        self.background_surface.blit(self.button_surface, (0, 0))
+        self.ability_screen_surface.blit(self.background_surface, (0, 0))
+
+    def update_ability_screen(self, pokemon):
+        background = pg.image.load("./pokemoni/ability_screen/assets/Untitled.png")
+        background = pg.transform.scale(background, self.size)
+
+        for button_name in self.buttons:
+            self.buttons["Attack"].set_name(pokemon.get_attack().get_name())
+            self.buttons["Special"].set_name(pokemon.get_special_attack().get_name())
+            self.buttons["Name"].set_name(pokemon.get_name().replace(".png", ""))
+            self.buttons["X"].set_name("X")
+            self.buttons["Switch"].set_name("Switch")
             # Se creeaza butonul
             create_text_button_surface(self.buttons, button_name, self.font)
             # Se copieaza butoanele pe suprafata de butoane

@@ -74,29 +74,38 @@ class Game:
         ability_screen = AbilityScreen()
         ability_screen.create_ability_screen()
 
-        # Loading all the attacks
-        attacks_frames = AttacksFrames()
-        attacks_frames.load_all_attacks_frames("./pokemoni/attacks/assets")
-
-        # Creating some effects
+        # CREATING ALL EFFECTS
         effects = []
         for i, effect_name in enumerate(effects_information):
             effects.append(Effect())
             effects[i].set_name(effect_name)
-            effects[i].set_number_of_turns(effects_information[effect_name]["no_of_turns"])
             effects[i].change_effectIcon(color = effects_information[effect_name]["color"])
             effects[i].set_color(effects_information[effect_name]["color"])
 
-        # Creating some attacks
-        attack1 = SpecialAttack()
-        attack2 = SpecialAttack()
+        # Loading all the attacks
+        attacks_frames = AttacksFrames()
+        attacks_frames.load_all_attacks_frames("./pokemoni/attacks/assets")
 
-        attack1.set_effect(search_effect(effects, "Poison"))
-        attack2.set_effect(search_effect(effects, "Poison"))
-        attack1.set_attack_frames(attacks_frames.get_attack_frames("scratch.png"))
-        attack2.set_attack_frames(attacks_frames.get_attack_frames("fire.png"))
-        attack1.set_energy_cost(20)
-        attack2.set_energy_cost(30)
+        # CREATING ALL THE ATTACKS
+        attacks = []
+        special_attacks = []
+
+        for pokemon in attacks_information:
+            attack = Attack()
+            special_attack = SpecialAttack()
+            attack.set_name(attacks_information[pokemon]["attack"])
+            attack.set_attack_frames(attacks_frames.get_attack_frames(attacks_information[pokemon]["frames"]))
+            attacks.append(attack)
+
+            special_attack.set_name(attacks_information[pokemon]["special_attack"]["name"])
+            special_attack.set_attack_frames(attacks_frames.get_attack_frames(attacks_information[pokemon]["frames"]))
+            special_attack.set_energy_cost(30)
+
+            attack_effects = []
+            for effect_name in attacks_information[pokemon]["special_attack"]["effects"]:
+                attack_effects.append(search_effect(effects, effect_name))
+            special_attack.set_effects(attack_effects)
+            special_attacks.append(special_attack)
 
         # Loading all pokemons
         pokemons_frames = PokemonsFrames()
@@ -110,71 +119,13 @@ class Game:
             pokemons[i].set_maxHealth(pokemons_info[pokemon_name]["health"])
             pokemons[i].set_energy(pokemons_info[pokemon_name]["energy"])
             pokemons[i].set_maxEnergy(pokemons_info[pokemon_name]["energy"])
-            pokemons[i].set_damage(10)
+            pokemons[i].set_damage(20)
             pokemons[i].set_level(1)
-            pokemons[i].set_ability_screen(ability_screen)
-            if i % 2 == 0:
-                pokemons[i].set_attack(attack1)
-            else:
-                pokemons[i].set_attack(attack2)
+            pokemons[i].set_attack(attacks[i])
+            pokemons[i].set_special_attack(special_attacks[i])
 
-
-        # # Creating some pokemons
-        # pokemon1 = Pokemon()
-        # pokemon2 = Pokemon()
-        # pokemon3 = Pokemon()
-        # pokemon4 = Pokemon()
-        # pokemon5 = Pokemon()
-        # pokemon6 = Pokemon()
-        #
-        # pokemon1.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Charmadillo.png"))
-        # pokemon1.set_health(100)
-        # pokemon1.set_maxHealth(100)
-        # pokemon1.set_energy(100)
-        # pokemon1.set_maxEnergy(100)
-        # pokemon1.set_damage(10)
-        # pokemon1.set_level(1)
-        # pokemon1.set_ability_screen(ability_screen)
-        # pokemon1.set_attack(attack1)
-        #
-        # pokemon2.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Gulfin.png"))
-        # pokemon2.set_health(120)
-        # pokemon2.set_maxHealth(120)
-        # pokemon2.set_damage(40)
-        # pokemon2.set_level(1)
-        # pokemon2.set_ability_screen(ability_screen)
-        # pokemon2.set_attack(attack2)
-        #
-        # pokemon3.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Pouch.png"))
-        # pokemon3.set_health(160)
-        # pokemon3.set_damage(80)
-        # pokemon3.set_level(1)
-        # pokemon3.set_ability_screen(ability_screen)
-        # pokemon3.set_attack(attack2)
-        #
-        # pokemon4.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Friolera.png"))
-        # pokemon4.set_health(200)
-        # pokemon4.set_damage(40)
-        # pokemon4.set_level(1)
-        # pokemon4.set_ability_screen(ability_screen)
-        # pokemon4.set_attack(attack2)
-        #
-        # pokemon5.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Jacana.png"))
-        # pokemon5.set_health(180)
-        # pokemon5.set_damage(60)
-        # pokemon5.set_level(1)
-        # pokemon5.set_ability_screen(ability_screen)
-        # pokemon5.set_attack(attack2)
-        #
-        # pokemon6.set_pokemon_frames(pokemons_frames.get_pokemon_frames("Larvea.png"))
-        # pokemon6.set_health(150)
-        # pokemon6.set_damage(40)
-        # pokemon6.set_level(1)
-        # pokemon6.set_ability_screen(ability_screen)
-        # pokemon6.set_attack(attack1)
-
-        inventory = [pokemons[0], pokemons[1], pokemons[2]]
-        enemies = [pokemons[3], pokemons[4], pokemons[5]]
+        inventory = [pokemons[7], pokemons[1], pokemons[2]]
+        enemies = [pokemons[1], pokemons[4], pokemons[5]]
 
         # Creating the pokemons
         # for i, pokemon_name in enumerate(pokemons_info):

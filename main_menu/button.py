@@ -14,6 +14,7 @@ class Button:
         self.display_surface = display_surface
         self.button_surface = pygame.Surface(size)
         self.rect = pygame.Rect(position[0], position[1], size[0], size[1])
+        self.name = None
         pass
 
     # getters

@@ -12,7 +12,6 @@ class Effect:
     def __init__(self):
         self.effectIcon = pg.Surface(SIZE)
         self.name = None
-        self.number_of_turns = None
         self.number_of_turns_left = None
         self.color = None
         self.justApplied = None
@@ -29,9 +28,6 @@ class Effect:
     def get_justApplied(self):
         return self.justApplied
 
-    def get_number_of_turns(self):
-        return self.number_of_turns
-
     def get_number_of_turns_left(self):
         return self.number_of_turns_left
 
@@ -46,9 +42,6 @@ class Effect:
 
     def set_name(self, name):
         self.name = name
-
-    def set_number_of_turns(self, number_of_turns):
-        self.number_of_turns = number_of_turns
 
     def set_number_of_turns_left(self, number_of_turns_left):
         self.number_of_turns_left = number_of_turns_left
