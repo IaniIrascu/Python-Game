@@ -131,8 +131,6 @@ class Battle_screen:
                                                    (self.positions_on_screen[0][0] - 60,
                                                     self.positions_on_screen[0][1] + (i * self.player_pokemons[0].get_pokemon_frames().get_size()[0]) / len(effects)))
 
-                    # Adding the names + lv
-
                     # Adding hp_bar
                     if bar_changed[0][0]:
                         percentage = self.player_pokemons[active_pokemon_index].get_health() / self.player_pokemons[active_pokemon_index].get_maxHealth()
@@ -210,7 +208,7 @@ class Battle_screen:
             # Atacul tau
             if add_attack[0] and attack_playing:
                 # Se animeza atacul pe 30 frame-uri
-                if int((frame - initial_frame)) <= 30:
+                if int((frame - initial_frame)) < 40:
                     frame_to_get = int((frame - initial_frame) * SPEEDOFANIMATION) % 4 + 1
                     self.pokemons_surface.blit(self.player_pokemons[active_pokemon_index].get_attack().get_attack_frames().get_attack_frame(frame_to_get),
                                                self.positions_on_screen[1])
@@ -222,10 +220,17 @@ class Battle_screen:
                                                    effects_when_attacked)
 
                     if result == "MainMenu":
+                        experience = calculate_experience(self.enemies)
+                        for pokemon in self.player_pokemons:
+                            if not pokemon.get_isDead():
+                                pokemon.set_experience(experience + pokemon.get_experience())
+                                level_up_pokemon(pokemon)
+
                         reset_pokemons(self.player_pokemons, self.enemies)
                         return "MainMenu"
                     elif result == "DEAD":
                         attack_playing = False
+                        add_special[0] = False
                     bar_changed[1][0] = True
 
                     # PASSIVE DAMAGE AFTER ATTACKING
@@ -237,6 +242,7 @@ class Battle_screen:
                         return "MainMenu"
                     if result == "DEAD":
                         attack_playing = False
+                        add_special[0] = False
 
                     bar_changed[0][0] = True
                     bar_changed[0][1] = True
@@ -246,7 +252,7 @@ class Battle_screen:
                         initial_frame = frame
                         wait_a_bit[0] = True
 
-            if add_special[0] and not add_attack[0] and attack_playing:
+            if add_special[0] and (not add_attack[0]) and attack_playing:
                 # Se creeaza efectul
                 effect_refs = self.player_pokemons[active_pokemon_index].get_special_attack().get_effects()
                 for effect_ref in effect_refs:
@@ -323,25 +329,34 @@ class Battle_screen:
                                                self.positions_on_screen[0])
                 else:
                     # ACTIVE DAMAGE
-                    damage = calculate_damage(self.enemies[active_enemy_index], self.player_pokemons[active_pokemon_index]) - 10
-                    if modify_health(self.player_pokemons[active_pokemon_index], damage) == "DEAD":
-                        self.player_pokemons[active_pokemon_index].set_isDead(True)  # Inamicul moare
-                        if self.player_pokemons[number_of_player_pokemons - 1].get_isDead():  # Daca a murit ultimul inamic se trece in meniu
-                            reset_pokemons(self.player_pokemons, self.enemies)
-                            return "MainMenu"
-                    bar_changed[0][0] = True
+                    result = active_update_pokemon(self.enemies[active_enemy_index],
+                                                   self.player_pokemons[active_pokemon_index],
+                                                   self.player_pokemons[number_of_player_pokemons - 1],
+                                                   effects_when_attacked)
 
-                    # Check if effect on the other pokemon is over
-                    remove_effects_turns(self.player_pokemons[active_pokemon_index].get_effects(),
-                                         effects_when_attacked)
-                    self.player_pokemons[active_pokemon_index].check_what_effect_is_over()
-
-                    # PASSIVE DAMAGE AFTER ATTACK
-                    if passive_update_pokemon(self.enemies[active_enemy_index],
-                                              self.enemies[len(self.enemies) - 1],
-                                              effects_end_of_turn) == "MainMenu":
+                    if result == "MainMenu":
                         reset_pokemons(self.player_pokemons, self.enemies)
                         return "MainMenu"
+                    elif result == "DEAD":
+                        attack_playing = False
+                        add_special[1] = False
+
+                    bar_changed[0][0] = True
+                    # PASSIVE DAMAGE AFTER ATTACK
+                    result = passive_update_pokemon(self.enemies[active_enemy_index],
+                                              self.enemies[len(self.enemies) - 1],
+                                              effects_end_of_turn)
+                    if result == "MainMenu":
+                        experience = calculate_experience(self.enemies)
+                        for pokemon in self.player_pokemons:
+                            if not pokemon.get_isDead():
+                                pokemon.set_experience(experience + pokemon.get_experience())
+                                level_up_pokemon(pokemon)
+                        reset_pokemons(self.player_pokemons, self.enemies)
+                        return "MainMenu"
+                    elif result == "DEAD":
+                        attack_playing = False
+                        add_special[1] = False
                     bar_changed[1][0] = True
                     bar_changed[1][1] = True
 
@@ -439,7 +454,7 @@ class Battle_screen:
                 else:
                     selected[0] = False
 
-                if add_ability_surface and not attack_playing:
+                if add_ability_surface and (not attack_playing):
                     if event.type == pg.MOUSEBUTTONDOWN:
                         if pg.mouse.get_pressed()[0] == 1:
                             # Update it here
@@ -461,9 +476,9 @@ class Battle_screen:
                                 self.player_pokemons[active_pokemon_index].set_energy(pokemon_energy - attack_energy_cost)
                                 attack_playing = True
                                 add_special[0] = True
-                                initial_frame = frame
                                 add_ability_surface = False
                                 add_attack[0] = True
+                                initial_frame = frame
 
                             if result == "Switch":
                                 bar_changed = [[True, True], [True, True]]
@@ -503,5 +518,5 @@ class Battle_screen:
             if frame > 1000000000:
                 reset_pokemons(self.player_pokemons, self.enemies)
                 return "MainMenu"
-            # print(clock.get_fps())
+            print(clock.get_fps())
             clock.tick(60)

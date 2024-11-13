@@ -119,10 +119,11 @@ class Game:
             pokemons[i].set_maxHealth(pokemons_info[pokemon_name]["health"])
             pokemons[i].set_energy(pokemons_info[pokemon_name]["energy"])
             pokemons[i].set_maxEnergy(pokemons_info[pokemon_name]["energy"])
-            pokemons[i].set_damage(20)
+            pokemons[i].set_damage(pokemons_info[pokemon_name]["attack"])
             pokemons[i].set_level(1)
             pokemons[i].set_attack(attacks[i])
             pokemons[i].set_special_attack(special_attacks[i])
+            pokemons[i].set_experience(0)
 
         inventory = [pokemons[2], pokemons[1], pokemons[3]]
         enemies = [pokemons[5], pokemons[4], pokemons[7]]

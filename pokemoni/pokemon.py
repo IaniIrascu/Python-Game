@@ -136,6 +136,9 @@ class Pokemon:
     def set_ability_screen(self, ability_screen):
         self.ability_screen = ability_screen
 
+    def set_experience(self, experience):
+        self.experience = experience
+
     def set_attack(self, attack):
         self.attack = attack
 
@@ -143,6 +146,9 @@ class Pokemon:
         self.effectsOnItself.append(effect)
 
     # Getters
+    def get_experience(self):
+        return self.experience
+
     def get_special_attack(self):
         return self.specialAttack
 

@@ -9,9 +9,9 @@ default_attacksprite = "scratch.png"
 pokemons_info = {
     "Atrox.png": {"health": 230, "energy": default_energy, "size":  default_size, "attack": 45, "attacksprites": default_attacksprite},
     "Charmadillo.png": {"health": 500, "energy": default_energy, "size":  default_size, "attack": 35, "attacksprites": default_attacksprite},
-    "Cindrill.png": {"health": 125, "energy": default_energy, "size":  default_size, "attack": 40, "attacksprites": default_attacksprite},
+    "Cindrill.png": {"health": 125, "energy": default_energy, "size":  default_size, "attack": 100, "attacksprites": default_attacksprite},
     "Cleaf.png": {"health": 250, "energy": default_energy, "size":  default_size, "attack": 30, "attacksprites": default_attacksprite},
-    "Draem.png": {"health": 400, "energy": default_energy, "size":  default_size, "attack": 25, "attacksprites": default_attacksprite},
+    "Draem.png": {"health": 400, "energy": default_energy, "size":  default_size, "attack": 50, "attacksprites": default_attacksprite},
     "Finiette.png": {"health": 325, "energy": default_energy, "size":  default_size, "attack": 40, "attacksprites": default_attacksprite},
     "Finsta.png": {"health": 230, "energy": default_energy, "size":  default_size, "attack": 30, "attacksprites": default_attacksprite},
     "Friolera.png": {"health": 260, "energy": default_energy, "size":  default_size, "attack": 25, "attacksprites": default_attacksprite},
