@@ -45,26 +45,30 @@ class AbilityScreen:
         background = pg.transform.scale(background, self.size)
         buttons = []
         attack_button = Button(display_surface = self.button_surface,
-                              position = (60, 200),
-                              size = (self.size[0] - 150, self.size[1] / 6))
+                              position = (60, 150),
+                              size = (self.size[0] - 150, self.size[1] / 7))
         special_ability_button = Button(display_surface=self.button_surface,
-                                        position=(60, 350),
-                                        size = (self.size[0] - 150, self.size[1] / 6))
+                                        position=(60, 275),
+                                        size = (self.size[0] - 150, self.size[1] / 7))
         switch_pokemon_button = Button(display_surface=self.button_surface,
-                                       position=(60, 500),
-                                       size = (self.size[0] - 150, self.size[1] / 6))
+                                       position=(60, 400),
+                                       size = (self.size[0] - 150, self.size[1] / 7))
         x_button = Button(display_surface = self.button_surface,
                           position = (self.button_surface.get_width() - 125, 40),
                           size = (45, 45))
         name_button = Button(display_surface=self.button_surface,
                              position = (40, 80),
                              size = (self.button_surface.get_width() - 100, self.size[1] / 10))
+        skip_button = Button(display_surface=self.button_surface,
+                             position = (60, 525),
+                             size = (self.button_surface.get_width() - 150, self.size[1] / 7))
 
         buttons.append(attack_button)
         buttons.append(special_ability_button)
         buttons.append(x_button)
         buttons.append(name_button)
         buttons.append(switch_pokemon_button)
+        buttons.append(skip_button)
 
         # Adding buttons to dictionary
         self.add_button("Attack", attack_button)
@@ -72,6 +76,7 @@ class AbilityScreen:
         self.add_button("X", x_button)
         self.add_button("Name", name_button)
         self.add_button("Switch", switch_pokemon_button)
+        self.add_button("Skip Turn", skip_button)
 
         for button_name in self.buttons:
             # Se creeaza butonul
@@ -87,11 +92,12 @@ class AbilityScreen:
         background = pg.image.load("./pokemoni/ability_screen/assets/Untitled.png")
         background = pg.transform.scale(background, self.size)
 
-        self.buttons["Attack"].set_name(pokemon.get_attack().get_name())
+        self.buttons["Attack"].set_name(pokemon.get_attack().get_name() + "(" + str(pokemon.get_damage()) + ")")
         self.buttons["Special"].set_name(pokemon.get_special_attack().get_name() + "(" + str(pokemon.get_special_attack().get_energy_cost()) + ")")
         self.buttons["Name"].set_name(pokemon.get_name().replace(".png", "") + " lv. " + str(pokemon.get_level()))
         self.buttons["X"].set_name("X")
         self.buttons["Switch"].set_name("Switch")
+        self.buttons["Skip Turn"].set_name("Skip Turn")
 
         for button_name in self.buttons:
             # Se creeaza butonul
@@ -101,7 +107,7 @@ class AbilityScreen:
                 for i, effect in enumerate(pokemon.get_special_attack().get_effects()):
                     button_surface = self.buttons["Special"].get_button_surface()
                     button_surface.blit(effect.get_effectIcon(),
-                                        (button_surface.get_width() / 2 - numberofefects * 10 + i * 20, 70), (0, 0, 15, 15))
+                                        (button_surface.get_width() / 2 - numberofefects * 10 + i * 20, 60), (0, 0, 15, 15))
             # Se copieaza butoanele pe suprafata de butoane
             self.buttons[button_name].create_button()
 

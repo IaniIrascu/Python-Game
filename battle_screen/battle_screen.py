@@ -139,7 +139,7 @@ class Battle_screen:
                         change_health_bar(health_bar,
                                           bars,
                                           1 - percentage,
-                                          FONT.render(str(self.player_pokemons[active_pokemon_index].get_health()) + "/" + str(self.player_pokemons[active_pokemon_index].get_maxHealth()), True, WHITE, None))
+                                          FONT.render(str(round(self.player_pokemons[active_pokemon_index].get_health(), 2)) + "/" + str(self.player_pokemons[active_pokemon_index].get_maxHealth()), True, WHITE, None))
                         bar_changed[0][0] = False
                     # Adding energy bar
                     if bar_changed[0][1]:
@@ -147,7 +147,7 @@ class Battle_screen:
                         change_energy_bar(energy_bar,
                                           bars,
                                           1 - percentage,
-                                          FONT.render(str(self.player_pokemons[active_pokemon_index].get_energy()) + "/" + str(self.player_pokemons[active_pokemon_index].get_maxEnergy()), True, WHITE, None))
+                                          FONT.render(str(round(self.player_pokemons[active_pokemon_index].get_energy(), 2)) + "/" + str(self.player_pokemons[active_pokemon_index].get_maxEnergy()), True, WHITE, None))
                         bar_changed[0][1] = False
                     self.pokemons_surface.blit(health_bar,
                                                (self.positions_on_screen[0][0] + self.player_pokemons[active_pokemon_index].get_pokemon_frames().get_size()[0] /2 - 160,
@@ -188,7 +188,7 @@ class Battle_screen:
                         change_health_bar(health_bar_enemy,
                                           bars,
                                           1 - percentage,
-                                          FONT.render(str(self.enemies[active_enemy_index].get_health()) + "/" + str(self.enemies[active_enemy_index].get_maxHealth()), True, WHITE, None))
+                                          FONT.render(str(round(self.enemies[active_enemy_index].get_health(), 2)) + "/" + str(self.enemies[active_enemy_index].get_maxHealth()), True, WHITE, None))
                         bar_changed[1][0] = False
 
                     if bar_changed[1][1]:
@@ -196,7 +196,7 @@ class Battle_screen:
                         change_energy_bar(energy_bar_enemy,
                                           bars,
                                           1 - percentage,
-                                          FONT.render(str(self.enemies[active_enemy_index].get_energy()) + "/" + str(self.enemies[active_enemy_index].get_maxEnergy()), True, WHITE, None))
+                                          FONT.render(str(round(self.enemies[active_enemy_index].get_energy(), 2)) + "/" + str(self.enemies[active_enemy_index].get_maxEnergy()), True, WHITE, None))
                         bar_changed[1][1] = False
 
                     self.pokemons_surface.blit(health_bar_enemy,
@@ -289,18 +289,29 @@ class Battle_screen:
                     pass
                 else:
                     # Se pregatesc verificarile daca inamicul isi poate folosi atacul special
-                    enemy_attack = random.randint(0, 1)
+                    enemy_attack = random.randint(0, 2)
                     attack_energy_cost = self.enemies[active_enemy_index].get_special_attack().get_energy_cost()
                     enemy_energy = self.enemies[active_enemy_index].get_energy()
 
-                    if enemy_attack == 0 or enemy_energy < attack_energy_cost:
+                    if enemy_attack == 0:
                         add_attack[1] = True
                         add_special[1] = False
-                    else:
+                    elif enemy_attack == 1 and enemy_energy >= attack_energy_cost:
                         bar_changed[1][1] = True
                         self.enemies[active_enemy_index].set_energy(enemy_energy - attack_energy_cost)
                         add_attack[1] = True
                         add_special[1] = True
+                    elif enemy_attack == 2 and enemy_energy + 0.3 * self.enemies[active_enemy_index].get_maxEnergy() <= self.enemies[active_enemy_index].get_maxEnergy():
+                        bar_changed[1][1] = True
+                        self.enemies[active_enemy_index].set_energy(self.enemies[active_enemy_index].get_energy() + 0.3 * self.enemies[active_enemy_index].get_maxEnergy())
+                        if self.enemies[active_enemy_index].get_energy() > self.enemies[active_enemy_index].get_maxEnergy():
+                            self.enemies[active_enemy_index].set_energy(self.enemies[active_enemy_index].get_maxEnergy())
+                        attack_playing = False
+                        add_special[1] = False
+                        add_special[1] = False
+                    else:
+                        add_attack[1] = True
+                        add_special[1] = False
                     wait_a_bit[0] = False
                     initial_frame = frame
 
@@ -462,6 +473,18 @@ class Battle_screen:
                                                         self.player_pokemons[active_pokemon_index + 1:] +
                                                         [self.player_pokemons[active_pokemon_index]])  # Rotate alive pokemons
                                 ability_screen.update_ability_screen(self.player_pokemons[active_pokemon_index])
+
+                            if result == "Skip Turn":
+                                self.player_pokemons[active_pokemon_index].set_energy(self.player_pokemons[active_pokemon_index].get_energy() + 0.3 * self.player_pokemons[active_pokemon_index].get_maxEnergy())
+                                if self.player_pokemons[active_pokemon_index].get_energy() > self.player_pokemons[active_pokemon_index].get_maxEnergy():
+                                    self.player_pokemons[active_pokemon_index].set_energy(self.player_pokemons[active_pokemon_index].get_maxEnergy())
+                                bar_changed[0][1] = True
+                                attack_playing = True
+                                add_attack[0] = False
+                                add_special[0] = False
+                                wait_a_bit[0] = True
+                                initial_frame = frame
+                                add_ability_surface = False
 
                 pokemon_rect = pg.Rect(self.positions_on_screen[1][0],
                                        self.positions_on_screen[1][1],

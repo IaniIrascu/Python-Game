@@ -99,7 +99,7 @@ class Game:
 
             special_attack.set_name(attacks_information[pokemon]["special_attack"]["name"])
             special_attack.set_attack_frames(attacks_frames.get_attack_frames(attacks_information[pokemon]["frames"]))
-            special_attack.set_energy_cost(30)
+            special_attack.set_energy_cost(attacks_information[pokemon]["energy"])
 
             attack_effects = []
             for effect_name in attacks_information[pokemon]["special_attack"]["effects"]:

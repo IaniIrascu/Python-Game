@@ -3,6 +3,13 @@ import random
 
 FONT = pg.font.Font("./main_menu/assets/minecraft.ttf", 24)
 
+BLEEDINGPROCENT = 0.1
+WEAKNESSPROCENT = 0.1
+MISSPROCENT = 0.05
+POISONPROCENT = 0.1
+RESTORATIONPROCENT = 0.05
+BURNEDPROCENT = 0.05
+
 def check_button_pressed(mouse_pos, ability_screen, ability_screen_position):
     buttons = ability_screen.get_buttons()
     for button_name in buttons:
@@ -43,11 +50,11 @@ def calculate_damage(attacking_pokemon, attacked_pokemon):
     for effect in attacked_pokemon.get_effects():
         effect_name = effect.get_name()
         if effect_name == "Bleeding":
-            damage += attacking_pokemon.get_damage() * 0.1 * effect.get_number_of_turns_left()
+            damage += attacking_pokemon.get_damage() * BLEEDINGPROCENT * effect.get_number_of_turns_left()
         if effect_name == "Weakness":
-            damage -= attacking_pokemon.get_damage() * 0.1 * effect.get_number_of_turns_left()
+            damage -= attacking_pokemon.get_damage() * WEAKNESSPROCENT * effect.get_number_of_turns_left()
         if effect_name == "Stunned":
-            chance = 5 * effect.get_number_of_turns_left()
+            chance = 100 * MISSPROCENT * effect.get_number_of_turns_left()
             if chance > 100:
                 chance = 100
             randomnumber = random.randint(1, 100)
@@ -62,9 +69,9 @@ def calculate_passive_damage(pokemon):
     for effect in pokemon.get_effects():
         effect_name = effect.get_name()
         if effect_name == "Restoration":
-            damage -= pokemon.get_maxHealth() * 0.5 * effect.get_number_of_turns_left()
+            damage -= pokemon.get_maxHealth() * RESTORATIONPROCENT * effect.get_number_of_turns_left()
         if effect_name == "Poison":
-            damage += 0.1 * pokemon.get_health() * effect.get_number_of_turns_left()
+            damage += POISONPROCENT * pokemon.get_health() * effect.get_number_of_turns_left()
     return damage
 
 def modify_health(pokemon, damage):
@@ -107,7 +114,7 @@ def passive_update_pokemon(pokemon, last_pokemon, effects_end_of_turn):
     for effect in pokemon.get_effects():
         if effect.get_name() == "Burned":
             energy = pokemon.get_energy()
-            energy -= 0.05 * effect.get_number_of_turns_left() * energy
+            energy -= BURNEDPROCENT * effect.get_number_of_turns_left() * energy
             if energy <= 0:
                 energy = 0
             pokemon.set_energy(energy)
