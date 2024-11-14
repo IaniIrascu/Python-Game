@@ -5,13 +5,31 @@ from main_menu.main_menu import MainMenu
 from map.map import Map
 from sprites.sprites import Sprite
 from sprites.player import Player
-from pokemoni.pokemon import Pokemon
-from pokemoni.ability_screen.ability_screen import Ability_screen
-from battle_screen.battle_screen import Battle_screen
+from pokemoni.pokemon import *
+from pokemoni.attacks.attack import *
+from pokemoni.effects.effect import *
 from pokemons_information import *
+
+from pokemoni.ability_screen.ability_screen import AbilityScreen
+from battle_screen.battle_screen import Battle_screen
 
 WINDOW_HEIGHT = 1920
 WINDOW_WIDTH = 1080
+
+def search_effect(effects, effect_name):
+    for effect in effects:
+        if effect.get_name() == effect_name:
+            return effect
+
+def search_pokemon(pokemons, pokemon_name):
+    for pokemon in pokemons:
+        if pokemon.get_name() == pokemon_name:
+            return pokemon
+
+def search_attack(attacks, attack_name):
+    for attack in attacks:
+        if attack.get_name() == attack_name:
+            return attack
 
 class Game:
     def __init__(self):
@@ -52,22 +70,79 @@ class Game:
 
         # Creare lista pokemoni
         pokemons = []
+        # Creating some ability screens
+        ability_screen = AbilityScreen()
+        ability_screen.create_ability_screen()
 
-        # Creating the pokemons
+        # CREATING ALL EFFECTS
+        effects = []
+        for i, effect_name in enumerate(effects_information):
+            effects.append(Effect())
+            effects[i].set_name(effect_name)
+            effects[i].change_effectIcon(color = effects_information[effect_name]["color"])
+            effects[i].set_color(effects_information[effect_name]["color"])
+
+        # Loading all the attacks
+        attacks_frames = AttacksFrames()
+        attacks_frames.load_all_attacks_frames("./pokemoni/attacks/assets")
+
+        # CREATING ALL THE ATTACKS
+        attacks = []
+        special_attacks = []
+
+        for pokemon in attacks_information:
+            attack = Attack()
+            special_attack = SpecialAttack()
+            attack.set_name(attacks_information[pokemon]["attack"])
+            attack.set_attack_frames(attacks_frames.get_attack_frames(attacks_information[pokemon]["frames"]))
+            attacks.append(attack)
+
+            special_attack.set_name(attacks_information[pokemon]["special_attack"]["name"])
+            special_attack.set_attack_frames(attacks_frames.get_attack_frames(attacks_information[pokemon]["frames"]))
+            special_attack.set_energy_cost(attacks_information[pokemon]["energy"])
+
+            attack_effects = []
+            for effect_name in attacks_information[pokemon]["special_attack"]["effects"]:
+                attack_effects.append(search_effect(effects, effect_name))
+            special_attack.set_effects(attack_effects)
+            special_attacks.append(special_attack)
+
+        # Loading all pokemons
+        pokemons_frames = PokemonsFrames()
+        pokemons_frames.load_all_pokemon_frames("./pokemoni/assets")
+
         for i, pokemon_name in enumerate(pokemons_info):
             pokemons.append(Pokemon())
+            pokemons[i].set_pokemon_frames(pokemons_frames.get_pokemon_frames(pokemon_name))
             pokemons[i].set_name(pokemon_name)
             pokemons[i].set_health(pokemons_info[pokemon_name]["health"])
+            pokemons[i].set_maxHealth(pokemons_info[pokemon_name]["health"])
             pokemons[i].set_energy(pokemons_info[pokemon_name]["energy"])
-            pokemons[i].set_size(pokemons_info[pokemon_name]["size"])
-            pokemons[i].set_attack(pokemons_info[pokemon_name]["attack"])
-            pokemons[i].animation_frames("./pokemoni/assets/" + pokemon_name)
-            pokemons[i].attack_frames_animation("./pokemoni/attacks/assets/" + pokemons_info[pokemon_name]["attacksprites"])
+            pokemons[i].set_maxEnergy(pokemons_info[pokemon_name]["energy"])
+            pokemons[i].set_damage(pokemons_info[pokemon_name]["attack"])
+            pokemons[i].set_level(1)
+            pokemons[i].set_attack(attacks[i])
+            pokemons[i].set_special_attack(special_attacks[i])
+            pokemons[i].set_experience(0)
 
-            # Creare ability_screen
-            ability_screen = Ability_screen()
-            ability_screen.create_ability_screen()
-            pokemons[i].set_ability_screen(ability_screen)
+        inventory = [pokemons[2], pokemons[1], pokemons[3]]
+        enemies = [pokemons[5], pokemons[4], pokemons[7]]
+
+        # Creating the pokemons
+        # for i, pokemon_name in enumerate(pokemons_info):
+        #     pokemons.append(Pokemon())
+        #     pokemons[i].set_name(pokemon_name)
+        #     pokemons[i].set_health(pokemons_info[pokemon_name]["health"])
+        #     pokemons[i].set_energy(pokemons_info[pokemon_name]["energy"])
+        #     pokemons[i].set_size(pokemons_info[pokemon_name]["size"])
+        #     pokemons[i].set_attack(pokemons_info[pokemon_name]["attack"])
+        #     pokemons[i].animation_frames("./pokemoni/assets/" + pokemon_name)
+        #     pokemons[i].attack_frames_animation("./pokemoni/attacks/assets/" + pokemons_info[pokemon_name]["attacksprites"])
+        #
+        #     # Creare ability_screen
+        #     ability_screen = Ability_screen()
+        #     ability_screen.create_ability_screen()
+        #     pokemons[i].set_ability_screen(ability_screen)
 
         while True:
             if game_scenes_active["main_menu"]:
@@ -83,14 +158,9 @@ class Game:
                     sys.exit()
             if game_scenes_active["battle_screen"]:
                 # Se aleg 3 inamici random din lista
-                battle_enemies = [pokemons[random.randint(0, len(pokemons) - 1)],
-                                  pokemons[random.randint(0, len(pokemons) - 1)],
-                                  pokemons[random.randint(0, len(pokemons) - 1)]]
-                player_pokemons = [pokemons[random.randint(0, len(pokemons) - 1)],
-                                  pokemons[random.randint(0, len(pokemons) - 1)],
-                                  pokemons[random.randint(0, len(pokemons) - 1)]]
-                battle_screen.load_enemies(battle_enemies)
-                battle_screen.load_player_pokemons(player_pokemons)
+                battle_screen.load_enemies(enemies)
+                battle_screen.load_player_pokemons(inventory)
+
                 # Se ruleaza battle screen
                 result = self.get_scene("Battle_screen").run(clock)
                 if result == "MainMenu":

@@ -1,92 +1,204 @@
 import pygame as pg
 import sys
-from pokemoni.ability_screen.ability_screen import Ability_screen
+import os
+from pokemoni.ability_screen.ability_screen import AbilityScreen
 
 ANIMATION_FRAMES = 8
 FRAMESPERWIDTH = 4
 FRAMESPERHEIGHT = 2
+FRAMEWIDTH = FRAMEHEIGHT = 192  # pixels
 
-class Pokemon():
-    def __init__(self, name = "NoName"):
-        self.health = None
-        self.energy = None
-        self.name = name
-        self.attack = None
-        # self.animations = [] # This is a list of lists of frames
-        self.frames = [] # This one contains all the frames
-        self.size = None
-        self.ability_screen = None
-        self.attack_frames = []
+class PokemonFrames():
+    def __init__(self):
+        self.idleFrames = []
+        self.attackFrames = []
+        self.animations = {}
+        self.size = (2 * FRAMEWIDTH, 2 * FRAMEHEIGHT)
 
-    # Getters
-    def get_frame(self, frame_no):
-        if 1 <= frame_no <= len(self.frames) + 1:
-            return self.frames[frame_no - 1]
+    def get_idle_frame(self, frame_no):
+        if 1 <= frame_no <= len(self.idleFrames) + 1:
+            return self.idleFrames[frame_no - 1]
         print("Frame not in list")
+
+    def clear_idle_frames(self):
+        self.idleFrames.clear()
 
     def get_attack_frame(self, frame_no):
-        if 1 <= frame_no <= len(self.attack_frames) + 1:
-            return self.attack_frames[frame_no - 1]
+        if 1 <= frame_no <= len(self.attackFrames) + 1:
+            return self.attackFrames[frame_no - 1]
         print("Frame not in list")
+
+    def clear_attack_frames(self):
+        self.attackFrames.clear()
 
     def get_size(self):
         return self.size
 
-    def get_name(self):
-        return self.name
-
-    def get_ability_screen(self):
-        return self.ability_screen
-
-    def get_health(self):
-        return self.health
-
-    def get_attack(self):
-        return self.attack
-
-    # Setters
-    def set_attack(self, attack):
-        self.attack = attack
-
-    def set_name(self, name):
-        self.name = name
-
-    def set_ability_screen(self, ability_screen):
-        self.ability_screen = ability_screen
-
     def set_size(self, size):
         self.size = size
 
-    def set_health(self, health):
-        self.health = health
+    def extract_animation_frames(self, image):
+        image = pg.image.load(image)
+        # IDLE FRAMES
+        for i in range(0, FRAMESPERWIDTH):
+            self.idleFrames.append(pg.Surface((FRAMEWIDTH, FRAMEHEIGHT), pg.SRCALPHA))
+            self.idleFrames[i].blit(image, (0, 0), (i * FRAMEWIDTH, 0, FRAMEWIDTH, FRAMEHEIGHT))
+            self.idleFrames[i] = pg.transform.scale(self.idleFrames[i], self.size)
+
+        # ATTACK FRAMES
+        for i in range(0, FRAMESPERWIDTH):
+            self.attackFrames.append(pg.Surface((FRAMEWIDTH, FRAMEHEIGHT), pg.SRCALPHA))
+            self.attackFrames[i].blit(image, (0, 0), (i * FRAMEWIDTH, FRAMEHEIGHT, FRAMEWIDTH, FRAMEHEIGHT))
+            self.attackFrames[i] = pg.transform.scale(self.attackFrames[i], self.size)
+
+        # Update list of animation
+        self.animations["Idle"] = self.idleFrames
+        self.animations["Attack"] = self.attackFrames
+
+class PokemonsFrames:
+    def __init__(self):
+        self.pokemonsFrames = {}
+
+    def get_pokemon_frames(self, image_name):
+        if image_name in self.pokemonsFrames:
+            return self.pokemonsFrames[image_name]
+
+    def load_all_pokemon_frames(self, folder):
+        for i, image_name in enumerate(os.listdir(folder)):
+            if image_name not in self.pokemonsFrames:
+                pokemonFrames = PokemonFrames()
+                pokemonFrames.extract_animation_frames(folder + "/" + image_name)
+                self.pokemonsFrames[image_name] = pokemonFrames
+
+    def add_pokemon_frames(self, image_name):
+        if image_name not in self.pokemonsFrames:
+            pokemonFrames = PokemonFrames()
+            pokemonFrames.extract_animation_frames(image_name)
+            self.pokemonsFrames[image_name] = pokemonFrames
+
+    def delete_pokemon_frames(self, image_name):
+        if image_name in self.pokemonsFrames:
+            self.pokemonsFrames.pop(image_name)
+
+# POKEMONUL
+class Pokemon:
+    def __init__(self, maxHealth = 0, maxEnergy = 0):
+        self.pokemonFrames = None
+        self.name = None
+        self.attack = None
+        self.specialAttack = None
+        self.isDead = False
+        self.isActive = False
+        self.level = None
+        self.health = None
+        self.maxHealth = maxHealth
+        self.damage = None
+        self.maxEnergy = maxEnergy
+        self.energy = None
+        self.experience = None
+        self.specialAbility = None
+        self.effectsOnItself = []
+
+    # Setters
+    def set_special_attack(self, specialAttack):
+        self.specialAttack = specialAttack
+
+    def set_maxHealth(self, maxHealth):
+        self.maxHealth = maxHealth
+
+    def set_maxEnergy(self, maxEnergy):
+        self.maxEnergy = maxEnergy
 
     def set_energy(self, energy):
         self.energy = energy
 
-    # Functia creeaza frame-urile de animatie cu atributele din obiect si le pune intr-o lista de frame-uri
-    # Frame-urile 1-4 idle, frame-urile 5-8 atac
-    def animation_frames(self, image):
-        image = pg.image.load(image)
-        frame_width = int(image.get_width() / FRAMESPERWIDTH)
-        frame_height = int(image.get_height() / FRAMESPERHEIGHT)
-        for i in range(0, int(image.get_height()), frame_height):
-            for j in range(0, int(image.get_width()), frame_width):
-                index = int(FRAMESPERWIDTH * (i / frame_height) + j / frame_width)
+    def set_name(self, name):
+        self.name = name
 
-                # Creare suprafata pentru frame-ul meu
-                self.frames.append(pg.Surface((frame_width, frame_height), pg.SRCALPHA))
-                self.frames[index].blit(image, (0, 0), (j, i, frame_width, frame_height))
+    def set_health(self, health):
+        self.health = health
 
-                # Se scaleaza la dimensiunea dorita
-                self.frames[index] = pg.transform.scale(self.frames[index], self.size)
+    def set_pokemon_frames(self, pokemonFramesClass):
+        self.pokemonFrames = pokemonFramesClass
 
-    def attack_frames_animation(self, image):
-        image = pg.image.load(image)
-        frame_width = int(image.get_width() / FRAMESPERWIDTH)
-        frame_height = int(image.get_height())
-        for i in range(0, int(image.get_width()), frame_width):
-            index = int(i / frame_width)
+    def set_level(self, level):
+        self.level = level
 
-            self.attack_frames.append(pg.Surface((frame_width, frame_height), pg.SRCALPHA))
-            self.attack_frames[index].blit(image, (0, 0), (i, 0, frame_width, frame_height))
-            self.attack_frames[index] = pg.transform.scale(self.attack_frames[index], (self.size[0] / 2, self.size[1] / 2))
+    def set_damage(self, damage):
+        self.damage = damage
+
+    def set_isDead(self, isDead):
+        self.isDead = isDead
+
+    def set_isActive(self, isActive):
+        self.isActive = isActive
+
+    def set_ability_screen(self, ability_screen):
+        self.ability_screen = ability_screen
+
+    def set_experience(self, experience):
+        self.experience = experience
+
+    def set_attack(self, attack):
+        self.attack = attack
+
+    def add_effect_on_itself(self, effect):
+        self.effectsOnItself.append(effect)
+
+    # Getters
+    def get_experience(self):
+        return self.experience
+
+    def get_special_attack(self):
+        return self.specialAttack
+
+    def get_maxHealth(self):
+        return self.maxHealth
+
+    def get_maxEnergy(self):
+        return self.maxEnergy
+
+    def get_energy(self):
+        return self.energy
+
+    def get_name(self):
+        return self.name
+
+    def get_experience(self):
+        return self.experience
+
+    def get_damage(self):
+        return self.damage
+
+    def get_health(self):
+        return self.health
+
+    def get_level(self):
+        return self.level
+
+    def get_pokemon_frames(self):
+        return self.pokemonFrames
+
+    def get_isDead(self):
+        return self.isDead
+
+    def get_isActive(self):
+        return self.isActive
+
+    def get_ability_screen(self):
+        return self.ability_screen
+
+    def get_attack(self):
+        return self.attack
+
+    def get_effects(self):
+        return self.effectsOnItself
+
+    # Functia aceasta modifica experienta pe care o primeste un caracter dupa ce omoara un inamic
+    def gain_experience(self, pokemon):
+        self.experience += (pokemon.get_level() * 10)
+
+    def check_what_effect_is_over(self):
+        for i in range(len(self.effectsOnItself) - 1, -1, -1):
+            if self.effectsOnItself[i].get_number_of_turns_left() == 0:
+                self.effectsOnItself.pop(i)
