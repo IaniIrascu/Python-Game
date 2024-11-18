@@ -3,7 +3,7 @@ import sys
 import random
 from main_menu.main_menu import MainMenu
 from map.map import Map
-from sprites.sprites import Sprite
+from sprites.sprites import Sprite, Group
 from sprites.player import Player
 from pokemoni.pokemon import *
 from pokemoni.attacks.attack import *
@@ -12,9 +12,7 @@ from pokemons_information import *
 
 from pokemoni.ability_screen.ability_screen import AbilityScreen
 from battle_screen.battle_screen import Battle_screen
-
-WINDOW_HEIGHT = 1920
-WINDOW_WIDTH = 1080
+from utils.constants import WINDOW_HEIGHT, WINDOW_WIDTH
 
 def search_effect(effects, effect_name):
     for effect in effects:
@@ -36,7 +34,8 @@ class Game:
         self.display_surface = pg.display.set_mode((0, 0), pg.FULLSCREEN)
         self.scenes = {}
         self.current_scene = None
-        self.all_sprites = pg.sprite.Group()
+        self.all_sprites = Group()
+        self.player = None
 
     # returns the object related to the name
     def get_scene(self, scene_name):
@@ -61,7 +60,8 @@ class Game:
         menu = MainMenu(self.display_surface)
         battle_screen = Battle_screen(self.display_surface)
         map = Map()
-
+        map.render(self.all_sprites, 'house')
+        self.player = map.player
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)
         self.add_scene("Battle_screen", battle_screen)
@@ -167,16 +167,15 @@ class Game:
                     game_scenes_active["main_menu"] = True
                     game_scenes_active["battle_screen"] = False
             if game_scenes_active["map"]:
-                self.get_scene("Map").render(self.all_sprites)
-                self.all_sprites.draw(self.display_surface)
-
+                dt = clock.tick(120) / 1000
+                self.display_surface.fill('grey')
+                self.all_sprites.draw(self.player.rect.center)
+                self.all_sprites.update(dt)
+            
             pg.display.update()
-            clock.tick(60)
+            clock.tick(120)
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
-                    pg.quit()
-                    sys.exit()
-                if event.type == pg.KEYDOWN:
                     pg.quit()
                     sys.exit()
