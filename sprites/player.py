@@ -1,11 +1,17 @@
 import pygame as pg
 
-class Player(pg.sprite.Sprite):
-    def __init__(self, image, position, group):
+class Entity(pg.sprite.Sprite):
+    def __init__(self, frames, position, group):
         super().__init__(group)
-        self.image = pg.surface.Surface((100, 100))
-        self.image.fill('red')
+        self.idx = int(0)
+        self.frames = frames
+        # print(self.frames['down'])
+        self.image = self.frames['down'][self.idx]
         self.rect = self.image.get_frect(center = position)
+
+class Player(Entity):
+    def __init__(self, frames, position, group):
+        super().__init__(frames, position, group)
         self.direction = pg.math.Vector2(0, 0)
         self.speed = 1000
     

@@ -8,7 +8,7 @@ from sprites.player import Player
 from pokemon.pokemon import *
 from pokemon.attacks.attack import *
 from pokemon.effects.effect import *
-from pokemons_information import *
+from pokemon.pokemons_information import *
 
 from pokemon.ability_screen.ability_screen import AbilityScreen
 from battle_screen.battle_screen import Battle_screen

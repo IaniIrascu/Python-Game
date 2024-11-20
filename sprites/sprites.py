@@ -5,7 +5,25 @@ class Sprite(pg.sprite.Sprite):
     def __init__(self, surface, position, group):
         super().__init__(group)
         self.image = surface
-        self.rect = self.image.get_frect(center = position)
+        self.rect = self.image.get_frect(topleft = position)
+
+class Animated(Sprite):
+    def __init__(self, frames, position, group):
+        self.frames = frames
+        self.idx = 0
+        self.wait = 0
+        super().__init__(frames[self.idx], position, group)
+        
+    def change(self):
+        self.wait += 1
+        if self.wait == 8:
+            self.wait = 0
+            self.idx += 1
+            self.idx = self.idx % 4
+        self.image = self.frames[self.idx]
+    def update(self, dt):
+        self.change()
+    
 
 class Group(pg.sprite.Group):
     def __init__(self):

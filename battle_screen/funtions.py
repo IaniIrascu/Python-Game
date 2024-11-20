@@ -1,4 +1,4 @@
-from pokemoni.ability_screen.ability_screen import *
+from pokemon.ability_screen.ability_screen import *
 import random
 
 FONT = pg.font.Font("./main_menu/assets/minecraft.ttf", 24)
