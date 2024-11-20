@@ -1,12 +1,12 @@
 import pygame as pg
 import sys
-from pokemoni.ability_screen import *
+from pokemon.ability_screen import *
 from utils.colors import *
-from pokemoni.effects.effect import Effect
+from pokemon.effects.effect import Effect
 import random
 import math
 import builtins
-from pokemoni.ability_screen.ability_screen import *
+from pokemon.ability_screen.ability_screen import *
 from battle_screen.funtions import *
 
 SPEEDOFANIMATION = 0.12  # Valoare intre (0 si 1)

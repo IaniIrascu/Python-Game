@@ -1,7 +1,7 @@
 import pygame as pg
 import sys
 import os
-from pokemoni.ability_screen.ability_screen import AbilityScreen
+from pokemon.ability_screen.ability_screen import AbilityScreen
 
 ANIMATION_FRAMES = 8
 FRAMESPERWIDTH = 4

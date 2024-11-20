@@ -5,12 +5,12 @@ from main_menu.main_menu import MainMenu
 from map.map import Map
 from sprites.sprites import Sprite, Group
 from sprites.player import Player
-from pokemoni.pokemon import *
-from pokemoni.attacks.attack import *
-from pokemoni.effects.effect import *
+from pokemon.pokemon import *
+from pokemon.attacks.attack import *
+from pokemon.effects.effect import *
 from pokemons_information import *
 
-from pokemoni.ability_screen.ability_screen import AbilityScreen
+from pokemon.ability_screen.ability_screen import AbilityScreen
 from battle_screen.battle_screen import Battle_screen
 from utils.constants import WINDOW_HEIGHT, WINDOW_WIDTH
 
@@ -84,7 +84,7 @@ class Game:
 
         # Loading all the attacks
         attacks_frames = AttacksFrames()
-        attacks_frames.load_all_attacks_frames("./pokemoni/attacks/assets")
+        attacks_frames.load_all_attacks_frames("./pokemon/attacks/assets")
 
         # CREATING ALL THE ATTACKS
         attacks = []
@@ -109,7 +109,7 @@ class Game:
 
         # Loading all pokemons
         pokemons_frames = PokemonsFrames()
-        pokemons_frames.load_all_pokemon_frames("./pokemoni/assets")
+        pokemons_frames.load_all_pokemon_frames("./pokemon/assets")
 
         for i, pokemon_name in enumerate(pokemons_info):
             pokemons.append(Pokemon())
@@ -136,8 +136,8 @@ class Game:
         #     pokemons[i].set_energy(pokemons_info[pokemon_name]["energy"])
         #     pokemons[i].set_size(pokemons_info[pokemon_name]["size"])
         #     pokemons[i].set_attack(pokemons_info[pokemon_name]["attack"])
-        #     pokemons[i].animation_frames("./pokemoni/assets/" + pokemon_name)
-        #     pokemons[i].attack_frames_animation("./pokemoni/attacks/assets/" + pokemons_info[pokemon_name]["attacksprites"])
+        #     pokemons[i].animation_frames("./pokemon/assets/" + pokemon_name)
+        #     pokemons[i].attack_frames_animation("./pokemon/attacks/assets/" + pokemons_info[pokemon_name]["attacksprites"])
         #
         #     # Creare ability_screen
         #     ability_screen = Ability_screen()
@@ -152,7 +152,7 @@ class Game:
                     game_scenes_active["battle_screen"] = True
                 elif result == "Load":
                     game_scenes_active["main_menu"] = False
-                    game_scenes_active["choose_save"] = True
+                    game_scenes_active["map"] = True
                 elif result == "Quit":
                     pg.quit()
                     sys.exit()
