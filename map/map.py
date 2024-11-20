@@ -1,7 +1,7 @@
 import pygame as pg
 from utils.importers import import_tmx, import_frames, import_coast, import_characters
 from sprites.sprites import Sprite
-from sprites.player import Player
+from sprites.player import Player, NPC
 from sprites.sprites import Animated
 from utils.constants import TILE_SIZE
 
@@ -28,7 +28,10 @@ class Map:
         
         for x, y, surface in self.maps['world'].get_layer_by_name("Terrain Top").tiles():
             Sprite(surface, (x * TILE_SIZE, y * TILE_SIZE), group)
-            
+
+        for obj in self.maps['world'].get_layer_by_name("Monsters"):
+            Sprite(obj.image, (obj.x, obj.y), group)
+
         for obj in self.maps['world'].get_layer_by_name("Coast"):
             Animated(self.frames['coast'][obj.properties['terrain']][obj.properties['side']], (obj.x, obj.y), group)
 
@@ -37,6 +40,9 @@ class Map:
         
         for obj in self.maps["world"].get_layer_by_name("Entities"):
             if obj.name == "Player" and obj.properties["pos"] == player_start_pos:
-                self.player = Player(self.frames['characters']['player'], (obj.x, obj.y), group)
+                self.player = Player(self.frames['characters']['player'], (obj.x, obj.y), group, obj.properties['direction'])
+            elif obj.name != "Player":
+                NPC(self.frames['characters'][obj.properties['graphic']], (obj.x, obj.y), group, obj.properties['direction'])
+
 
 

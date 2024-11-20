@@ -1,18 +1,16 @@
 import pygame as pg
 
 class Entity(pg.sprite.Sprite):
-    def __init__(self, frames, position, group):
+    def __init__(self, frames, position, group, turned):
         super().__init__(group)
         self.wait = 0
         self.idx = 0
         self.frames = frames
-        print(frames)
         self.speed = 1000
-        # print(self.frames['down'])
         self.image = self.frames['down'][self.idx]
         self.rect = self.image.get_frect(center = position)
         self.direction = pg.math.Vector2(0, 0)
-        self.turned = 'down'
+        self.turned = turned
     
     def change(self):
         self.wait += 1
@@ -27,8 +25,8 @@ class Entity(pg.sprite.Sprite):
     
 
 class Player(Entity):
-    def __init__(self, frames, position, group):
-        super().__init__(frames, position, group)
+    def __init__(self, frames, position, group, turned):
+        super().__init__(frames, position, group, turned)
 
     
     def input(self):
@@ -51,4 +49,11 @@ class Player(Entity):
     def update(self, dt):
         self.input()
         self.rect.center += self.direction * self.speed * dt
+        self.change()
+
+class NPC(Entity):
+    def __init__(self, frames, position, group, turned):
+        super().__init__(frames, position, group, turned)
+    
+    def update(self, dt):
         self.change()
