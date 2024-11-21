@@ -54,9 +54,9 @@ class Game:
         pg.init()
         clock = pg.time.Clock()
 
-        # pg.mixer.init()
-        # pg.mixer.music.load("./utils/sounds/metin.mp3")
-        # pg.mixer.music.play(-1)
+        pg.mixer.init()
+        pg.mixer.music.load("./utils/sounds/metin.mp3")
+        pg.mixer.music.play(-1)
 
         menu = MainMenu(self.display_surface)
         battle_screen = Battle_screen(self.display_surface)
