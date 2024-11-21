@@ -2,17 +2,19 @@ import pygame as pg
 from utils.constants import WINDOW_HEIGHT, WINDOW_WIDTH
 
 class Sprite(pg.sprite.Sprite):
-    def __init__(self, surface, position, group):
+    def __init__(self, surface, position, group, order = 3):
         super().__init__(group)
         self.image = surface
         self.rect = self.image.get_frect(topleft = position)
+        self.order = order
+        self.behind = self.rect.centery
 
 class Animated(Sprite):
-    def __init__(self, frames, position, group):
+    def __init__(self, frames, position, group, order):
         self.frames = frames
         self.idx = 0
         self.wait = 0
-        super().__init__(frames[self.idx], position, group)
+        super().__init__(frames[self.idx], position, group, order)
         
     def change(self):
         self.wait += 1
@@ -23,6 +25,11 @@ class Animated(Sprite):
         self.image = self.frames[self.idx]
     def update(self, dt):
         self.change()
+
+class Grass(Sprite):
+    def __init__(self, surface, position, group, order):
+        super().__init__(surface, position, group, order)
+        self.behind = self.rect.centery - 40
     
 
 class Group(pg.sprite.Group):
@@ -31,9 +38,14 @@ class Group(pg.sprite.Group):
         self.display_surface = pg.display.get_surface()
         self.offset = pg.math.Vector2(0, 0)
 
-
     def draw(self, player_pos):
         self.offset.x = self.display_surface.get_width() / 2 - player_pos[0]
         self.offset.y = self.display_surface.get_height() / 2 - player_pos[1]
-        for sprite in self:
-            self.display_surface.blit(sprite.image, sprite.rect.topleft + self.offset)
+        
+        bg = [sprite for sprite in self if sprite.order < 3]
+        main = sorted([sprite for sprite in self if sprite.order == 3], key = lambda sprite: sprite.behind)
+        fg = [sprite for sprite in self if sprite.order > 3]
+        for order in [bg, main, fg]:
+            for sprite in order:
+                self.display_surface.blit(sprite.image, sprite.rect.topleft + self.offset)
+        

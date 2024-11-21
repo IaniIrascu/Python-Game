@@ -9,8 +9,11 @@ class Entity(pg.sprite.Sprite):
         self.speed = 1000
         self.image = self.frames['down'][self.idx]
         self.rect = self.image.get_frect(center = position)
+        self.behind = self.rect.centery
         self.direction = pg.math.Vector2(0, 0)
         self.turned = turned
+        self.order = 3
+        self.hitbox = self.rect.inflate(-self.rect.width / 2, -self.rect.height / 3)
     
     def change(self):
         self.wait += 1
@@ -49,6 +52,8 @@ class Player(Entity):
     def update(self, dt):
         self.input()
         self.rect.center += self.direction * self.speed * dt
+        self.behind = self.rect.centery
+        self.hitbox.center = self.rect.center
         self.change()
 
 class NPC(Entity):

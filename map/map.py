@@ -1,8 +1,7 @@
 import pygame as pg
 from utils.importers import import_tmx, import_frames, import_coast, import_characters
-from sprites.sprites import Sprite
+from sprites.sprites import Sprite, Animated, Grass
 from sprites.player import Player, NPC
-from sprites.sprites import Animated
 from utils.constants import TILE_SIZE
 
 
@@ -21,22 +20,25 @@ class Map:
         for obj in self.maps['world'].get_layer_by_name("Water"):
             for x in range(int(obj.x), int(obj.x + obj.width), TILE_SIZE):
                 for y in range(int(obj.y), int(obj.y + obj.height), TILE_SIZE):
-                    Animated(self.frames['water'], (x, y), group)
-
+                    Animated(self.frames['water'], (x, y), group, 0)
+        
         for x, y, surface in self.maps['world'].get_layer_by_name("Terrain").tiles():
-            Sprite(surface, (x * TILE_SIZE, y * TILE_SIZE), group)
+            Sprite(surface, (x * TILE_SIZE, y * TILE_SIZE), group, 1)
         
         for x, y, surface in self.maps['world'].get_layer_by_name("Terrain Top").tiles():
-            Sprite(surface, (x * TILE_SIZE, y * TILE_SIZE), group)
+            Sprite(surface, (x * TILE_SIZE, y * TILE_SIZE), group, 1)
+        
+        for obj in self.maps['world'].get_layer_by_name("Coast"):
+            Animated(self.frames['coast'][obj.properties['terrain']][obj.properties['side']], (obj.x, obj.y), group, 1)
 
         for obj in self.maps['world'].get_layer_by_name("Monsters"):
-            Sprite(obj.image, (obj.x, obj.y), group)
-
-        for obj in self.maps['world'].get_layer_by_name("Coast"):
-            Animated(self.frames['coast'][obj.properties['terrain']][obj.properties['side']], (obj.x, obj.y), group)
+            Grass(obj.image, (obj.x, obj.y), group, 1 if obj.properties['biome'] == "sand" else 3)
 
         for obj in self.maps['world'].get_layer_by_name("Objects"):
-            Sprite(obj.image, (obj.x, obj.y), group)    
+            if obj.name == "top":
+                Sprite(obj.image, (obj.x, obj.y), group, 4)
+            else:
+                Sprite(obj.image, (obj.x, obj.y), group)    
         
         for obj in self.maps["world"].get_layer_by_name("Entities"):
             if obj.name == "Player" and obj.properties["pos"] == player_start_pos:
