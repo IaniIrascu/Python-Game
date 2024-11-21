@@ -2,12 +2,18 @@ import pygame as pg
 from utils.constants import WINDOW_HEIGHT, WINDOW_WIDTH
 
 class Sprite(pg.sprite.Sprite):
-    def __init__(self, surface, position, group, order = 3):
+    def __init__(self, surface, position, group, order):
         super().__init__(group)
         self.image = surface
         self.rect = self.image.get_frect(topleft = position)
         self.order = order
         self.behind = self.rect.centery
+        self.hitbox = self.rect.inflate(0, -self.rect.height / 3)
+
+class Collision(Sprite):
+    def __init__(self, surface, position, group):
+        super().__init__(surface, position, group, -1)
+        self.hitbox = self.rect.copy()
 
 class Animated(Sprite):
     def __init__(self, frames, position, group, order):
@@ -29,9 +35,8 @@ class Animated(Sprite):
 class Grass(Sprite):
     def __init__(self, surface, position, group, order):
         super().__init__(surface, position, group, order)
-        self.behind = self.rect.centery - 40
+        self.behind = self.rect.centery - 30
     
-
 class Group(pg.sprite.Group):
     def __init__(self):
         super().__init__()

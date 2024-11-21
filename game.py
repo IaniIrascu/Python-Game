@@ -4,7 +4,7 @@ import random
 from main_menu.main_menu import MainMenu
 from map.map import Map
 from sprites.sprites import Sprite, Group
-from sprites.player import Player
+from sprites.characters import Player
 from pokemon.pokemon import *
 from pokemon.attacks.attack import *
 from pokemon.effects.effect import *
@@ -35,6 +35,7 @@ class Game:
         self.scenes = {}
         self.current_scene = None
         self.all_sprites = Group()
+        self.collisions = Group()
         self.player = None
 
     # returns the object related to the name
@@ -60,7 +61,7 @@ class Game:
         menu = MainMenu(self.display_surface)
         battle_screen = Battle_screen(self.display_surface)
         map = Map()
-        map.render(self.all_sprites, 'house')
+        map.render(self.all_sprites, self.collisions, 'house')
         self.player = map.player
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)

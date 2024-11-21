@@ -1,7 +1,7 @@
 import pygame as pg
 from utils.importers import import_tmx, import_frames, import_coast, import_characters
-from sprites.sprites import Sprite, Animated, Grass
-from sprites.player import Player, NPC
+from sprites.sprites import Sprite, Animated, Grass, Collision
+from sprites.characters import Player, NPC
 from utils.constants import TILE_SIZE
 
 
@@ -16,7 +16,7 @@ class Map:
             'characters' : import_characters("sprites", "assets", "characters")
         }
     
-    def render(self, group, player_start_pos):
+    def render(self, group, collisions, player_start_pos):
         for obj in self.maps['world'].get_layer_by_name("Water"):
             for x in range(int(obj.x), int(obj.x + obj.width), TILE_SIZE):
                 for y in range(int(obj.y), int(obj.y + obj.height), TILE_SIZE):
@@ -38,13 +38,16 @@ class Map:
             if obj.name == "top":
                 Sprite(obj.image, (obj.x, obj.y), group, 4)
             else:
-                Sprite(obj.image, (obj.x, obj.y), group)    
+                Sprite(obj.image, (obj.x, obj.y), (group, collisions) , 3)    
         
+        for obj in self.maps['world'].get_layer_by_name("Collisions"):
+            Collision(pg.Surface((obj.width, obj.height)), (obj.x, obj.y), collisions)
+
         for obj in self.maps["world"].get_layer_by_name("Entities"):
             if obj.name == "Player" and obj.properties["pos"] == player_start_pos:
-                self.player = Player(self.frames['characters']['player'], (obj.x, obj.y), group, obj.properties['direction'])
+                self.player = Player(self.frames['characters']['player'], (obj.x, obj.y), group, obj.properties['direction'], collisions)
             elif obj.name != "Player":
-                NPC(self.frames['characters'][obj.properties['graphic']], (obj.x, obj.y), group, obj.properties['direction'])
+                NPC(self.frames['characters'][obj.properties['graphic']], (obj.x, obj.y), (group, collisions), obj.properties['direction'])
 
 
 
