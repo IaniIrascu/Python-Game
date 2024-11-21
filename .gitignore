@@ -5,3 +5,8 @@
 /map/__pycache__
 /sprites/__pycache__
 /utils/__pycache__
+/pokemon/__pycache__
+/battle_screen/__pycache__
+/pokemon/effects/__pycache__
+/pokemon/attacks/__pycache__
+/pokemon/ability_screen/__pycache__

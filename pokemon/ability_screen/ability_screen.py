@@ -41,7 +41,7 @@ class AbilityScreen:
 
     def create_ability_screen(self):
         # # Setting up the background and creating the background surface
-        background = pg.image.load("./pokemoni/ability_screen/assets/Untitled.png")
+        background = pg.image.load("./pokemon/ability_screen/assets/Untitled.png")
         background = pg.transform.scale(background, self.size)
         buttons = []
         attack_button = Button(display_surface = self.button_surface,
@@ -89,7 +89,7 @@ class AbilityScreen:
         self.ability_screen_surface.blit(self.background_surface, (0, 0))
 
     def update_ability_screen(self, pokemon):
-        background = pg.image.load("./pokemoni/ability_screen/assets/Untitled.png")
+        background = pg.image.load("./pokemon/ability_screen/assets/Untitled.png")
         background = pg.transform.scale(background, self.size)
 
         self.buttons["Attack"].set_name(pokemon.get_attack().get_name() + "(" + str(pokemon.get_damage()) + ")")
