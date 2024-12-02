@@ -518,5 +518,4 @@ class Battle_screen:
             if frame > 1000000000:
                 reset_pokemons(self.player_pokemons, self.enemies)
                 return "MainMenu"
-            print(clock.get_fps())
-            clock.tick(60)
+            clock.tick(120)

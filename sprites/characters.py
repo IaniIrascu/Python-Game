@@ -6,7 +6,7 @@ class Entity(pg.sprite.Sprite):
         self.wait = 0
         self.idx = 0
         self.frames = frames
-        self.speed = 1500
+        self.speed = 1200
         self.image = self.frames['down'][self.idx]
         self.rect = self.image.get_frect(center = position)
         self.behind = self.rect.centery

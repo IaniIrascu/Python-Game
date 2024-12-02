@@ -1,6 +1,6 @@
 import pygame as pg
 import sys
-import random
+import random as rd
 from main_menu.main_menu import MainMenu
 from map.map import Map
 from sprites.sprites import Sprite, Group
@@ -36,7 +36,10 @@ class Game:
         self.current_scene = None
         self.all_sprites = Group()
         self.collisions = Group()
+        self.transitions = Group()
         self.player = None
+        self.rand = rd.randint(100, 500)
+        self.map_name = "world"
 
     # returns the object related to the name
     def get_scene(self, scene_name):
@@ -50,18 +53,27 @@ class Game:
         if scene_name in self.scenes:
             self.scenes.pop(scene_name)
 
+    def fade(self):
+        fade = pg.Surface(self.display_surface.get_size())
+        fade.fill('black')
+        
+        for alpha in range(0, 200, 2):
+            fade.set_alpha(alpha)
+            self.display_surface.blit(fade, (0, 0))
+            pg.display.update()
+
     def run(self):
         pg.init()
         clock = pg.time.Clock()
 
-        pg.mixer.init()
-        pg.mixer.music.load("./utils/sounds/metin.mp3")
-        pg.mixer.music.play(-1)
+        # pg.mixer.init()
+        # pg.mixer.music.load("./utils/sounds/metin.mp3")
+        # pg.mixer.music.play(-1)
 
         menu = MainMenu(self.display_surface)
         battle_screen = Battle_screen(self.display_surface)
         map = Map()
-        map.render(self.all_sprites, self.collisions, 'house')
+        map.render(self.all_sprites, self.collisions, self.transitions , map.first_pos[self.map_name], self.map_name)
         self.player = map.player
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)
@@ -150,29 +162,45 @@ class Game:
                 result = self.get_scene("Menu").run(clock)
                 if result == "Start":
                     game_scenes_active["main_menu"] = False
-                    game_scenes_active["battle_screen"] = True
+                    game_scenes_active["map"] = True
                 elif result == "Load":
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
                 elif result == "Quit":
                     pg.quit()
                     sys.exit()
+
             if game_scenes_active["battle_screen"]:
                 # Se aleg 3 inamici random din lista
                 battle_screen.load_enemies(enemies)
                 battle_screen.load_player_pokemons(inventory)
-
-                # Se ruleaza battle screen
                 result = self.get_scene("Battle_screen").run(clock)
                 if result == "MainMenu":
                     game_scenes_active["main_menu"] = True
                     game_scenes_active["battle_screen"] = False
+
             if game_scenes_active["map"]:
                 dt = clock.tick(120) / 1000
-                self.display_surface.fill('grey')
+                if map.change == "MainMenu":
+                    game_scenes_active["main_menu"] = True
+                    game_scenes_active["map"] = False
+                if any(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)):
+                    self.fade()
+                    self.map_name = next(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)).target
+                    self.map_pos = next(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)).target_pos
+                    map.render(self.all_sprites, self.collisions, self.transitions, self.map_pos, self.map_name)
+                    self.player = map.player
+                count = map.grass_count()
+                if count == self.rand:
+                    self.fade()
+                    game_scenes_active["battle_screen"] = True
+                    game_scenes_active["map"] = False
+                    count = 0
+                    self.rand = rd.randint(100, 500)
+                self.display_surface.fill('black')
                 self.all_sprites.draw(self.player.rect.center)
                 self.all_sprites.update(dt)
-            
+                    
             pg.display.update()
             clock.tick(120)
 

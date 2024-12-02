@@ -36,7 +36,14 @@ class Grass(Sprite):
     def __init__(self, surface, position, group, order):
         super().__init__(surface, position, group, order)
         self.behind = self.rect.centery - 30
-    
+
+class Transition(Sprite):
+    def __init__(self, size, position, group, target, target_pos):
+        self.target = target
+        self.target_pos = target_pos
+        surface = pg.Surface(size, pg.SRCALPHA, 32).convert_alpha()
+        super().__init__(surface, position, group, -1)
+            
 class Group(pg.sprite.Group):
     def __init__(self):
         super().__init__()
