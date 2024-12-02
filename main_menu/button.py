@@ -76,8 +76,3 @@ class Button:
         image_surface = pg.transform.scale(image_surface, (scale_factor * self.size[0], scale_factor * self.size[1]))
         #Adding the image on the button
         self.add_surface_over_button(image_surface)
-
-
-
-
-

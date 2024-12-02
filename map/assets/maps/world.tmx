@@ -184,7 +184,7 @@
 </data>
  </layer>
  <objectgroup id="3" name="Entities">
-  <object id="12" name="Player" x="4252.61" y="3653.93">
+  <object id="12" name="Player" x="4449.11" y="3810.43">
    <properties>
     <property name="direction" value="down"/>
     <property name="pos" value="house"/>
