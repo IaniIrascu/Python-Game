@@ -1,6 +1,6 @@
 import pygame as pg
 import sys
-import random
+import random as rd
 from main_menu.main_menu import MainMenu
 from map.map import Map
 from sprites.sprites import Sprite, Group
@@ -37,6 +37,7 @@ class Game:
         self.all_sprites = Group()
         self.collisions = Group()
         self.player = None
+        self.rand = rd.randint(100, 800)
 
     # returns the object related to the name
     def get_scene(self, scene_name):
@@ -150,7 +151,7 @@ class Game:
                 result = self.get_scene("Menu").run(clock)
                 if result == "Start":
                     game_scenes_active["main_menu"] = False
-                    game_scenes_active["battle_screen"] = True
+                    game_scenes_active["map"] = True
                 elif result == "Load":
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
@@ -171,7 +172,17 @@ class Game:
                 dt = clock.tick(120) / 1000
                 self.display_surface.fill('grey')
                 self.all_sprites.draw(self.player.rect.center)
+                count = map.grass_count()
+                if count == self.rand:
+                    game_scenes_active["battle_screen"] = True
+                    game_scenes_active["map"] = False
+                    count = 0
+                    self.rand = rd.randint(100, 800)
                 self.all_sprites.update(dt)
+                if map.change == "MainMenu":
+                    game_scenes_active["main_menu"] = True
+                    game_scenes_active["map"] = False
+                    
             
             pg.display.update()
             clock.tick(120)

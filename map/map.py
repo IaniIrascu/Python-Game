@@ -3,6 +3,7 @@ from utils.importers import import_tmx, import_frames, import_coast, import_char
 from sprites.sprites import Sprite, Animated, Grass, Collision
 from sprites.characters import Player, NPC
 from utils.constants import TILE_SIZE
+import random as rd
 
 
 class Map:
@@ -15,6 +16,8 @@ class Map:
             'water' : import_frames("map", "assets", "tilesets", "water"),
             'characters' : import_characters("sprites", "assets", "characters")
         }
+        self.change = ""
+        self.count = 0
     
     def render(self, group, collisions, player_start_pos):
         for obj in self.maps['world'].get_layer_by_name("Water"):
@@ -49,5 +52,21 @@ class Map:
             elif obj.name != "Player":
                 NPC(self.frames['characters'][obj.properties['graphic']], (obj.x, obj.y), (group, collisions), obj.properties['direction'])
 
+        for event in pg.event.get():
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:
+                    self.change = "MainMenu"
+    
 
+    def grass_count(self):
+        if self.count > 800:
+            self.count = 0
+        x = self.player.rect.centerx
+        y = self.player.rect.centery
+        for obj in self.maps['world'].get_layer_by_name("Monsters"):
+            if obj.x < x < obj.x + TILE_SIZE and obj.y < y < obj.y + TILE_SIZE:
+                self.count += 1
+        return self.count
+
+        
 

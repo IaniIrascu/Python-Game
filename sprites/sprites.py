@@ -36,7 +36,7 @@ class Grass(Sprite):
     def __init__(self, surface, position, group, order):
         super().__init__(surface, position, group, order)
         self.behind = self.rect.centery - 30
-    
+            
 class Group(pg.sprite.Group):
     def __init__(self):
         super().__init__()
