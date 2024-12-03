@@ -138,24 +138,8 @@ class Game:
             pokemons[i].set_special_attack(special_attacks[i])
             pokemons[i].set_experience(0)
 
-        inventory = [pokemons[2], pokemons[1], pokemons[3]]
-        enemies = [pokemons[5], pokemons[4], pokemons[7]]
-
-        # Creating the pokemons
-        # for i, pokemon_name in enumerate(pokemons_info):
-        #     pokemons.append(Pokemon())
-        #     pokemons[i].set_name(pokemon_name)
-        #     pokemons[i].set_health(pokemons_info[pokemon_name]["health"])
-        #     pokemons[i].set_energy(pokemons_info[pokemon_name]["energy"])
-        #     pokemons[i].set_size(pokemons_info[pokemon_name]["size"])
-        #     pokemons[i].set_attack(pokemons_info[pokemon_name]["attack"])
-        #     pokemons[i].animation_frames("./pokemon/assets/" + pokemon_name)
-        #     pokemons[i].attack_frames_animation("./pokemon/attacks/assets/" + pokemons_info[pokemon_name]["attacksprites"])
-        #
-        #     # Creare ability_screen
-        #     ability_screen = Ability_screen()
-        #     ability_screen.create_ability_screen()
-        #     pokemons[i].set_ability_screen(ability_screen)
+        inventory = []
+        enemies = []
 
         while True:
             if game_scenes_active["main_menu"]:
@@ -193,6 +177,7 @@ class Game:
                 count = map.grass_count()
                 if count == self.rand:
                     self.fade()
+
                     game_scenes_active["battle_screen"] = True
                     game_scenes_active["map"] = False
                     count = 0
