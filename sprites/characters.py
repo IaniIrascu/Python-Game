@@ -8,7 +8,7 @@ class Entity(pg.sprite.Sprite):
         self.frames = frames
         self.speed = 1200
         self.image = self.frames['down'][self.idx]
-        self.rect = self.image.get_frect(center = position)
+        self.rect = self.image.get_rect(center = position)
         self.behind = self.rect.centery
         self.direction = pg.math.Vector2(0, 0)
         self.turned = turned

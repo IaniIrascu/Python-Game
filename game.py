@@ -138,8 +138,8 @@ class Game:
             pokemons[i].set_special_attack(special_attacks[i])
             pokemons[i].set_experience(0)
 
-        inventory = []
-        enemies = []
+        inventory = [pokemons[1]]
+        enemies = [pokemons[2]]
 
         while True:
             if game_scenes_active["main_menu"]:
@@ -193,3 +193,7 @@ class Game:
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE and game_scenes_active["map"]:
+                        game_scenes_active["map"] = False
+                        game_scenes_active["main_menu"] = True
