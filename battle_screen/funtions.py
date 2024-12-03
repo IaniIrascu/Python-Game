@@ -43,7 +43,7 @@ def change_health_bar(health_bar, bars_surface, percentage, text_surface):
     height = health_bar.get_height()
     health_bar.fill((0, 0, 0, 0))
     health_bar.fill(RED, (90, 37, width - 115 - removeFromBar, height / 3))
-    health_bar.blit(text_surface, (145, 45))
+    health_bar.blit(text_surface, (125, 45))
     health_bar.blit(bars_surface, (0, 0), (0, 0, width, height))
 
 def change_energy_bar(energy_bar, bars_surface, percentage, text_surface):
@@ -52,7 +52,7 @@ def change_energy_bar(energy_bar, bars_surface, percentage, text_surface):
     height = energy_bar.get_height()
     energy_bar.fill((0, 0, 0, 0))
     energy_bar.fill(BLUE, (90, 37, width - 115 - removeFromBar, height / 3))
-    energy_bar.blit(text_surface, (145, 45))
+    energy_bar.blit(text_surface, (125, 45))
     energy_bar.blit(bars_surface, (0, 0), (0, height, width, height))
 
 def remove_effects_turns(effects, effects_names):

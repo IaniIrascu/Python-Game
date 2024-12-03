@@ -408,25 +408,6 @@ class Battle_screen:
                     attack_playing = False
                     wait_a_bit[1] = False
 
-            # Verify if all enemies are dead or all player_pokemons are dead
-            dead_enemies = 0
-            dead_player_pokemons = 0
-            for enemy in self.enemies:
-                if enemy.get_isDead():
-                    dead_enemies += 1
-
-            if dead_enemies == number_of_enemies:
-                reset_pokemons(self.player_pokemons, self.enemies)
-                return "MainMenu"
-
-            for player_pokemon in self.player_pokemons:
-                if player_pokemon.get_isDead():
-                    dead_player_pokemons += 1
-
-            if dead_player_pokemons == number_of_player_pokemons:
-                reset_pokemons(self.player_pokemons, self.enemies)
-                return "MainMenu"
-
             # Combinare suprafete si afisare
             self.display_surface.blit(self.pokemons_surface, (0, 0))
 
@@ -518,4 +499,4 @@ class Battle_screen:
             if frame > 1000000000:
                 reset_pokemons(self.player_pokemons, self.enemies)
                 return "MainMenu"
-            clock.tick(120)
+            clock.tick(60)

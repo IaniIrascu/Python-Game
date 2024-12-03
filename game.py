@@ -9,25 +9,43 @@ from pokemon.pokemon import *
 from pokemon.attacks.attack import *
 from pokemon.effects.effect import *
 from pokemon.pokemons_information import *
-
+from save_handleling.save_handleling import *
 from pokemon.ability_screen.ability_screen import AbilityScreen
 from battle_screen.battle_screen import Battle_screen
+from inventory.inventory import *
 from utils.constants import WINDOW_HEIGHT, WINDOW_WIDTH
 
-def search_effect(effects, effect_name):
-    for effect in effects:
-        if effect.get_name() == effect_name:
-            return effect
 
-def search_pokemon(pokemons, pokemon_name):
-    for pokemon in pokemons:
-        if pokemon.get_name() == pokemon_name:
-            return pokemon
+def search(list, element_name):
+    for element in list:
+        if element.get_name() == element_name:
+            return element
 
-def search_attack(attacks, attack_name):
-    for attack in attacks:
-        if attack.get_name() == attack_name:
-            return attack
+
+def generate_pokemon(pokemon_name, pokemons_frames, attacks, special_attacks, level):
+    pokemon = Pokemon()
+    pokemon.set_name(pokemon_name)
+    pokemon.set_pokemon_frames(pokemons_frames.get_pokemon_frames(pokemon_name))
+
+    maxHealth = pokemons_info[pokemon_name]["health"]
+    pokemon.set_maxHealth(maxHealth * pow(1.5, level - 1))
+    pokemon.set_health(pokemon.get_maxHealth())
+
+    maxEnergy = pokemons_info[pokemon_name]["energy"]
+    pokemon.set_maxEnergy(maxEnergy + 25 * (level - 1))
+    pokemon.set_energy(pokemon.get_maxEnergy())
+
+    damage = pokemons_info[pokemon_name]["damage"]
+    pokemon.set_damage(damage * pow(1.3, level - 1))
+
+    pokemon.set_level(level)
+    attack_name = attacks_information[pokemon_name]["attack"]
+    pokemon.set_attack(search(attacks, attack_name))
+    special_attack_name = attacks_information[pokemon_name]["special_attack"]["name"]
+    pokemon.set_special_attack(search(special_attacks, special_attack_name))
+    pokemon.set_experience(0)
+    return pokemon
+
 
 class Game:
     def __init__(self):
@@ -56,7 +74,7 @@ class Game:
     def fade(self):
         fade = pg.Surface(self.display_surface.get_size())
         fade.fill('black')
-        
+
         for alpha in range(0, 200, 2):
             fade.set_alpha(alpha)
             self.display_surface.blit(fade, (0, 0))
@@ -73,8 +91,10 @@ class Game:
         menu = MainMenu(self.display_surface)
         battle_screen = Battle_screen(self.display_surface)
         map = Map()
-        map.render(self.all_sprites, self.collisions, self.transitions , map.first_pos[self.map_name], self.map_name)
+        map.render(self.all_sprites, self.collisions, self.transitions, map.first_pos[self.map_name], self.map_name)
         self.player = map.player
+        self.player.set_inventory(Inventory(self.display_surface))
+        self.player.get_inventory().set_noOfPokemons(0)
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)
         self.add_scene("Battle_screen", battle_screen)
@@ -92,7 +112,7 @@ class Game:
         for i, effect_name in enumerate(effects_information):
             effects.append(Effect())
             effects[i].set_name(effect_name)
-            effects[i].change_effectIcon(color = effects_information[effect_name]["color"])
+            effects[i].change_effectIcon(color=effects_information[effect_name]["color"])
             effects[i].set_color(effects_information[effect_name]["color"])
 
         # Loading all the attacks
@@ -116,7 +136,7 @@ class Game:
 
             attack_effects = []
             for effect_name in attacks_information[pokemon]["special_attack"]["effects"]:
-                attack_effects.append(search_effect(effects, effect_name))
+                attack_effects.append(search(effects, effect_name))
             special_attack.set_effects(attack_effects)
             special_attacks.append(special_attack)
 
@@ -124,40 +144,92 @@ class Game:
         pokemons_frames = PokemonsFrames()
         pokemons_frames.load_all_pokemon_frames("./pokemon/assets")
 
-        for i, pokemon_name in enumerate(pokemons_info):
-            pokemons.append(Pokemon())
-            pokemons[i].set_pokemon_frames(pokemons_frames.get_pokemon_frames(pokemon_name))
-            pokemons[i].set_name(pokemon_name)
-            pokemons[i].set_health(pokemons_info[pokemon_name]["health"])
-            pokemons[i].set_maxHealth(pokemons_info[pokemon_name]["health"])
-            pokemons[i].set_energy(pokemons_info[pokemon_name]["energy"])
-            pokemons[i].set_maxEnergy(pokemons_info[pokemon_name]["energy"])
-            pokemons[i].set_damage(pokemons_info[pokemon_name]["attack"])
-            pokemons[i].set_level(1)
-            pokemons[i].set_attack(attacks[i])
-            pokemons[i].set_special_attack(special_attacks[i])
-            pokemons[i].set_experience(0)
+        generated_pokemon = generate_pokemon("Charmadillo.png", pokemons_frames, attacks, special_attacks, 3)
+        # First time loading the game
+        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 2)
+        # First time loading the game
+        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        generated_pokemon = generate_pokemon("Draem.png", pokemons_frames, attacks, special_attacks, 3)
+        # First time loading the game
+        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        generated_pokemon = generate_pokemon("Gulfin.png", pokemons_frames, attacks, special_attacks, 2)
+        # First time loading the game
+        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        generated_pokemon = generate_pokemon("Jacana.png", pokemons_frames, attacks, special_attacks, 3)
+        # First time loading the game
+        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 2)
+        # First time loading the game
+        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        generated_pokemon = generate_pokemon("Charmadillo.png", pokemons_frames, attacks, special_attacks, 3)
+        # First time loading the game
+        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 2)
+        self.player.get_inventory().set_noOfPokemons(8)
+        # First time loading the game
+        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        generated_enemy = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 4)
+        enemies = [generated_enemy]
 
-        inventory = [pokemons[1]]
-        enemies = [pokemons[2]]
-
+        player_rect_center = (0, 0)
         while True:
             if game_scenes_active["main_menu"]:
                 result = self.get_scene("Menu").run(clock)
                 if result == "Start":
+                    # AR TREBUI SA IMI RESETEZE DE LA INCEPUT STARTUL
+                    #
+                    #
+                    #
+                    #
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
                 elif result == "Load":
+                    # Aici se da load la toti pokemonii din inventar
+                    s = SaveLoadSystem(".save", "./save_files")
+                    if s.check_for_file("inventory"):
+                        inventory = []
+                        inventory_data = s.load_data("inventory")
+                        self.player.get_inventory().set_noOfPokemons(0)
+                        # Se genereaza inventarul cu pokemonii asa cum erau cand s-a iesit din joc
+                        for i, data in enumerate(inventory_data):
+                            inventory.append(
+                                generate_pokemon(inventory_data[i]["name"], pokemons_frames, attacks, special_attacks,
+                                                 inventory_data[i]["level"]))
+                            inventory[i].set_experience(inventory_data[i]["experience"])
+                            self.player.get_inventory().set_noOfPokemons(
+                                self.player.get_inventory().get_noOfPokemons() + 1)
+                        os.remove("./save_files/inventory.save")
+                        self.player.get_inventory().update_inventory(inventory)
+                    s = SaveLoadSystem(".save", "./save_files")
+                    if s.check_for_file("player_position"):
+                        self.player.rect.center = s.load_data("player_position")
+                        os.remove("./save_files/player_position.save")
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
                 elif result == "Quit":
+                    s = SaveLoadSystem(".save", "./save_files")
+                    # datele despre inventar sunt salvate asa: nume level experienta ramasa pentru fiecare
+                    # pokemoni intr-o lista de dictionare
+                    saved_inventory_data = []
+                    for pokemon in self.player.get_inventory().get_pokemons():
+                        saved_data = {"name": pokemon.get_name(), "level": pokemon.get_level(),
+                                      "experience": pokemon.get_experience()}
+                        saved_inventory_data.append(saved_data)
+
+                    s.save_data(saved_inventory_data, "inventory")
+                    s.save_data(self.player.rect.center, "player_position")
                     pg.quit()
                     sys.exit()
 
             if game_scenes_active["battle_screen"]:
                 # Se aleg 3 inamici random din lista
                 battle_screen.load_enemies(enemies)
-                battle_screen.load_player_pokemons(inventory)
+                pokemons_in_battle = []
+                for i, pokemon in enumerate(self.player.get_inventory().get_pokemons()):
+                    if self.player.get_inventory().get_active_pokemons()[i]:
+                        pokemons_in_battle.append(pokemon)
+                battle_screen.load_player_pokemons(pokemons_in_battle)
                 result = self.get_scene("Battle_screen").run(clock)
                 if result == "MainMenu":
                     game_scenes_active["main_menu"] = True
@@ -197,3 +269,5 @@ class Game:
                     if event.key == pg.K_ESCAPE and game_scenes_active["map"]:
                         game_scenes_active["map"] = False
                         game_scenes_active["main_menu"] = True
+                    if event.key == pg.K_e and game_scenes_active["map"]:
+                        self.player.get_inventory().run(clock)

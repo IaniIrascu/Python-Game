@@ -31,6 +31,7 @@ class Player(Entity):
     def __init__(self, frames, position, group, turned, collisions):
         super().__init__(frames, position, group, turned)
         self.collisions = collisions
+        self.inventory = None
 
     
     def input(self):
@@ -79,7 +80,11 @@ class Player(Entity):
                         self.hitbox.top = obj.hitbox.bottom
                     self.rect.centery = self.hitbox.centery
                 
+    def set_inventory(self, inventory):
+        self.inventory = inventory
 
+    def get_inventory(self):
+        return self.inventory
 
 class NPC(Entity):
     def __init__(self, frames, position, group, turned):

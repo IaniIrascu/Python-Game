@@ -92,7 +92,7 @@ class AbilityScreen:
         background = pg.image.load("./pokemon/ability_screen/assets/Untitled.png")
         background = pg.transform.scale(background, self.size)
 
-        self.buttons["Attack"].set_name(pokemon.get_attack().get_name() + "(" + str(pokemon.get_damage()) + ")")
+        self.buttons["Attack"].set_name(pokemon.get_attack().get_name() + "(" + str(round(pokemon.get_damage(), 2)) + ")")
         self.buttons["Special"].set_name(pokemon.get_special_attack().get_name() + "(" + str(pokemon.get_special_attack().get_energy_cost()) + ")")
         self.buttons["Name"].set_name(pokemon.get_name().replace(".png", "") + " lv. " + str(pokemon.get_level()))
         self.buttons["X"].set_name("X")
