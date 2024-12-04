@@ -144,44 +144,48 @@ class Game:
         pokemons_frames = PokemonsFrames()
         pokemons_frames.load_all_pokemon_frames("./pokemon/assets")
 
-        generated_pokemon = generate_pokemon("Charmadillo.png", pokemons_frames, attacks, special_attacks, 3)
-        # First time loading the game
-        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-        generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 2)
-        # First time loading the game
-        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-        generated_pokemon = generate_pokemon("Draem.png", pokemons_frames, attacks, special_attacks, 3)
-        # First time loading the game
-        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-        generated_pokemon = generate_pokemon("Gulfin.png", pokemons_frames, attacks, special_attacks, 2)
-        # First time loading the game
-        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-        generated_pokemon = generate_pokemon("Jacana.png", pokemons_frames, attacks, special_attacks, 3)
-        # First time loading the game
-        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-        generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 2)
-        # First time loading the game
-        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+
+        # generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 1)
+        # # First time loading the game
+        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        # generated_pokemon = generate_pokemon("Draem.png", pokemons_frames, attacks, special_attacks, 1)
+        # # First time loading the game
+        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        # generated_pokemon = generate_pokemon("Gulfin.png", pokemons_frames, attacks, special_attacks, 1)
+        # # First time loading the game
+        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        # generated_pokemon = generate_pokemon("Jacana.png", pokemons_frames, attacks, special_attacks, 1)
+        # # First time loading the game
+        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        # generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 1)
+        # # First time loading the game
+        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
         # generated_pokemon = generate_pokemon("Charmadillo.png", pokemons_frames, attacks, special_attacks, 3)
         # # First time loading the game
         # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
         # generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 2)
-        self.player.get_inventory().set_noOfPokemons(6)
+
         # First time loading the game
         # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
         generated_enemy = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 1)
         enemies = [generated_enemy]
 
-        player_rect_center = (0, 0)
+        player_rect_center = self.player.rect.center
         while True:
             if game_scenes_active["main_menu"]:
                 result = self.get_scene("Menu").run(clock)
                 if result == "Start":
-                    # AR TREBUI SA IMI RESETEZE DE LA INCEPUT STARTUL
-                    #
-                    #
-                    #
-                    #
+                    self.player.get_inventory().get_pokemons().clear()
+                    self.player.rect.center = player_rect_center
+                    generated_pokemon = generate_pokemon("Charmadillo.png", pokemons_frames, attacks, special_attacks, 1)
+                    self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+                    self.player.get_inventory().set_noOfPokemons(1)
+                    s = SaveLoadSystem(".save", "./save_files")
+                    # Se sterg fisierele de salvare vechi
+                    if s.check_for_file("inventory"):
+                        os.remove("./save_files/inventory.save")
+                    if s.check_for_file("player_position"):
+                        os.remove("./save_files/player_position.save")
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
                 elif result == "Load":
@@ -200,24 +204,17 @@ class Game:
                             self.player.get_inventory().set_noOfPokemons(self.player.get_inventory().get_noOfPokemons() + 1)
                         os.remove("./save_files/inventory.save")
                         self.player.get_inventory().update_inventory(inventory)
-                    s = SaveLoadSystem(".save", "./save_files")
+                    else:
+                        # Daca nu exista, se predefineste un pokemon de inceput
+                        generated_pokemon = generate_pokemon("Charmadillo.png", pokemons_frames, attacks, special_attacks, 1)
+                        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+                        self.player.get_inventory().set_noOfPokemons(1)
                     if s.check_for_file("player_position"):
                         self.player.rect.center = s.load_data("player_position")
                         os.remove("./save_files/player_position.save")
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
                 elif result == "Quit":
-                    s = SaveLoadSystem(".save", "./save_files")
-                    # datele despre inventar sunt salvate asa: nume level experienta ramasa pentru fiecare
-                    # pokemoni intr-o lista de dictionare
-                    saved_inventory_data = []
-                    for pokemon in self.player.get_inventory().get_pokemons():
-                        saved_data = {"name": pokemon.get_name(), "level": pokemon.get_level(),
-                                      "experience": pokemon.get_experience()}
-                        saved_inventory_data.append(saved_data)
-
-                    s.save_data(saved_inventory_data, "inventory")
-                    s.save_data(self.player.rect.center, "player_position")
                     pg.quit()
                     sys.exit()
 
@@ -252,9 +249,6 @@ class Game:
 
             if game_scenes_active["map"]:
                 dt = clock.tick(120) / 1000
-                if map.change == "MainMenu":
-                    game_scenes_active["main_menu"] = True
-                    game_scenes_active["map"] = False
                 if any(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)):
                     self.fade()
                     self.map_name = next(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)).target
@@ -282,7 +276,19 @@ class Game:
                     sys.exit()
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE and game_scenes_active["map"]:
-                        game_scenes_active["map"] = False
+                        # DACA SE IESE DE PE HARTA SE SALVEAZA PROGRESUL
+                        s = SaveLoadSystem(".save", "./save_files")
+                        # datele despre inventar sunt salvate asa: nume level experienta ramasa pentru fiecare
+                        # pokemoni intr-o lista de dictionare
+                        saved_inventory_data = []
+                        for pokemon in self.player.get_inventory().get_pokemons():
+                            saved_data = {"name": pokemon.get_name(), "level": pokemon.get_level(),
+                                          "experience": pokemon.get_experience()}
+                            saved_inventory_data.append(saved_data)
+
+                        s.save_data(saved_inventory_data, "inventory")
+                        s.save_data(self.player.rect.center, "player_position")
                         game_scenes_active["main_menu"] = True
+                        game_scenes_active["map"] = False
                     if event.key == pg.K_e and game_scenes_active["map"]:
                         self.player.get_inventory().run(clock)
