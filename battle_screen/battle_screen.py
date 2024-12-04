@@ -227,7 +227,7 @@ class Battle_screen:
                                 level_up_pokemon(pokemon)
 
                         reset_pokemons(self.player_pokemons, self.enemies)
-                        return "MainMenu"
+                        return "Win"
                     elif result == "DEAD":
                         attack_playing = False
                         add_special[0] = False
@@ -353,7 +353,7 @@ class Battle_screen:
                                 pokemon.set_experience(experience + pokemon.get_experience())
                                 level_up_pokemon(pokemon)
                         reset_pokemons(self.player_pokemons, self.enemies)
-                        return "MainMenu"
+                        return "Win"
                     elif result == "DEAD":
                         attack_playing = False
                         add_special[1] = False
@@ -418,7 +418,7 @@ class Battle_screen:
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         reset_pokemons(self.player_pokemons, self.enemies)
-                        return "MainMenu"  # AICI AR TREBUI SA FIE ESCAPE MENU, DAR CAND SE FACE
+                        return "Map"  # AICI AR TREBUI SA FIE ESCAPE MENU, DAR CAND SE FACE
                 mouse_pos = pg.mouse.get_pos()
 
                 # checking if pokemon is clicked or if cursor is on it
@@ -498,5 +498,5 @@ class Battle_screen:
             frame += 1
             if frame > 1000000000:
                 reset_pokemons(self.player_pokemons, self.enemies)
-                return "MainMenu"
+                return "Map"
             clock.tick(60)

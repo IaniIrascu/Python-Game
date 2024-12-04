@@ -162,14 +162,14 @@ class Game:
         generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 2)
         # First time loading the game
         self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-        generated_pokemon = generate_pokemon("Charmadillo.png", pokemons_frames, attacks, special_attacks, 3)
+        # generated_pokemon = generate_pokemon("Charmadillo.png", pokemons_frames, attacks, special_attacks, 3)
+        # # First time loading the game
+        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        # generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 2)
+        self.player.get_inventory().set_noOfPokemons(6)
         # First time loading the game
-        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-        generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 2)
-        self.player.get_inventory().set_noOfPokemons(8)
-        # First time loading the game
-        self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-        generated_enemy = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 4)
+        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+        generated_enemy = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 1)
         enemies = [generated_enemy]
 
         player_rect_center = (0, 0)
@@ -197,8 +197,7 @@ class Game:
                                 generate_pokemon(inventory_data[i]["name"], pokemons_frames, attacks, special_attacks,
                                                  inventory_data[i]["level"]))
                             inventory[i].set_experience(inventory_data[i]["experience"])
-                            self.player.get_inventory().set_noOfPokemons(
-                                self.player.get_inventory().get_noOfPokemons() + 1)
+                            self.player.get_inventory().set_noOfPokemons(self.player.get_inventory().get_noOfPokemons() + 1)
                         os.remove("./save_files/inventory.save")
                         self.player.get_inventory().update_inventory(inventory)
                     s = SaveLoadSystem(".save", "./save_files")
@@ -223,16 +222,32 @@ class Game:
                     sys.exit()
 
             if game_scenes_active["battle_screen"]:
+                self.player.get_inventory().activate_first_max_3_pokemons()
                 # Se aleg 3 inamici random din lista
-                battle_screen.load_enemies(enemies)
+                enemies_in_battle = enemies
                 pokemons_in_battle = []
                 for i, pokemon in enumerate(self.player.get_inventory().get_pokemons()):
                     if self.player.get_inventory().get_active_pokemons()[i]:
                         pokemons_in_battle.append(pokemon)
+                battle_screen.load_enemies(enemies_in_battle)
                 battle_screen.load_player_pokemons(pokemons_in_battle)
                 result = self.get_scene("Battle_screen").run(clock)
-                if result == "MainMenu":
-                    game_scenes_active["main_menu"] = True
+                if result == "Map":
+                    game_scenes_active["map"] = True
+                    game_scenes_active["battle_screen"] = False
+                if result == "Win":
+                    chance = 200
+                    if self.player.get_inventory().get_noOfPokemons() <= 16:
+                        if chance >= random.randint(0, 100):
+                            enemy_index = random.randint(0, len(enemies_in_battle) - 1)
+                            pokemon_to_add = generate_pokemon(enemies_in_battle[enemy_index].get_name(),
+                                                        pokemons_frames,
+                                                        attacks,
+                                                        special_attacks,
+                                                        enemies_in_battle[enemy_index].get_level())
+                            self.player.get_inventory().add_pokemon_to_inventory(pokemon_to_add)
+                            self.player.get_inventory().set_noOfPokemons(self.player.get_inventory().get_noOfPokemons() + 1)
+                    game_scenes_active["map"] = True
                     game_scenes_active["battle_screen"] = False
 
             if game_scenes_active["map"]:
