@@ -64,7 +64,10 @@ class Map:
 
         for obj in self.maps[map_name].get_layer_by_name("Entities"):
             if obj.name == "Player" and obj.properties["pos"] == player_start_pos:
-                self.player = Player(self.frames['characters']['player'], (obj.x, obj.y), group, obj.properties['direction'], collisions)
+                if self.player == None:
+                    self.player = Player(self.frames['characters']['player'], (obj.x, obj.y), group, obj.properties['direction'], collisions)
+                else:
+                    self.player = Player(self.frames['characters']['player'], (obj.x, obj.y), group, obj.properties['direction'], collisions, self.player.inventory)
             elif obj.name != "Player":
                 NPC(self.frames['characters'][obj.properties['graphic']], (obj.x, obj.y), (group, collisions), obj.properties['direction'])
 
