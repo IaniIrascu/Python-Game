@@ -280,7 +280,7 @@ class Game:
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE and game_scenes_active["map"]:
                         # DACA SE IESE DE PE HARTA SE SALVEAZA PROGRESUL
-                        s = SaveLoadSystem(".save", "./save_files")
+                        s = SaveLoadSystem("save", "save_files")
                         # datele despre inventar sunt salvate asa: nume level experienta ramasa pentru fiecare
                         # pokemoni intr-o lista de dictionare
                         saved_inventory_data = []
