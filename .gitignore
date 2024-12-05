@@ -10,3 +10,6 @@
 /pokemon/effects/__pycache__
 /pokemon/attacks/__pycache__
 /pokemon/ability_screen/__pycache__
+/inventory/__pycache__
+/save_handling/__pycache__
+/save_files
