@@ -8,7 +8,7 @@ class Entity(pg.sprite.Sprite):
         self.frames = frames
         self.speed = 1200
         self.image = self.frames['down'][self.idx]
-        self.rect = self.image.get_frect(center = position)
+        self.rect = self.image.get_rect(center = position)
         self.behind = self.rect.centery
         self.direction = pg.math.Vector2(0, 0)
         self.turned = turned
@@ -28,9 +28,10 @@ class Entity(pg.sprite.Sprite):
     
 
 class Player(Entity):
-    def __init__(self, frames, position, group, turned, collisions):
+    def __init__(self, frames, position, group, turned, collisions, inventory = None):
         super().__init__(frames, position, group, turned)
         self.collisions = collisions
+        self.inventory = inventory
 
     
     def input(self):
@@ -79,7 +80,11 @@ class Player(Entity):
                         self.hitbox.top = obj.hitbox.bottom
                     self.rect.centery = self.hitbox.centery
                 
+    def set_inventory(self, inventory):
+        self.inventory = inventory
 
+    def get_inventory(self):
+        return self.inventory
 
 class NPC(Entity):
     def __init__(self, frames, position, group, turned):

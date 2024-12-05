@@ -7,22 +7,22 @@ default_attack = 5
 default_attacksprite = "scratch.png"
 
 pokemons_info = {
-    "Atrox.png": {"health": 230, "energy": default_energy, "size":  default_size, "attack": 45, "attacksprites": default_attacksprite},
-    "Charmadillo.png": {"health": 500, "energy": default_energy, "size":  default_size, "attack": 35, "attacksprites": default_attacksprite},
-    "Cindrill.png": {"health": 125, "energy": default_energy, "size":  default_size, "attack": 100, "attacksprites": default_attacksprite},
-    "Cleaf.png": {"health": 250, "energy": default_energy, "size":  default_size, "attack": 30, "attacksprites": default_attacksprite},
-    "Draem.png": {"health": 400, "energy": default_energy, "size":  default_size, "attack": 50, "attacksprites": default_attacksprite},
-    "Finiette.png": {"health": 325, "energy": default_energy, "size":  default_size, "attack": 40, "attacksprites": default_attacksprite},
-    "Finsta.png": {"health": 230, "energy": default_energy, "size":  default_size, "attack": 30, "attacksprites": default_attacksprite},
-    "Friolera.png": {"health": 260, "energy": default_energy, "size":  default_size, "attack": 25, "attacksprites": default_attacksprite},
-    "Gulfin.png": {"health": 145, "energy": default_energy, "size":  default_size, "attack": 70, "attacksprites": default_attacksprite},
-    "Ivieron.png": {"health": 270, "energy": default_energy, "size":  default_size, "attack": 40, "attacksprites": default_attacksprite},
-    "Jacana.png": {"health": 150, "energy": default_energy, "size":  default_size, "attack": 35, "attacksprites": default_attacksprite},
-    "Larvea.png": {"health": 75, "energy": default_energy, "size":  default_size, "attack": 125, "attacksprites": default_attacksprite},
-    "Pluma.png": {"health": 450, "energy": default_energy, "size":  default_size, "attack": 50, "attacksprites": default_attacksprite},
-    "Plumette.png": {"health": 200, "energy": default_energy, "size":  default_size, "attack": 35, "attacksprites": default_attacksprite},
-    "Pouch.png": {"health": 250, "energy": default_energy, "size":  default_size, "attack": 25, "attacksprites": default_attacksprite},
-    "Sparchu.png": {"health": 320, "energy": default_energy, "size":  default_size, "attack": 30, "attacksprites": default_attacksprite},
+    "Atrox.png": {"health": 230, "energy": default_energy, "size":  default_size, "damage": 45},
+    "Charmadillo.png": {"health": 500, "energy": default_energy, "size":  default_size, "damage": 3500},
+    "Cindrill.png": {"health": 125, "energy": default_energy, "size":  default_size, "damage": 100},
+    "Cleaf.png": {"health": 250, "energy": default_energy, "size":  default_size, "damage": 30},
+    "Draem.png": {"health": 400, "energy": default_energy, "size":  default_size, "damage": 50},
+    "Finiette.png": {"health": 325, "energy": default_energy, "size":  default_size, "damage": 40},
+    "Finsta.png": {"health": 230, "energy": default_energy, "size":  default_size, "damage": 30},
+    "Friolera.png": {"health": 260, "energy": default_energy, "size":  default_size, "damage": 25},
+    "Gulfin.png": {"health": 145, "energy": default_energy, "size":  default_size, "damage": 70},
+    "Ivieron.png": {"health": 270, "energy": default_energy, "size":  default_size, "damage": 40},
+    "Jacana.png": {"health": 150, "energy": default_energy, "size":  default_size, "damage": 35},
+    "Larvea.png": {"health": 75, "energy": default_energy, "size":  default_size, "damage": 125},
+    "Pluma.png": {"health": 450, "energy": default_energy, "size":  default_size, "damage": 50},
+    "Plumette.png": {"health": 200, "energy": default_energy, "size":  default_size, "damage": 35},
+    "Pouch.png": {"health": 250, "energy": default_energy, "size":  default_size, "damage": 25},
+    "Sparchu.png": {"health": 320, "energy": default_energy, "size":  default_size, "damage": 30},
 }
 
 effects_information = {

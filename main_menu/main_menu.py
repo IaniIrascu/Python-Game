@@ -161,7 +161,6 @@ class MainMenu:
                         if load_button.rect.collidepoint(mouse_pos):
                             return "Load"
                         if quit_button.rect.collidepoint(mouse_pos):
-                            pg.quit()
-                            sys.exit()
+                            return "Quit"
             pg.display.update()
             clock.tick(120)
