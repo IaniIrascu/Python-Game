@@ -11,6 +11,7 @@ class Inventory:
         self.display_surface = display_surface
         self.inventory_surface = pg.transform.scale_by(pg.image.load('./inventory/assets/inventory.jpg'), 2)
         self.size = self.inventory_surface.get_size()
+        self.position = None
         self.maxCapacity = 16
         self.noOfPokemons = 0
         self.activePokemons = [False, False, False, False,
@@ -49,12 +50,31 @@ class Inventory:
     def get_active_pokemons(self):
         return self.activePokemons
 
+    def get_position(self):
+        return self.position
+
+    def set_position(self, position):
+        self.position = position
+
+    def inventory_pos_clicked(self, mouse_pos):
+        x = int((mouse_pos[0] - self.size[0] / 11 - 10 - self.position[0]) * (4.5 / self.size[0]))
+        y = int((mouse_pos[1] - self.size[1] / 9 - 10 - self.position[1]) * (4.5 / self.size[1]))
+        pos = (x, y)
+        return pos
+
+    def animate_surface(self, surface, start_pos, end_pos, procent):
+        delta_x = end_pos[0] - start_pos[0]
+        delta_y = end_pos[1] - start_pos[1]
+        pos = (start_pos[0] + delta_x * procent, start_pos[1] + delta_y * procent)
+        self.display_surface.blit(surface, pos)
+
     def run(self, clock):
         self.activate_first_max_3_pokemons()
         # Se verifica daca exista pokemoni activi in inventar
         activated_pokemons = 0
         reset_active_pokemons = False
         delete_pokemon = False
+        start_pokemon_stats_animation = False
         # Se incarca backgroundurile pentru inventar
         background = pg.transform.scale_by(pg.image.load('./inventory/assets/inventory.jpg'), 2)
         background_delete = pg.transform.scale_by(pg.image.load('./inventory/assets/inventory_-_delete.png'), 2)
@@ -86,6 +106,8 @@ class Inventory:
         health_bar = pg.Surface((bars_width, bars_height), pg.SRCALPHA)
         energy_bar = pg.Surface((bars_width, bars_height), pg.SRCALPHA)
 
+        start_animation_time = 0
+        animation_time = 750
         while True:
             if reset_active_pokemons and not delete_pokemon:
                 self.inventory_surface.blit(background_select, (0, 0))
@@ -109,10 +131,50 @@ class Inventory:
             self.display_surface.blit(pg.transform.scale(pg.image.load("./inventory/assets/pokemon_background.jpg"),
                                       (self.display_surface.get_width(), self.display_surface.get_height())), (0, 0))
             if show_ability_screen:
+                if start_pokemon_stats_animation:
+                    while (pg.time.get_ticks() - start_animation_time) < animation_time:
+                        self.display_surface.blit(pg.transform.scale(pg.image.load("./inventory/assets/pokemon_background.jpg"),
+                                               (self.display_surface.get_width(), self.display_surface.get_height())), (0, 0))
+
+                        procent = (pg.time.get_ticks() - start_animation_time) / animation_time
+                        self.animate_surface(
+                            ability_screen.get_ability_screen_surface(),
+                            (self.display_surface.get_width() / 2 - self.size[0] / 2,
+                             (self.display_surface.get_height() - ability_screen.get_ability_screen_surface().get_height()) / 2),
+                            (3 * self.display_surface.get_width() / 4 - ability_screen.get_ability_screen_surface().get_width() / 1,
+                            (self.display_surface.get_height() - ability_screen.get_ability_screen_surface().get_height()) / 2),
+                            procent
+                        )
+
+                        self.animate_surface(
+                            health_bar,
+                            (self.display_surface.get_width() / 2 - self.size[0] / 2 + ability_screen.get_ability_screen_surface().get_width() + 50,
+                             (self.display_surface.get_height() / 2 - health_bar.get_height())),
+                            (self.display_surface.get_width() / 2 + ability_screen.get_ability_screen_surface().get_width() + 50,
+                            self.display_surface.get_height() / 2 - health_bar.get_height()),
+                            procent
+                        )
+
+                        self.animate_surface(
+                            energy_bar,
+                            (self.display_surface.get_width() / 2 - self.size[0] / 2 + ability_screen.get_ability_screen_surface().get_width() + 50,
+                             self.display_surface.get_height() / 2),
+                            (self.display_surface.get_width() / 2 + ability_screen.get_ability_screen_surface().get_width() + 50,
+                            self.display_surface.get_height() / 2),
+                            procent
+                        )
+
+                        self.animate_surface(
+                            self.inventory_surface,
+                            (self.display_surface.get_width() / 2 - self.size[0] / 2, 50),
+                            (0, 50),
+                            procent
+                        )
+                        pg.display.update()
+                    start_pokemon_stats_animation = False
                 self.display_surface.blit(ability_screen.get_ability_screen_surface(),
                                           (3 * self.display_surface.get_width() / 4 - ability_screen.get_ability_screen_surface().get_width() / 1,
                                            (self.display_surface.get_height() - ability_screen.get_ability_screen_surface().get_height()) / 2))
-
                 self.display_surface.blit(health_bar,
                                           (self.display_surface.get_width() / 2 + ability_screen.get_ability_screen_surface().get_width() + 50,
                                           self.display_surface.get_height() / 2 - health_bar.get_height()))
@@ -120,20 +182,28 @@ class Inventory:
                                           (self.display_surface.get_width() / 2 + ability_screen.get_ability_screen_surface().get_width() + 50,
                                           self.display_surface.get_height() / 2))
 
-            self.display_surface.blit(self.inventory_surface, (0, 50))
+            if show_ability_screen:
+                self.position = (0 , 50)
+                self.display_surface.blit(self.inventory_surface, self.position)
+            else:
+                self.position = (self.display_surface.get_width() / 2 - self.size[0] / 2, 50)
+                self.display_surface.blit(self.inventory_surface, self.position)
             for event in pg.event.get():
                 mouse_pos = pg.mouse.get_pos()
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if pg.mouse.get_pressed()[0]:
                         if not reset_active_pokemons and not delete_pokemon:
-                            x = int((mouse_pos[0] - self.size[0] / 11) * (4.5 / self.size[0]))
-                            y = int((mouse_pos[1] - self.size[1] / 9) * (4.5 / self.size[1]))
+                            pos = self.inventory_pos_clicked(mouse_pos)
+                            x = pos[0]
+                            y = pos[1]
                             if 0 <= x <= 3 and 0 <= y <= 3:
                                 if x + 4 * y < self.noOfPokemons:
                                     if index_to_show == x + 4 * y:
                                         show_ability_screen = False
                                         index_to_show = -1
                                     else:
+                                        if not show_ability_screen:
+                                            start_pokemon_stats_animation = True
                                         show_ability_screen = True
                                         index_to_show = x + 4 * y
                                         ability_screen.update_ability_screen(self.pokemons[index_to_show])
@@ -145,22 +215,25 @@ class Inventory:
                                                           bars,
                                                           0,
                                                           energy_texts[index_to_show])
+                                        start_animation_time = pg.time.get_ticks()
                         # Se face inventarul verde si se selecteaza pokemonii de vrei sa ii slectezi in batalie
                         if reset_active_pokemons:
-                            x = int((mouse_pos[0] - self.size[0] / 11) * (4.5 / self.size[0]))
-                            y = int((mouse_pos[1] - self.size[1] / 9) * (4.5 / self.size[1]))
+                            pos = self.inventory_pos_clicked(mouse_pos)
+                            x = pos[0]
+                            y = pos[1]
                             if 0 <= x <= 3 and 0 <= y <= 3:
                                 if x + 4 * y < self.noOfPokemons:
                                     self.activePokemons[x + 4 * y] = True
                                     activated_pokemons += 1
-                                    if activated_pokemons >= 3:
+                                    if activated_pokemons >= 3 or activated_pokemons >= self.noOfPokemons:
                                         reset_active_pokemons = False
                                         activated_pokemons = 0
                         # Se face inventarul rosu si poti apasa pe pokemoni sa ii stergi
                         # Se verifica daca ai mai mult de 3 pokemoni, nu poti sterge toti pokemonii trebuie sa ai minim 3 in inventar
                         if delete_pokemon and self.noOfPokemons > 3:
-                            x = int((mouse_pos[0] - self.size[0] / 11) * (4.5 / self.size[0]))
-                            y = int((mouse_pos[1] - self.size[1] / 9) * (4.5 / self.size[1]))
+                            pos = self.inventory_pos_clicked(mouse_pos)
+                            x = pos[0]
+                            y = pos[1]
                             if 0 <= x <= 3 and 0 <= y <= 3:
                                 if x + 4 * y < self.noOfPokemons:
                                     self.noOfPokemons -= 1
@@ -171,10 +244,13 @@ class Inventory:
                                             if not self.activePokemons[i]:
                                                 self.activePokemons[i] = True
                                                 break
+                            if self.noOfPokemons <= 3:
+                                delete_pokemon = False
                         else:
                             delete_pokemon = False
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_r and not reset_active_pokemons and not delete_pokemon:
+                        index_to_show = -1
                         for i in range(16):
                             self.activePokemons[i] = False
                         reset_active_pokemons = True
@@ -185,7 +261,11 @@ class Inventory:
                     if event.key == pg.K_e and not reset_active_pokemons and not delete_pokemon:
                         return
                     if event.key == pg.K_DELETE and not reset_active_pokemons:
-                        delete_pokemon = not delete_pokemon
+                        index_to_show = -1
+                        if self.noOfPokemons > 3 and not delete_pokemon:
+                            delete_pokemon = not delete_pokemon
+                        else:
+                            delete_pokemon = False
                         show_ability_screen = False
             pg.display.update()
             clock.tick(120)

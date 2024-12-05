@@ -21,7 +21,6 @@ def search(list, element_name):
         if element.get_name() == element_name:
             return element
 
-
 def generate_pokemon(pokemon_name, pokemons_frames, attacks, special_attacks, level):
     pokemon = Pokemon()
     pokemon.set_name(pokemon_name)
@@ -145,12 +144,7 @@ class Game:
         pokemons_frames.load_all_pokemon_frames("./pokemon/assets")
 
 
-        # generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 1)
-        # # First time loading the game
-        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-        # generated_pokemon = generate_pokemon("Draem.png", pokemons_frames, attacks, special_attacks, 1)
-        # # First time loading the game
-        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+
         # generated_pokemon = generate_pokemon("Gulfin.png", pokemons_frames, attacks, special_attacks, 1)
         # # First time loading the game
         # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
@@ -179,7 +173,13 @@ class Game:
                     self.player.rect.center = player_rect_center
                     generated_pokemon = generate_pokemon("Charmadillo.png", pokemons_frames, attacks, special_attacks, 1)
                     self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-                    self.player.get_inventory().set_noOfPokemons(1)
+                    generated_pokemon = generate_pokemon("Gulfin.png", pokemons_frames, attacks, special_attacks, 1)
+                    # First time loading the game
+                    self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+                    generated_pokemon = generate_pokemon("Draem.png", pokemons_frames, attacks, special_attacks, 1)
+                    # First time loading the game
+                    self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+                    self.player.get_inventory().set_noOfPokemons(3)
                     s = SaveLoadSystem(".save", "./save_files")
                     # Se sterg fisierele de salvare vechi
                     if s.check_for_file("inventory"):
@@ -237,13 +237,16 @@ class Game:
                     if self.player.get_inventory().get_noOfPokemons() <= 16:
                         if chance >= random.randint(0, 100):
                             enemy_index = random.randint(0, len(enemies_in_battle) - 1)
-                            pokemon_to_add = generate_pokemon(enemies_in_battle[enemy_index].get_name(),
-                                                        pokemons_frames,
-                                                        attacks,
-                                                        special_attacks,
-                                                        enemies_in_battle[enemy_index].get_level())
-                            self.player.get_inventory().add_pokemon_to_inventory(pokemon_to_add)
-                            self.player.get_inventory().set_noOfPokemons(self.player.get_inventory().get_noOfPokemons() + 1)
+                            # Cautare daca pokemonul exista deja in lista de pokemoni
+                            if search(self.player.get_inventory().get_pokemons(), enemies_in_battle[enemy_index].get_name()) is None:
+                                # S-a gasit un pokemon care nu exista in lista si se adauga la inventar
+                                pokemon_to_add = generate_pokemon(enemies_in_battle[enemy_index].get_name(),
+                                                            pokemons_frames,
+                                                            attacks,
+                                                            special_attacks,
+                                                            enemies_in_battle[enemy_index].get_level())
+                                self.player.get_inventory().add_pokemon_to_inventory(pokemon_to_add)
+                                self.player.get_inventory().set_noOfPokemons(self.player.get_inventory().get_noOfPokemons() + 1)
                     game_scenes_active["map"] = True
                     game_scenes_active["battle_screen"] = False
 

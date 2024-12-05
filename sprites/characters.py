@@ -28,10 +28,10 @@ class Entity(pg.sprite.Sprite):
     
 
 class Player(Entity):
-    def __init__(self, frames, position, group, turned, collisions):
+    def __init__(self, frames, position, group, turned, collisions, inventory = None):
         super().__init__(frames, position, group, turned)
         self.collisions = collisions
-        self.inventory = None
+        self.inventory = inventory
 
     
     def input(self):
