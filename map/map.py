@@ -79,7 +79,7 @@ class Map:
                     self.change = "MainMenu"
 
     def grass_count(self):
-        if self.count > 500:
+        if self.count > 300:
             self.count = 0
         x = self.player.rect.centerx
         y = self.player.rect.centery

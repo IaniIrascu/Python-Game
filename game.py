@@ -9,7 +9,7 @@ from pokemon.pokemon import *
 from pokemon.attacks.attack import *
 from pokemon.effects.effect import *
 from pokemon.pokemons_information import *
-from save_handleling.save_handleling import *
+from save_handling.save_handling import *
 from pokemon.ability_screen.ability_screen import AbilityScreen
 from battle_screen.battle_screen import Battle_screen
 from inventory.inventory import *
@@ -55,7 +55,7 @@ class Game:
         self.collisions = Group()
         self.transitions = Group()
         self.player = None
-        self.rand = rd.randint(100, 500)
+        self.rand = rd.randint(50, 300)
         self.map_name = "world"
 
     # returns the object related to the name
@@ -265,7 +265,7 @@ class Game:
                     game_scenes_active["battle_screen"] = True
                     game_scenes_active["map"] = False
                     count = 0
-                    self.rand = rd.randint(100, 500)
+                    self.rand = rd.randint(50, 300)
                 self.display_surface.fill('black')
                 self.all_sprites.draw(self.player.rect.center)
                 self.all_sprites.update(dt)
