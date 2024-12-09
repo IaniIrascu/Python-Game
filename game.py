@@ -13,6 +13,7 @@ from save_handling.save_handling import *
 from pokemon.ability_screen.ability_screen import AbilityScreen
 from battle_screen.battle_screen import Battle_screen
 from inventory.inventory import *
+from exit_menu.exit_menu import *
 from utils.constants import WINDOW_HEIGHT, WINDOW_WIDTH
 
 
@@ -91,14 +92,16 @@ class Game:
         battle_screen = Battle_screen(self.display_surface)
         map = Map()
         map.render(self.all_sprites, self.collisions, self.transitions, map.first_pos[self.map_name], self.map_name)
+        exit = Exit(self.display_surface)
         self.player = map.player
         self.player.set_inventory(Inventory(self.display_surface))
         self.player.get_inventory().set_noOfPokemons(0)
         self.add_scene("Menu", menu)
         self.add_scene("Map", map)
         self.add_scene("Battle_screen", battle_screen)
+        self.add_scene("Exit", exit)
 
-        game_scenes_active = {"main_menu": True, "map": False, "choose_save": False, "battle_screen": False}
+        game_scenes_active = {"main_menu": True, "map": False, "choose_save": False, "battle_screen": False, "exit": False}
 
         # Creare lista pokemoni
         pokemons = []
@@ -165,8 +168,16 @@ class Game:
         enemies = [generated_enemy]
 
         player_rect_center = self.player.rect.center
+        mainMenuMusic = pg.mixer.Sound("./utils/sounds/metin.mp3").play(-1)
+        battleMusic = pg.mixer.Sound("./utils/sounds/mario.mp3").play(-1)
+        mainMenuMusic.pause()
+        battleMusic.pause()
+        str_screen = None
         while True:
             if game_scenes_active["main_menu"]:
+                str_screen = "main_menu"
+                mainMenuMusic.unpause()
+                battleMusic.pause()
                 result = self.get_scene("Menu").run(clock)
                 if result == "Start":
                     self.player.get_inventory().get_pokemons().clear()
@@ -188,6 +199,7 @@ class Game:
                         os.remove("./save_files/player_position.save")
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
+                    battleMusic.stop()  # AAAAAAAAAAAAAAAAAAAAAAAAA
                 elif result == "Load":
                     # Aici se da load la toti pokemonii din inventar
                     s = SaveLoadSystem(".save", "./save_files")
@@ -214,25 +226,29 @@ class Game:
                         os.remove("./save_files/player_position.save")
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
+                    battleMusic.stop()  # AAAAAAAAAAAAAAAAAAAAAAAAA
                 elif result == "Quit":
                     pg.quit()
                     sys.exit()
 
             if game_scenes_active["battle_screen"]:
-                self.player.get_inventory().activate_first_max_3_pokemons()
-                # Se aleg 3 inamici random din lista
-                enemies_in_battle = enemies
-                pokemons_in_battle = []
-                for i, pokemon in enumerate(self.player.get_inventory().get_pokemons()):
-                    if self.player.get_inventory().get_active_pokemons()[i]:
-                        pokemons_in_battle.append(pokemon)
-                battle_screen.load_enemies(enemies_in_battle)
-                battle_screen.load_player_pokemons(pokemons_in_battle)
+                battleMusic.unpause()
+                mainMenuMusic.pause()
+                if str_screen != "exit":
+                    self.player.get_inventory().activate_first_max_3_pokemons()
+                    # Se aleg 3 inamici random din lista
+                    enemies_in_battle = enemies
+                    pokemons_in_battle = []
+                    for i, pokemon in enumerate(self.player.get_inventory().get_pokemons()):
+                        if self.player.get_inventory().get_active_pokemons()[i]:
+                            pokemons_in_battle.append(pokemon)
+                    battle_screen.load_enemies(enemies_in_battle)
+                    battle_screen.load_player_pokemons(pokemons_in_battle)
                 result = self.get_scene("Battle_screen").run(clock)
                 if result == "Map":
                     game_scenes_active["map"] = True
                     game_scenes_active["battle_screen"] = False
-                if result == "Win":
+                elif result == "Win":
                     chance = 200
                     if self.player.get_inventory().get_noOfPokemons() <= 16:
                         if chance >= random.randint(0, 100):
@@ -249,9 +265,12 @@ class Game:
                                 self.player.get_inventory().set_noOfPokemons(self.player.get_inventory().get_noOfPokemons() + 1)
                     game_scenes_active["map"] = True
                     game_scenes_active["battle_screen"] = False
-
+                elif result == "Exit":
+                    game_scenes_active["exit"] = True
+                    game_scenes_active["battle_screen"] = False
+                str_screen = "battle_screen"
             if game_scenes_active["map"]:
-                dt = clock.tick(120) / 1000
+                dt = clock.tick(60) / 1000
                 if any(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)):
                     self.fade()
                     self.map_name = next(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)).target
@@ -264,14 +283,42 @@ class Game:
 
                     game_scenes_active["battle_screen"] = True
                     game_scenes_active["map"] = False
-                    count = 0
+                    #count = 0
                     self.rand = rd.randint(50, 300)
+                    battleMusic.stop()
+                    battleMusic.play(pg.mixer.Sound("./utils/sounds/mario.mp3"), -1)
                 self.display_surface.fill('black')
                 self.all_sprites.draw(self.player.rect.center)
                 self.all_sprites.update(dt)
-                    
+                str_screen = "map"
+            if game_scenes_active["exit"]:
+                game_scenes_active["main_menu"] = False
+                game_scenes_active["battle_screen"] = False
+                exit_res = self.get_scene("Exit").run1(clock)
+                if exit_res == "Continue":
+                    game_scenes_active[str_screen] = True
+                    game_scenes_active["exit"] = False
+                    str_screen = "exit"
+                elif exit_res == "Save":
+                    # DACA SE IESE DE PE HARTA SE SALVEAZA PROGRESUL
+                    s = SaveLoadSystem(".save", "./save_files")
+                    # datele despre inventar sunt salvate asa: nume level experienta ramasa pentru fiecare
+                    # pokemoni intr-o lista de dictionare
+                    saved_inventory_data = []
+                    for pokemon in self.player.get_inventory().get_pokemons():
+                        saved_data = {"name": pokemon.get_name(), "level": pokemon.get_level(),
+                                      "experience": pokemon.get_experience()}
+                        saved_inventory_data.append(saved_data)
+
+                    s.save_data(saved_inventory_data, "inventory")
+                    s.save_data(self.player.rect.center, "player_position")
+                elif exit_res == "Menu":
+                    mainMenuMusic.stop()
+                    mainMenuMusic.play(pg.mixer.Sound("./utils/sounds/metin.mp3"), -1)
+                    game_scenes_active["main_menu"] = True
+                    game_scenes_active[str_screen] = False
             pg.display.update()
-            clock.tick(120)
+            clock.tick(60)
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -279,19 +326,7 @@ class Game:
                     sys.exit()
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE and game_scenes_active["map"]:
-                        # DACA SE IESE DE PE HARTA SE SALVEAZA PROGRESUL
-                        s = SaveLoadSystem(".save", "./save_files")
-                        # datele despre inventar sunt salvate asa: nume level experienta ramasa pentru fiecare
-                        # pokemoni intr-o lista de dictionare
-                        saved_inventory_data = []
-                        for pokemon in self.player.get_inventory().get_pokemons():
-                            saved_data = {"name": pokemon.get_name(), "level": pokemon.get_level(),
-                                          "experience": pokemon.get_experience()}
-                            saved_inventory_data.append(saved_data)
-
-                        s.save_data(saved_inventory_data, "inventory")
-                        s.save_data(self.player.rect.center, "player_position")
-                        game_scenes_active["main_menu"] = True
+                        game_scenes_active["exit"] = True
                         game_scenes_active["map"] = False
                     if event.key == pg.K_e and game_scenes_active["map"]:
                         self.player.get_inventory().run(clock)

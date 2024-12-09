@@ -83,25 +83,33 @@ class Exit:
             self.buttons[button_name].create_button()
 
         pg.display.update()
+        wannaeExit = False
         while True:
-            self.button_surface.blit(self.background_surface, (0, 0))
-            create_button_surface_instant(self.buttons)
-            self.display_surface.blit(self.button_surface.convert_alpha(), (0, 0))
-            for event in pg.event.get():
-                close_game(event)
-                # get mouse position
-                mouse_pos = pg.mouse.get_pos()
-                if event.type == pg.MOUSEBUTTONDOWN:
-                    if pg.mouse.get_pressed()[0]:
-                        # check the collision with the buttons
-                        if continue_button.rect.collidepoint(mouse_pos):
-                            return "Continue"
-                        if save_button.rect.collidepoint(mouse_pos):
-                            return "Save"
-                        if exit_menu_button.rect.collidepoint(mouse_pos):
-                            return "Menu"
-                        if exit_button.rect.collidepoint(mouse_pos):
-                            pg.quit()
-                            sys.exit()
+            if not wannaeExit:
+                self.button_surface.blit(self.background_surface, (0, 0))
+                create_button_surface_instant(self.buttons)
+                self.display_surface.blit(self.button_surface.convert_alpha(), (0, 0))
+                for event in pg.event.get():
+                    close_game(event)
+                    # get mouse position
+                    mouse_pos = pg.mouse.get_pos()
+                    if event.type == pg.MOUSEBUTTONDOWN:
+                        if pg.mouse.get_pressed()[0]:
+                            # check the collision with the buttons
+                            if continue_button.rect.collidepoint(mouse_pos):
+                                return "Continue"
+                            if save_button.rect.collidepoint(mouse_pos):
+                                return "Save"
+                            if exit_menu_button.rect.collidepoint(mouse_pos):
+                                return "Menu"
+                            if exit_button.rect.collidepoint(mouse_pos):
+                                wannaeExit = True
+                                pg.quit()
+                                sys.exit()
+
+            else:
+                self.button_surface.blit(self.background_surface, (0, 0))
+                create_button_surface_instant(self.buttons)
+                self.display_surface.blit(self.button_surface.convert_alpha(), (0, 0))
             pg.display.update()
             clock.tick(60)

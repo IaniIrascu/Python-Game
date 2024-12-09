@@ -300,9 +300,11 @@ class Battle_screen:
                     enemy_energy = self.enemies[active_enemy_index].get_energy()
 
                     if enemy_attack == 0:
+                        pg.mixer.Sound("./battle_screen/sounds/" + self.enemies[active_enemy_index].get_attack().get_name() + ".mp3").play()
                         add_attack[1] = True
                         add_special[1] = False
                     elif enemy_attack == 1 and enemy_energy >= attack_energy_cost:
+                        pg.mixer.Sound("./battle_screen/sounds/" + self.enemies[active_enemy_index].get_special_attack().get_name() + ".mp3").play()
                         bar_changed[1][1] = True
                         self.enemies[active_enemy_index].set_energy(enemy_energy - attack_energy_cost)
                         add_attack[1] = True
@@ -316,6 +318,7 @@ class Battle_screen:
                         add_special[1] = False
                         add_special[1] = False
                     else:
+                        pg.mixer.Sound("./battle_screen/sounds/" + self.enemies[active_enemy_index].get_attack().get_name() + ".mp3").play()
                         add_attack[1] = True
                         add_special[1] = False
                     wait_a_bit[0] = False
@@ -417,8 +420,8 @@ class Battle_screen:
                     sys.quit()
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
-                        reset_pokemons(self.player_pokemons, self.enemies)
-                        return "Map"  # AICI AR TREBUI SA FIE ESCAPE MENU, DAR CAND SE FACE
+                        # reset_pokemons(self.player_pokemons, self.enemies)
+                        return "Exit"
                 mouse_pos = pg.mouse.get_pos()
 
                 # checking if pokemon is clicked or if cursor is on it
@@ -448,11 +451,16 @@ class Battle_screen:
                             if result == "X":
                                 add_ability_surface = False
                             if result == "Attack":
+                                #propagare sunet de atac
+                                pg.mixer.Sound("./battle_screen/sounds/" + self.player_pokemons[active_pokemon_index].get_attack().get_name() + ".mp3").play()
                                 attack_playing = True
                                 initial_frame = frame
                                 add_ability_surface = False
                                 add_attack[0] = True
                             if result == "Special" and attack_energy_cost <= pokemon_energy:
+                                #propagarre sunet atac special
+                                pg.mixer.Sound("./battle_screen/sounds/" + self.player_pokemons[active_pokemon_index].get_special_attack().get_name() + ".mp3").play()
+
                                 bar_changed[0][1] = True
                                 self.player_pokemons[active_pokemon_index].set_energy(pokemon_energy - attack_energy_cost)
                                 attack_playing = True
@@ -499,4 +507,4 @@ class Battle_screen:
             if frame > 1000000000:
                 reset_pokemons(self.player_pokemons, self.enemies)
                 return "Map"
-            clock.tick(120)
+            clock.tick(60)
