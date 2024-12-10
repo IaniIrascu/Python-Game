@@ -25,10 +25,10 @@ def level_up_pokemon(pokemon):
         return
     while levels_experience[pokemon.get_level() - 1] <= pokemon.get_experience():
         pokemon.set_level(pokemon.get_level() + 1)
-        pokemon.set_maxHealth(pokemon.get_health() * (1 + 0.5))
+        pokemon.set_maxHealth(pokemon.get_maxHealth() * (1 + 0.5))
         pokemon.set_damage(pokemon.get_damage() * (1 + 0.3))
         pokemon.set_experience(pokemon.get_experience() - levels_experience[pokemon.get_level() - 1])
-        pokemon.set_maxEnergy(pokemon.get_energy() + 25)
+        pokemon.set_maxEnergy(pokemon.get_maxEnergy() + 25)
 
 def check_button_pressed(mouse_pos, ability_screen, ability_screen_position):
     buttons = ability_screen.get_buttons()
