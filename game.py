@@ -1,5 +1,6 @@
 import pygame as pg
 import sys
+import os
 import random as rd
 from main_menu.main_menu import MainMenu
 from map.map import Map
@@ -13,8 +14,7 @@ from save_handling.save_handling import *
 from pokemon.ability_screen.ability_screen import AbilityScreen
 from battle_screen.battle_screen import Battle_screen
 from inventory.inventory import *
-from utils.constants import WINDOW_HEIGHT, WINDOW_WIDTH
-
+from sprites.characters import Dialog
 
 def search(list, element_name):
     for element in list:
@@ -54,9 +54,11 @@ class Game:
         self.all_sprites = Group()
         self.collisions = Group()
         self.transitions = Group()
+        self.npcs = Group()
         self.player = None
         self.rand = rd.randint(50, 300)
         self.map_name = "world"
+        self.dialog = None
 
     # returns the object related to the name
     def get_scene(self, scene_name):
@@ -90,7 +92,7 @@ class Game:
         menu = MainMenu(self.display_surface)
         battle_screen = Battle_screen(self.display_surface)
         map = Map()
-        map.render(self.all_sprites, self.collisions, self.transitions, map.first_pos[self.map_name], self.map_name)
+        map.render(self.all_sprites, self.collisions, self.transitions, self.npcs, map.first_pos[self.map_name], self.map_name)
         self.player = map.player
         self.player.set_inventory(Inventory(self.display_surface))
         self.player.get_inventory().set_noOfPokemons(0)
@@ -251,27 +253,38 @@ class Game:
                     game_scenes_active["battle_screen"] = False
 
             if game_scenes_active["map"]:
-                dt = clock.tick(120) / 1000
+                dt = clock.tick(60) / 1000
                 if any(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)):
                     self.fade()
                     self.map_name = next(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)).target
                     self.map_pos = next(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)).target_pos
-                    map.render(self.all_sprites, self.collisions, self.transitions, self.map_pos, self.map_name)
+                    map.render(self.all_sprites, self.collisions, self.transitions, self.npcs, self.map_pos, self.map_name)
                     self.player = map.player
                 count = map.grass_count()
                 if count == self.rand:
                     self.fade()
-
                     game_scenes_active["battle_screen"] = True
                     game_scenes_active["map"] = False
                     count = 0
                     self.rand = rd.randint(50, 300)
+                if not self.dialog:
+                    if pg.key.get_just_pressed()[pg.K_f]:
+                        for npc in self.npcs:
+                            distance = pg.math.Vector2(npc.rect.center) - pg.math.Vector2(self.player.rect.center)
+                            if distance.length() < 100:
+                                self.player.stop = True
+                                self.player.direction = pg.math.Vector2(0, 0)
+                                font = pg.font.Font(os.path.join("main_menu", "assets", "minecraft.ttf"), 30)
+                                self.dialog = Dialog(npc, self.player, self.all_sprites, font)
+
                 self.display_surface.fill('black')
                 self.all_sprites.draw(self.player.rect.center)
                 self.all_sprites.update(dt)
+                if self.dialog:
+                    self.dialog.update()
                     
             pg.display.update()
-            clock.tick(120)
+            clock.tick(60)
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:

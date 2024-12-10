@@ -163,4 +163,4 @@ class MainMenu:
                         if quit_button.rect.collidepoint(mouse_pos):
                             return "Quit"
             pg.display.update()
-            clock.tick(120)
+            clock.tick(60)

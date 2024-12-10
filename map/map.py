@@ -3,6 +3,7 @@ from utils.importers import import_tmx, import_frames, import_coast, import_char
 from sprites.sprites import Sprite, Animated, Grass, Collision, Transition
 from sprites.characters import Player, NPC
 from utils.constants import TILE_SIZE
+from sprites.assets.npc_data import NPC_DATA
 
 class Map:
     def __init__(self):
@@ -28,9 +29,9 @@ class Map:
             'water': 'entrance'
         }
     
-    def render(self, group, collisions, transitions, player_start_pos, map_name):
+    def render(self, group, collisions, transitions, npcs, player_start_pos, map_name):
         self.map_name = map_name
-        for sprites in (group, collisions, transitions):
+        for sprites in (group, collisions, transitions, npcs):
             sprites.empty()
 
         for obj in self.maps[map_name].get_layer_by_name("Water"):
@@ -71,7 +72,7 @@ class Map:
                     self.player = Player(self.frames['characters']['player'], (obj.x, obj.y), group,
                                          obj.properties['direction'], collisions, self.player.inventory)
             elif obj.name != "Player":
-                NPC(self.frames['characters'][obj.properties['graphic']], (obj.x, obj.y), (group, collisions), obj.properties['direction'])
+                NPC(self.frames['characters'][obj.properties['graphic']], (obj.x, obj.y), (group, collisions, npcs), obj.properties['direction'], NPC_DATA[obj.properties['character_id']])
 
         for event in pg.event.get():
             if event.type == pg.KEYDOWN:

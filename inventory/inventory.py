@@ -268,4 +268,4 @@ class Inventory:
                             delete_pokemon = False
                         show_ability_screen = False
             pg.display.update()
-            clock.tick(120)
+            clock.tick(60)

@@ -499,4 +499,4 @@ class Battle_screen:
             if frame > 1000000000:
                 reset_pokemons(self.player_pokemons, self.enemies)
                 return "Map"
-            clock.tick(120)
+            clock.tick(60)
