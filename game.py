@@ -51,7 +51,7 @@ def generate_pokemon(pokemon_name, pokemons_frames, attacks, special_attacks, le
 
 class Game:
     def __init__(self):
-        self.display_surface = pg.display.set_mode((0, 0), pg.FULLSCREEN)
+        self.display_surface = pg.display.set_mode((WINDOW_HEIGHT, WINDOW_WIDTH))
         self.scenes = {}
         self.current_scene = None
         self.all_sprites = Group()
@@ -62,6 +62,7 @@ class Game:
         self.rand = rd.randint(50, 300)
         self.map_name = "world"
         self.dialog = None
+        self.enemies = []
 
     # returns the object related to the name
     def get_scene(self, scene_name):
@@ -85,11 +86,13 @@ class Game:
             pg.display.update()
 
     def run(self):
+        metin = os.path.join("utils", "sounds", "metin.mp3")
+        mario = os.path.join("utils", "sounds", "mario.mp3")
         pg.init()
         clock = pg.time.Clock()
 
         # pg.mixer.init()
-        # pg.mixer.music.load("./utils/sounds/metin.mp3")
+        # pg.mixer.music.load(metin)
         # pg.mixer.music.play(-1)
 
         menu = MainMenu(self.display_surface)
@@ -150,33 +153,16 @@ class Game:
         pokemons_frames = PokemonsFrames()
         pokemons_frames.load_all_pokemon_frames(os.path.join("pokemon", "assets"))
 
-
-
-        # generated_pokemon = generate_pokemon("Gulfin.png", pokemons_frames, attacks, special_attacks, 1)
-        # # First time loading the game
-        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-        # generated_pokemon = generate_pokemon("Jacana.png", pokemons_frames, attacks, special_attacks, 1)
-        # # First time loading the game
-        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-        # generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 1)
-        # # First time loading the game
-        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-        # generated_pokemon = generate_pokemon("Charmadillo.png", pokemons_frames, attacks, special_attacks, 3)
-        # # First time loading the game
-        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
-        # generated_pokemon = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 2)
-
-        # First time loading the game
-        # self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
         generated_enemy = generate_pokemon("Atrox.png", pokemons_frames, attacks, special_attacks, 1)
-        enemies = [generated_enemy]
+        self.enemies = [generated_enemy]
 
         player_rect_center = self.player.rect.center
-        mainMenuMusic = pg.mixer.Sound("./utils/sounds/metin.mp3").play(-1)
-        battleMusic = pg.mixer.Sound("./utils/sounds/mario.mp3").play(-1)
+        mainMenuMusic = pg.mixer.Sound(metin).play(-1)
+        battleMusic = pg.mixer.Sound(mario).play(-1)
         mainMenuMusic.pause()
         battleMusic.pause()
         str_screen = None
+        current_npc = None
         while True:
             if game_scenes_active["main_menu"]:
                 str_screen = "main_menu"
@@ -204,7 +190,6 @@ class Game:
                         os.remove("./save_files/player_position.save")
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
-                    battleMusic.stop()  # AAAAAAAAAAAAAAAAAAAAAAAAA
                 elif result == "Load":
                     # Aici se da load la toti pokemonii din inventar
                     s = SaveLoadSystem(".save", "./save_files")
@@ -231,18 +216,18 @@ class Game:
                         os.remove("./save_files/player_position.save")
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
-                    battleMusic.stop()
                 elif result == "Quit":
                     pg.quit()
                     sys.exit()
 
             if game_scenes_active["battle_screen"]:
-                battleMusic.unpause()
+                battleMusic.play(pg.mixer.Sound(mario), -1)
                 mainMenuMusic.pause()
                 if str_screen != "exit":
                     self.player.get_inventory().activate_first_max_3_pokemons()
                     # Se aleg 3 inamici random din lista
-                    enemies_in_battle = enemies
+                    enemies_in_battle = self.enemies
+                    print(self.enemies)
                     pokemons_in_battle = []
                     for i, pokemon in enumerate(self.player.get_inventory().get_pokemons()):
                         if self.player.get_inventory().get_active_pokemons()[i]:
@@ -251,14 +236,17 @@ class Game:
                     battle_screen.load_enemies(enemies_in_battle)
                     battle_screen.load_player_pokemons(pokemons_in_battle)
                 result = self.get_scene("Battle_screen").run(clock)
-                print(str_screen)
                 if result == "Map":
-                    battleMusic.pause()
+                    battleMusic.stop()
                     mainMenuMusic.unpause()
                     game_scenes_active["map"] = True
                     game_scenes_active["battle_screen"] = False
                 elif result == "Win":
-                    battleMusic.pause()
+                    if current_npc:
+                        current_npc.data['defeated'] = True
+                        print(current_npc.data['defeated'])
+                        current_npc = None
+                    battleMusic.stop()
                     mainMenuMusic.unpause()
                     chance = 200
                     if self.player.get_inventory().get_noOfPokemons() <= 16:
@@ -293,13 +281,12 @@ class Game:
                     self.fade()
                     game_scenes_active["battle_screen"] = True
                     game_scenes_active["map"] = False
-                    #count = 0
                     self.rand = rd.randint(50, 300)
                 if not self.dialog:
                     if pg.key.get_just_pressed()[pg.K_f]:
                         for npc in self.npcs:
                             distance = pg.math.Vector2(npc.rect.center) - pg.math.Vector2(self.player.rect.center)
-                            if distance.length() < 100:
+                            if distance.length() < 150:
                                 self.player.stop = True
                                 self.player.direction = pg.math.Vector2(0, 0)
                                 font = pg.font.Font(os.path.join("main_menu", "assets", "minecraft.ttf"), 30)
@@ -308,40 +295,23 @@ class Game:
                 self.display_surface.fill('black')
                 self.all_sprites.draw(self.player.rect.center)
                 self.all_sprites.update(dt)
-
+                str_screen = "map"
                 if self.dialog:
                     self.dialog.update()
-            
-                    if self.dialog.idx == len(self.dialog.npc.data['dialog']['default']):
+                    if self.dialog.idx == len(self.dialog.npc.data['dialog']['default']) and not self.dialog.npc.data['defeated']:
+                        self.enemies.clear()
                         for pokemon in self.dialog.npc.data['pokemon'].values():
-                            enemies.clear()
                             enemy = generate_pokemon(f'{pokemon[0]}.png', pokemons_frames, attacks, special_attacks, pokemon[1])
-                            enemies.append(enemy)
+                            self.enemies.append(enemy)
                         self.fade()
                         game_scenes_active["map"] = False
                         game_scenes_active["battle_screen"] = True
-                        self.dialog.npc.data['defeated'] = True
+                        current_npc = self.dialog.npc
                     if self.dialog.end:
                         self.dialog = None
-                    
-            pg.display.update()
-            clock.tick(60)
+            
 
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    pg.quit()
-                    sys.exit()
-                if event.type == pg.KEYDOWN:
-                    if event.key == pg.K_ESCAPE and game_scenes_active["map"]:
-                    battleMusic.stop()
-                    battleMusic.play(pg.mixer.Sound("./utils/sounds/mario.mp3"), -1)
-                self.display_surface.fill('black')
-                self.all_sprites.draw(self.player.rect.center)
-                self.all_sprites.update(dt)
-                str_screen = "map"
             if game_scenes_active["exit"]:
-                # game_scenes_active["main_menu"] = False
-                # game_scenes_active["battle_screen"] = False
                 if str_screen == "battle_screen":
                     exit_res = self.get_scene("Exit").run2(clock)
                     if exit_res == "Continue":
@@ -350,7 +320,7 @@ class Game:
                         str_screen = "exit"
                     elif exit_res == "Map":
                         battleMusic.stop()
-                        mainMenuMusic.play(pg.mixer.Sound("./utils/sounds/metin.mp3"), -1)
+                        mainMenuMusic.play(pg.mixer.Sound(metin), -1)
                         game_scenes_active["map"] = True
                         game_scenes_active["exit"] = False
                 elif str_screen == "map":
@@ -367,14 +337,14 @@ class Game:
                         saved_inventory_data = []
                         for pokemon in self.player.get_inventory().get_pokemons():
                             saved_data = {"name": pokemon.get_name(), "level": pokemon.get_level(),
-                                          "experience": pokemon.get_experience()}
+                                        "experience": pokemon.get_experience()}
                             saved_inventory_data.append(saved_data)
 
                         s.save_data(saved_inventory_data, "inventory")
                         s.save_data(self.player.rect.center, "player_position")
                     elif exit_res == "Menu":
                         mainMenuMusic.stop()
-                        mainMenuMusic.play(pg.mixer.Sound("./utils/sounds/metin.mp3"), -1)
+                        mainMenuMusic.play(pg.mixer.Sound(metin), -1)
                         game_scenes_active["main_menu"] = True
                         game_scenes_active["map"] = False
                         game_scenes_active["exit"] = False

@@ -92,10 +92,12 @@ class NPC(Entity):
     def __init__(self, frames, position, group, turned, data):
         super().__init__(frames, position, group, turned)
         self.data = data
+        self.dialog_key = 'default' if not self.data['defeated'] else 'defeated'
+
     
     def speak(self):
-        dialog_key = 'default' if not self.data['defeated'] else 'defeated'
-        return self.data['dialog'][dialog_key]
+        self.dialog_key = 'default' if not self.data['defeated'] else 'defeated'
+        return self.data['dialog'][self.dialog_key]
     
     def update(self, dt):
         self.change()
@@ -109,14 +111,13 @@ class Dialog:
         self.idx = 0
         self.dialog = Popup(self.npc, self.group, self.font, self.idx)
         self.start_time = pg.time.get_ticks()
-        self.delay_duration = 500  # Delay in milliseconds
+        self.delay_duration = 300
         self.delay_active = True
         self.end = False
 
     def change_dialog(self):
         current_time = pg.time.get_ticks()
         
-        # Handle initial delay without freezing the game
         if self.delay_active and (current_time - self.start_time) < self.delay_duration:
             return
         elif self.delay_active:
@@ -125,7 +126,6 @@ class Dialog:
         if pg.key.get_just_pressed()[pg.K_f]:
             self.dialog.kill()
             self.idx += 1
-            print(self.idx)
             if self.idx < len(self.npc.data['dialog']['default']):
                 self.dialog = Popup(self.npc, self.group, self.font, self.idx)
             else:
@@ -133,13 +133,15 @@ class Dialog:
                 self.player.stop = False
                 self.end = True
 
+
     def update(self):
         self.change_dialog()
 
 class Popup(pg.sprite.Sprite):
     def __init__(self, npc, group, font, idx):
         super().__init__(group)
-        self.image = font.render(npc.speak()[idx], True, 'blue')
+        #  
+        self.image = font.render(npc.speak()[idx % len(npc.data['dialog'][npc.dialog_key])], True, 'white')
         self.order = 4
         self.rect = self.image.get_frect(midbottom = npc.rect.midtop)
 

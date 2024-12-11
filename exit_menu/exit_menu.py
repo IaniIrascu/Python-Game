@@ -91,7 +91,10 @@ class Exit:
                 create_button_surface_instant(self.buttons)
                 self.display_surface.blit(self.button_surface.convert_alpha(), (0, 0))
                 for event in pg.event.get():
-                    close_game(event)
+                    if event.type == pg.QUIT:
+                        wannaeExit = True
+                        pg.quit()
+                        sys.exit()
                     # get mouse position
                     mouse_pos = pg.mouse.get_pos()
                     if event.type == pg.MOUSEBUTTONDOWN:
@@ -152,7 +155,10 @@ class Exit:
                 create_button_surface_instant(self.buttons)
                 self.display_surface.blit(self.button_surface.convert_alpha(), (0, 0))
                 for event in pg.event.get():
-                    close_game(event)
+                    if event.type == pg.QUIT:
+                        wannaeExit = True
+                        pg.quit()
+                        sys.exit()
                     # get mouse position
                     mouse_pos = pg.mouse.get_pos()
                     if event.type == pg.MOUSEBUTTONDOWN:
