@@ -111,6 +111,7 @@ class Dialog:
         self.start_time = pg.time.get_ticks()
         self.delay_duration = 500  # Delay in milliseconds
         self.delay_active = True
+        self.end = False
 
     def change_dialog(self):
         current_time = pg.time.get_ticks()
@@ -130,6 +131,7 @@ class Dialog:
             else:
                 self.dialog.kill()
                 self.player.stop = False
+                self.end = True
 
     def update(self):
         self.change_dialog()

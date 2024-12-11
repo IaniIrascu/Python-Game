@@ -1,7 +1,6 @@
 import sys
 from os.path import join
 import pygame as pg
-from utils.functions import *
 import pygame.mouse
 from main_menu.button import *
 
@@ -128,7 +127,9 @@ class MainMenu:
 
             # Looking for events
             for event in pg.event.get():
-                close_game(event)
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    sys.exit()
                 # get mouse position
                 mouse_pos = pg.mouse.get_pos()
 

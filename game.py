@@ -118,7 +118,7 @@ class Game:
 
         # Loading all the attacks
         attacks_frames = AttacksFrames()
-        attacks_frames.load_all_attacks_frames("./pokemon/attacks/assets")
+        attacks_frames.load_all_attacks_frames(os.path.join("pokemon", "attacks", "assets"))
 
         # CREATING ALL THE ATTACKS
         attacks = []
@@ -143,7 +143,7 @@ class Game:
 
         # Loading all pokemons
         pokemons_frames = PokemonsFrames()
-        pokemons_frames.load_all_pokemon_frames("./pokemon/assets")
+        pokemons_frames.load_all_pokemon_frames(os.path.join("pokemon", "assets"))
 
 
 
@@ -280,8 +280,21 @@ class Game:
                 self.display_surface.fill('black')
                 self.all_sprites.draw(self.player.rect.center)
                 self.all_sprites.update(dt)
+
                 if self.dialog:
                     self.dialog.update()
+            
+                    if self.dialog.idx == len(self.dialog.npc.data['dialog']['default']):
+                        for pokemon in self.dialog.npc.data['pokemon'].values():
+                            enemies.clear()
+                            enemy = generate_pokemon(f'{pokemon[0]}.png', pokemons_frames, attacks, special_attacks, pokemon[1])
+                            enemies.append(enemy)
+                        self.fade()
+                        game_scenes_active["map"] = False
+                        game_scenes_active["battle_screen"] = True
+                        self.dialog.npc.data['defeated'] = True
+                    if self.dialog.end:
+                        self.dialog = None
                     
             pg.display.update()
             clock.tick(60)
