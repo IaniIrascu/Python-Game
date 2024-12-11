@@ -8,7 +8,7 @@ default_attacksprite = "scratch.png"
 
 pokemons_info = {
     "Atrox.png": {"health": 230, "energy": default_energy, "size":  default_size, "damage": 45},
-    "Charmadillo.png": {"health": 500, "energy": default_energy, "size":  default_size, "damage": 35},
+    "Charmadillo.png": {"health": 500, "energy": default_energy, "size":  default_size, "damage": 10000},
     "Cindrill.png": {"health": 125, "energy": default_energy, "size":  default_size, "damage": 100},
     "Cleaf.png": {"health": 250, "energy": default_energy, "size":  default_size, "damage": 30},
     "Draem.png": {"health": 400, "energy": default_energy, "size":  default_size, "damage": 50},

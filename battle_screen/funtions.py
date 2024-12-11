@@ -15,10 +15,10 @@ def calculate_experience(enemies):
         level = enemy.get_level()
         health = enemy.get_health()
         attack = enemy.get_damage()
-        return 200 * (level - 1) + 10 * health + 20 * attack
+        return 200 * (level - 1) + 2 * health + 5 * attack
 
 def level_up_pokemon(pokemon):
-    levels_experience = [1000, 5000, 10000, 15000, 30000, 50000, 150000]
+    levels_experience = [1000, 3000, 5000, 7000, 9000, 11000, 13000]
     # LEVEL MAX = 7
     if pokemon.get_level() > 7:
         pokemon.set_experience(0)
