@@ -1,5 +1,6 @@
 import pygame as pg
 import sys
+import os
 import random as rd
 from main_menu.main_menu import MainMenu
 from map.map import Map
@@ -13,6 +14,7 @@ from save_handling.save_handling import *
 from pokemon.ability_screen.ability_screen import AbilityScreen
 from battle_screen.battle_screen import Battle_screen
 from inventory.inventory import *
+from sprites.characters import Dialog
 from exit_menu.exit_menu import *
 from utils.constants import WINDOW_HEIGHT, WINDOW_WIDTH
 
@@ -55,9 +57,11 @@ class Game:
         self.all_sprites = Group()
         self.collisions = Group()
         self.transitions = Group()
+        self.npcs = Group()
         self.player = None
         self.rand = rd.randint(50, 300)
         self.map_name = "world"
+        self.dialog = None
 
     # returns the object related to the name
     def get_scene(self, scene_name):
@@ -91,7 +95,7 @@ class Game:
         menu = MainMenu(self.display_surface)
         battle_screen = Battle_screen(self.display_surface)
         map = Map()
-        map.render(self.all_sprites, self.collisions, self.transitions, map.first_pos[self.map_name], self.map_name)
+        map.render(self.all_sprites, self.collisions, self.transitions, self.npcs, map.first_pos[self.map_name], self.map_name)
         exit = Exit(self.display_surface)
         self.player = map.player
         self.player.set_inventory(Inventory(self.display_surface))
@@ -119,7 +123,7 @@ class Game:
 
         # Loading all the attacks
         attacks_frames = AttacksFrames()
-        attacks_frames.load_all_attacks_frames("./pokemon/attacks/assets")
+        attacks_frames.load_all_attacks_frames(os.path.join("pokemon", "attacks", "assets"))
 
         # CREATING ALL THE ATTACKS
         attacks = []
@@ -144,7 +148,7 @@ class Game:
 
         # Loading all pokemons
         pokemons_frames = PokemonsFrames()
-        pokemons_frames.load_all_pokemon_frames("./pokemon/assets")
+        pokemons_frames.load_all_pokemon_frames(os.path.join("pokemon", "assets"))
 
 
 
@@ -277,21 +281,58 @@ class Game:
                     game_scenes_active["battle_screen"] = False
                 str_screen = "battle_screen"
             if game_scenes_active["map"]:
-                dt = clock.tick(60) / 1250
+                dt = clock.tick(60) / 1000
                 if any(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)):
                     self.fade()
                     self.map_name = next(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)).target
                     self.map_pos = next(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)).target_pos
-                    map.render(self.all_sprites, self.collisions, self.transitions, self.map_pos, self.map_name)
+                    map.render(self.all_sprites, self.collisions, self.transitions, self.npcs, self.map_pos, self.map_name)
                     self.player = map.player
                 count = map.grass_count()
                 if count == self.rand:
                     self.fade()
-
                     game_scenes_active["battle_screen"] = True
                     game_scenes_active["map"] = False
                     #count = 0
                     self.rand = rd.randint(50, 300)
+                if not self.dialog:
+                    if pg.key.get_just_pressed()[pg.K_f]:
+                        for npc in self.npcs:
+                            distance = pg.math.Vector2(npc.rect.center) - pg.math.Vector2(self.player.rect.center)
+                            if distance.length() < 100:
+                                self.player.stop = True
+                                self.player.direction = pg.math.Vector2(0, 0)
+                                font = pg.font.Font(os.path.join("main_menu", "assets", "minecraft.ttf"), 30)
+                                self.dialog = Dialog(npc, self.player, self.all_sprites, font)
+
+                self.display_surface.fill('black')
+                self.all_sprites.draw(self.player.rect.center)
+                self.all_sprites.update(dt)
+
+                if self.dialog:
+                    self.dialog.update()
+            
+                    if self.dialog.idx == len(self.dialog.npc.data['dialog']['default']):
+                        for pokemon in self.dialog.npc.data['pokemon'].values():
+                            enemies.clear()
+                            enemy = generate_pokemon(f'{pokemon[0]}.png', pokemons_frames, attacks, special_attacks, pokemon[1])
+                            enemies.append(enemy)
+                        self.fade()
+                        game_scenes_active["map"] = False
+                        game_scenes_active["battle_screen"] = True
+                        self.dialog.npc.data['defeated'] = True
+                    if self.dialog.end:
+                        self.dialog = None
+                    
+            pg.display.update()
+            clock.tick(60)
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    sys.exit()
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE and game_scenes_active["map"]:
                     battleMusic.stop()
                     battleMusic.play(pg.mixer.Sound("./utils/sounds/mario.mp3"), -1)
                 self.display_surface.fill('black')
@@ -320,7 +361,7 @@ class Game:
                         str_screen = "exit"
                     elif exit_res == "Save":
                         # DACA SE IESE DE PE HARTA SE SALVEAZA PROGRESUL
-                        s = SaveLoadSystem(".save", "./save_files")
+                        s = SaveLoadSystem("save", "save_files")
                         # datele despre inventar sunt salvate asa: nume level experienta ramasa pentru fiecare
                         # pokemoni intr-o lista de dictionare
                         saved_inventory_data = []
