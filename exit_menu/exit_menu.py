@@ -10,7 +10,7 @@ import pygame as pg
 
 button_sizes = {"Continue": (200, 100),
                 "Save": (200, 100),
-                "Menu": (200,100),
+                "Menu": (200, 100),
                 "Exit": (200, 100),
                 "Map": (200, 100)}
 

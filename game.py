@@ -84,9 +84,12 @@ class Game:
         pg.init()
         clock = pg.time.Clock()
 
-        # pg.mixer.init()
-        # pg.mixer.music.load("./utils/sounds/metin.mp3")
-        # pg.mixer.music.play(-1)
+        mainMenuMusic = pg.mixer.Sound("./utils/sounds/metin.mp3").play(-1)
+        mainMenuMusic.pause()
+        battleMusic = pg.mixer.Sound("./utils/sounds/mario.mp3").play(-1)
+        battleMusic.pause()
+        bgMusic = pg.mixer.Sound("./utils/sounds/bgmusic.mp3").play(-1)
+        bgMusic.pause()
 
         menu = MainMenu(self.display_surface)
         battle_screen = Battle_screen(self.display_surface)
@@ -168,23 +171,22 @@ class Game:
         enemies = [generated_enemy]
 
         player_rect_center = self.player.rect.center
-        mainMenuMusic = pg.mixer.Sound("./utils/sounds/metin.mp3").play(-1)
-        battleMusic = pg.mixer.Sound("./utils/sounds/mario.mp3").play(-1)
-        mainMenuMusic.pause()
-        battleMusic.pause()
         str_screen = None
         while True:
             if game_scenes_active["main_menu"]:
                 str_screen = "main_menu"
+                bgMusic.pause()
                 mainMenuMusic.unpause()
                 battleMusic.pause()
                 result = self.get_scene("Menu").run(clock)
                 if result == "Start":
+                    mainMenuMusic.stop()
+                    bgMusic.play(pg.mixer.Sound("./utils/sounds/bgmusic.mp3"), -1)
                     self.player.get_inventory().get_pokemons().clear()
                     self.player.rect.center = player_rect_center
-                    generated_pokemon = generate_pokemon("Sparchu.png", pokemons_frames, attacks, special_attacks, 1)
-                    self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
                     generated_pokemon = generate_pokemon("Charmadillo.png", pokemons_frames, attacks, special_attacks, 1)
+                    self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
+                    generated_pokemon = generate_pokemon("Sparchu.png", pokemons_frames, attacks, special_attacks, 1)
                     # First time loading the game
                     self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
                     generated_pokemon = generate_pokemon("Draem.png", pokemons_frames, attacks, special_attacks, 1)
@@ -202,6 +204,8 @@ class Game:
                     game_scenes_active["map"] = True
                     battleMusic.stop()  # AAAAAAAAAAAAAAAAAAAAAAAAA
                 elif result == "Load":
+                    mainMenuMusic.stop()
+                    bgMusic.play(pg.mixer.Sound("./utils/sounds/bgmusic.mp3"), -1)
                     # Aici se da load la toti pokemonii din inventar
                     s = SaveLoadSystem(".save", "./save_files")
                     if s.check_for_file("inventory"):
@@ -235,6 +239,7 @@ class Game:
             if game_scenes_active["battle_screen"]:
                 battleMusic.unpause()
                 mainMenuMusic.pause()
+                bgMusic.pause()
                 if str_screen != "exit":
                     self.player.get_inventory().activate_first_max_3_pokemons()
                     # Se aleg 3 inamici random din lista
@@ -242,20 +247,20 @@ class Game:
                     pokemons_in_battle = []
                     for i, pokemon in enumerate(self.player.get_inventory().get_pokemons()):
                         if self.player.get_inventory().get_active_pokemons()[i]:
-                            print("P" + str(i) + " " + str(pokemon.get_maxEnergy()))
                             pokemons_in_battle.append(pokemon)
                     battle_screen.load_enemies(enemies_in_battle)
                     battle_screen.load_player_pokemons(pokemons_in_battle)
                 result = self.get_scene("Battle_screen").run(clock)
-                print(str_screen)
                 if result == "Map":
                     battleMusic.pause()
-                    mainMenuMusic.unpause()
+                    mainMenuMusic.pause()
+                    bgMusic.unpause()
                     game_scenes_active["map"] = True
                     game_scenes_active["battle_screen"] = False
                 elif result == "Win":
                     battleMusic.pause()
-                    mainMenuMusic.unpause()
+                    mainMenuMusic.pause()
+                    bgMusic.unpause()
                     chance = 200
                     if self.player.get_inventory().get_noOfPokemons() <= 16:
                         if chance >= random.randint(0, 100):
@@ -299,8 +304,6 @@ class Game:
                 self.all_sprites.update(dt)
                 str_screen = "map"
             if game_scenes_active["exit"]:
-                # game_scenes_active["main_menu"] = False
-                # game_scenes_active["battle_screen"] = False
                 if str_screen == "battle_screen":
                     exit_res = self.get_scene("Exit").run2(clock)
                     if exit_res == "Continue":
@@ -309,7 +312,8 @@ class Game:
                         str_screen = "exit"
                     elif exit_res == "Map":
                         battleMusic.stop()
-                        mainMenuMusic.play(pg.mixer.Sound("./utils/sounds/metin.mp3"), -1)
+                        mainMenuMusic.stop()
+                        bgMusic.play(pg.mixer.Sound("./utils/sounds/bgmusic.mp3"), -1)
                         game_scenes_active["map"] = True
                         game_scenes_active["exit"] = False
                 elif str_screen == "map":
@@ -332,7 +336,7 @@ class Game:
                         s.save_data(saved_inventory_data, "inventory")
                         s.save_data(self.player.rect.center, "player_position")
                     elif exit_res == "Menu":
-                        mainMenuMusic.stop()
+                        bgMusic.stop()
                         mainMenuMusic.play(pg.mixer.Sound("./utils/sounds/metin.mp3"), -1)
                         game_scenes_active["main_menu"] = True
                         game_scenes_active["map"] = False

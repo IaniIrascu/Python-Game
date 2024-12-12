@@ -21,7 +21,6 @@ class Battle_screen:
         self.positions_on_screen = [(175, self.display_surface.get_height() / 2 - 100),
                                     (self.display_surface.get_width() - 525, self.display_surface.get_height() / 2 - 100)]
 
-
     def load_enemies(self, enemies):
         self.enemies = enemies
 
