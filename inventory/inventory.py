@@ -90,8 +90,8 @@ class Inventory:
         health_texts = []
         energy_texts = []
         for i, pokemon in enumerate(self.pokemons):
-            health_texts.append(font.render(str(round(pokemon.get_health(), 2)) + "/" + str(pokemon.get_maxHealth()), True, WHITE, None))
-            energy_texts.append(font.render(str(round(pokemon.get_energy(), 2)) + "/" + str(pokemon.get_maxEnergy()), True, WHITE, None))
+            health_texts.append(font.render(str(round(pokemon.get_health(), 2)) + "/" + str(round(pokemon.get_maxHealth(), 2)), True, WHITE, None))
+            energy_texts.append(font.render(str(round(pokemon.get_energy(), 2)) + "/" + str(round(pokemon.get_maxEnergy(), 2)), True, WHITE, None))
 
         show_ability_screen = False
         index_to_show = -1

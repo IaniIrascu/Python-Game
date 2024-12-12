@@ -4,8 +4,7 @@ import os
 import random as rd
 from main_menu.main_menu import MainMenu
 from map.map import Map
-from sprites.sprites import Sprite, Group
-from sprites.characters import Player
+from sprites.sprites import Group
 from pokemon.pokemon import *
 from pokemon.attacks.attack import *
 from pokemon.effects.effect import *
@@ -16,7 +15,7 @@ from battle_screen.battle_screen import Battle_screen
 from inventory.inventory import *
 from sprites.characters import Dialog
 from exit_menu.exit_menu import *
-from utils.constants import WINDOW_HEIGHT, WINDOW_WIDTH
+from utils.constants import *
 
 
 def search(list, element_name):
@@ -30,15 +29,15 @@ def generate_pokemon(pokemon_name, pokemons_frames, attacks, special_attacks, le
     pokemon.set_pokemon_frames(pokemons_frames.get_pokemon_frames(pokemon_name))
 
     maxHealth = pokemons_info[pokemon_name]["health"]
-    pokemon.set_maxHealth(maxHealth * pow(1.5, level - 1))
+    pokemon.set_maxHealth(maxHealth * pow(HPUPPROCENT, level - 1))
     pokemon.set_health(pokemon.get_maxHealth())
 
     maxEnergy = pokemons_info[pokemon_name]["energy"]
-    pokemon.set_maxEnergy(maxEnergy + 25 * (level - 1))
+    pokemon.set_maxEnergy(maxEnergy + MANABONUS * (level - 1))
     pokemon.set_energy(pokemon.get_maxEnergy())
 
     damage = pokemons_info[pokemon_name]["damage"]
-    pokemon.set_damage(damage * pow(1.3, level - 1))
+    pokemon.set_damage(damage * pow(DAMAGEUPPROCENT, level - 1))
 
     pokemon.set_level(level)
     attack_name = attacks_information[pokemon_name]["attack"]
@@ -48,6 +47,14 @@ def generate_pokemon(pokemon_name, pokemons_frames, attacks, special_attacks, le
     pokemon.set_experience(0)
     return pokemon
 
+def populate_enemies(enemies_list_names, pokemons_frames, attacks, special_attacks):
+    enemies_in_battle = []
+    length = len(enemies_list_names)
+    noOfPokemons = random.randint(1, 3)
+    for i in range(noOfPokemons):
+        pokemonpos = random.randint(0, length - 1)
+        enemies_in_battle.append(generate_pokemon(enemies_list_names[pokemonpos], pokemons_frames, attacks, special_attacks, 1))
+    return enemies_in_battle
 
 class Game:
     def __init__(self):
@@ -163,6 +170,15 @@ class Game:
         battleMusic.pause()
         str_screen = None
         current_npc = None
+        biome = None
+
+        beach_pokemons = ["Atrox.png", "Gulfin.png", "Finsta.png", "Pouch.png", "Jacana.png", "Finiette.png"]
+        desert_pokemons = ["Charmadillo.png", "Cindrill.png", "Draem.png", "Sparchu.png"]
+        ice_pokemons = ["Friolera", "Pluma.png", "Cleaf.png", "Draem.png"]
+        forest_pokemons = ["Plumette.png", "Pluma.png", "Larvea.png", "Ivieron.png", "Cleaf.png", "Atrox.png", "Pouch.png"]
+
+        pokemons_by_category = {"beach": beach_pokemons, "desert": desert_pokemons, "ice": ice_pokemons, "forest": forest_pokemons}
+
         while True:
             if game_scenes_active["main_menu"]:
                 str_screen = "main_menu"
@@ -182,7 +198,7 @@ class Game:
                     # First time loading the game
                     self.player.get_inventory().add_pokemon_to_inventory(generated_pokemon)
                     self.player.get_inventory().set_noOfPokemons(3)
-                    s = SaveLoadSystem(".save", "./save_files")
+                    s = SaveLoadSystem("save", "./save_files")
                     # Se sterg fisierele de salvare vechi
                     if s.check_for_file("inventory"):
                         os.remove("./save_files/inventory.save")
@@ -190,9 +206,10 @@ class Game:
                         os.remove("./save_files/player_position.save")
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
+                    self.fade()
                 elif result == "Load":
                     # Aici se da load la toti pokemonii din inventar
-                    s = SaveLoadSystem(".save", "./save_files")
+                    s = SaveLoadSystem("save", "./save_files")
                     if s.check_for_file("inventory"):
                         inventory = []
                         inventory_data = s.load_data("inventory")
@@ -216,22 +233,42 @@ class Game:
                         os.remove("./save_files/player_position.save")
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
+                    self.fade()
                 elif result == "Quit":
+                    # DACA SE IESE DE PE HARTA SE SALVEAZA PROGRESUL
+                    s = SaveLoadSystem("save", "save_files")
+                    # datele despre inventar sunt salvate asa: nume level experienta ramasa pentru fiecare
+                    # pokemoni intr-o lista de dictionare
+                    saved_inventory_data = []
+                    for pokemon in self.player.get_inventory().get_pokemons():
+                        saved_data = {"name": pokemon.get_name(), "level": pokemon.get_level(),
+                                      "experience": pokemon.get_experience()}
+                        saved_inventory_data.append(saved_data)
+
+                    s.save_data(saved_inventory_data, "inventory")
+                    s.save_data(self.player.rect.center, "player_position")
+                    self.fade()
                     pg.quit()
                     sys.exit()
 
             if game_scenes_active["battle_screen"]:
-                battleMusic.play(pg.mixer.Sound(mario), -1)
+                if str_screen != "exit":
+                    battleMusic.play(pg.mixer.Sound(mario), -1)
                 mainMenuMusic.pause()
                 if str_screen != "exit":
+                    enemies_in_battle = []
                     self.player.get_inventory().activate_first_max_3_pokemons()
                     # Se aleg 3 inamici random din lista
-                    enemies_in_battle = self.enemies
-                    print(self.enemies)
+                    if biome is None:
+                        # NPC battle
+                        enemies_in_battle = self.enemies
+                    else:
+                        enemies_in_battle = populate_enemies(pokemons_by_category[biome], pokemons_frames, attacks, special_attacks)
+
                     pokemons_in_battle = []
                     for i, pokemon in enumerate(self.player.get_inventory().get_pokemons()):
                         if self.player.get_inventory().get_active_pokemons()[i]:
-                            print("P" + str(i) + " " + str(pokemon.get_maxEnergy()))
+                            # print("P" + str(i) + " " + str(pokemon.get_maxEnergy()))
                             pokemons_in_battle.append(pokemon)
                     battle_screen.load_enemies(enemies_in_battle)
                     battle_screen.load_player_pokemons(pokemons_in_battle)
@@ -241,14 +278,17 @@ class Game:
                     mainMenuMusic.unpause()
                     game_scenes_active["map"] = True
                     game_scenes_active["battle_screen"] = False
+                    self.fade()
                 elif result == "Win":
                     if current_npc:
                         current_npc.data['defeated'] = True
-                        print(current_npc.data['defeated'])
                         current_npc = None
                     battleMusic.stop()
                     mainMenuMusic.unpause()
-                    chance = 200
+                    if biome is None:
+                        chance = 200
+                    else:
+                        chance = 33
                     if self.player.get_inventory().get_noOfPokemons() <= 16:
                         if chance >= random.randint(0, 100):
                             enemy_index = random.randint(0, len(enemies_in_battle) - 1)
@@ -264,10 +304,12 @@ class Game:
                                 self.player.get_inventory().set_noOfPokemons(self.player.get_inventory().get_noOfPokemons() + 1)
                     game_scenes_active["map"] = True
                     game_scenes_active["battle_screen"] = False
+                    self.fade()
                 elif result == "Exit":
                     game_scenes_active["exit"] = True
                     game_scenes_active["battle_screen"] = False
                 str_screen = "battle_screen"
+                biome = None
             if game_scenes_active["map"]:
                 dt = clock.tick(60) / 1000
                 if any(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)):
@@ -276,40 +318,17 @@ class Game:
                     self.map_pos = next(sprite for sprite in self.transitions if sprite.rect.colliderect(self.player.hitbox)).target_pos
                     map.render(self.all_sprites, self.collisions, self.transitions, self.npcs, self.map_pos, self.map_name)
                     self.player = map.player
-                count = map.grass_count()
+                count, biome = map.grass_count()
                 if count == self.rand:
                     self.fade()
                     game_scenes_active["battle_screen"] = True
                     game_scenes_active["map"] = False
                     self.rand = rd.randint(50, 300)
-                if not self.dialog:
-                    if pg.key.get_just_pressed()[pg.K_f]:
-                        for npc in self.npcs:
-                            distance = pg.math.Vector2(npc.rect.center) - pg.math.Vector2(self.player.rect.center)
-                            if distance.length() < 150:
-                                self.player.stop = True
-                                self.player.direction = pg.math.Vector2(0, 0)
-                                font = pg.font.Font(os.path.join("main_menu", "assets", "minecraft.ttf"), 30)
-                                self.dialog = Dialog(npc, self.player, self.all_sprites, font)
-
+                    continue
                 self.display_surface.fill('black')
                 self.all_sprites.draw(self.player.rect.center)
                 self.all_sprites.update(dt)
                 str_screen = "map"
-                if self.dialog:
-                    self.dialog.update()
-                    if self.dialog.idx == len(self.dialog.npc.data['dialog']['default']) and not self.dialog.npc.data['defeated']:
-                        self.enemies.clear()
-                        for pokemon in self.dialog.npc.data['pokemon'].values():
-                            enemy = generate_pokemon(f'{pokemon[0]}.png', pokemons_frames, attacks, special_attacks, pokemon[1])
-                            self.enemies.append(enemy)
-                        self.fade()
-                        game_scenes_active["map"] = False
-                        game_scenes_active["battle_screen"] = True
-                        current_npc = self.dialog.npc
-                    if self.dialog.end:
-                        self.dialog = None
-            
 
             if game_scenes_active["exit"]:
                 if str_screen == "battle_screen":
@@ -330,10 +349,7 @@ class Game:
                         game_scenes_active["exit"] = False
                         str_screen = "exit"
                     elif exit_res == "Save":
-                        # DACA SE IESE DE PE HARTA SE SALVEAZA PROGRESUL
                         s = SaveLoadSystem("save", "save_files")
-                        # datele despre inventar sunt salvate asa: nume level experienta ramasa pentru fiecare
-                        # pokemoni intr-o lista de dictionare
                         saved_inventory_data = []
                         for pokemon in self.player.get_inventory().get_pokemons():
                             saved_data = {"name": pokemon.get_name(), "level": pokemon.get_level(),
@@ -348,6 +364,19 @@ class Game:
                         game_scenes_active["main_menu"] = True
                         game_scenes_active["map"] = False
                         game_scenes_active["exit"] = False
+                    elif exit_res == "Exit":
+                        s = SaveLoadSystem("save", "save_files")
+                        saved_inventory_data = []
+                        for pokemon in self.player.get_inventory().get_pokemons():
+                            saved_data = {"name": pokemon.get_name(), "level": pokemon.get_level(),
+                                          "experience": pokemon.get_experience()}
+                            saved_inventory_data.append(saved_data)
+                        s.save_data(saved_inventory_data, "inventory")
+                        s.save_data(self.player.rect.center, "player_position")
+                        self.fade()
+                        pg.quit()
+                        sys.exit()
+                self.fade()
             pg.display.update()
             clock.tick(60)
 
@@ -361,3 +390,27 @@ class Game:
                         game_scenes_active["map"] = False
                     if event.key == pg.K_e and game_scenes_active["map"]:
                         self.player.get_inventory().run(clock)
+                    if event.key == pg.K_f and game_scenes_active["map"]:
+                        if not self.dialog:
+                            for npc in self.npcs:
+                                distance = pg.math.Vector2(npc.rect.center) - pg.math.Vector2(self.player.rect.center)
+                                if distance.length() < 150:
+                                    self.player.stop = True
+                                    self.player.direction = pg.math.Vector2(0, 0)
+                                    font = pg.font.Font(os.path.join("main_menu", "assets", "minecraft.ttf"), 30)
+                                    self.dialog = Dialog(npc, self.player, self.all_sprites, font)
+                        if self.dialog:
+                            self.dialog.update()
+                            if self.dialog.idx == len(self.dialog.npc.data['dialog']['default']) and not \
+                            self.dialog.npc.data['defeated']:
+                                self.enemies.clear()
+                                for pokemon in self.dialog.npc.data['pokemon'].values():
+                                    enemy = generate_pokemon(f'{pokemon[0]}.png', pokemons_frames, attacks,
+                                                             special_attacks, pokemon[1])
+                                    self.enemies.append(enemy)
+                                self.fade()
+                                game_scenes_active["map"] = False
+                                game_scenes_active["battle_screen"] = True
+                                current_npc = self.dialog.npc
+                            if self.dialog.end:
+                                self.dialog = None

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="86" height="86" tilewidth="64" tileheight="64" infinite="0" nextlayerid="14" nextobjectid="1255">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="86" height="86" tilewidth="64" tileheight="64" infinite="0" nextlayerid="14" nextobjectid="1561">
  <tileset firstgid="1" source="../tilesets/world.tsx"/>
  <tileset firstgid="211" source="../tilesets/objects.tsx"/>
  <tileset firstgid="242" source="../tilesets/Grass.tsx"/>
- <layer id="1" name="Terrain" width="86" height="86">
+ <layer id="1" name="Terrain" width="86" height="86" locked="1">
   <data encoding="csv">
 195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,196,132,132,136,132,132,132,136,132,123,42,43,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,
 195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,195,196,132,132,147,126,132,132,136,132,132,123,54,33,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,
@@ -93,7 +93,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="13" name="Terrain Top" width="86" height="86">
+ <layer id="13" name="Terrain Top" width="86" height="86" locked="1">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -183,7 +183,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="3" name="Entities">
+ <objectgroup id="3" name="Entities" locked="1">
   <object id="12" name="Player" x="4445.11" y="3828.43">
    <properties>
     <property name="direction" value="down"/>
@@ -297,7 +297,7 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="9" name="Coast" visible="0">
+ <objectgroup id="9" name="Coast" visible="0" locked="1">
   <object id="130" name="coast" x="4224" y="4992" width="64" height="64">
    <properties>
     <property name="side" value="top"/>
@@ -1720,42 +1720,84 @@
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Ivieron"/>
+   </properties>
+  </object>
+  <object id="1262" gid="242" x="4096" y="4096" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+    <property name="level" type="int" value="10"/>
+    <property name="monsters" value="Ivieron"/>
    </properties>
   </object>
   <object id="35" gid="242" x="4032" y="4096" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Ivieron, Larvea, Larvea"/>
+   </properties>
+  </object>
+  <object id="1261" gid="242" x="4032" y="4096" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+    <property name="level" type="int" value="10"/>
+    <property name="monsters" value="Ivieron, Larvea, Larvea"/>
    </properties>
   </object>
   <object id="36" gid="242" x="3968" y="4096" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Ivieron"/>
    </properties>
   </object>
-  <object id="37" gid="242" x="3968" y="4160" width="64" height="64">
+  <object id="1260" gid="242" x="3968" y="4096" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Ivieron"/>
+   </properties>
+  </object>
+  <object id="37" gid="242" x="3970.67" y="4158.67" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+    <property name="level" type="int" value="10"/>
+    <property name="monsters" value="Plumette, Atrox, Pouch"/>
+   </properties>
+  </object>
+  <object id="1258" gid="242" x="3970.67" y="4158.67" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+    <property name="level" type="int" value="10"/>
+    <property name="monsters" value="Plumette, Atrox, Pouch"/>
    </properties>
   </object>
   <object id="38" gid="242" x="4032" y="4160" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Larvea"/>
+   </properties>
+  </object>
+  <object id="1257" gid="242" x="4032" y="4160" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+    <property name="level" type="int" value="10"/>
+    <property name="monsters" value="Larvea"/>
    </properties>
   </object>
   <object id="39" gid="242" x="4096" y="4160" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Plumette, Pluma"/>
+   </properties>
+  </object>
+  <object id="1256" gid="242" x="4096" y="4160" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+    <property name="level" type="int" value="10"/>
+    <property name="monsters" value="Plumette, Pluma"/>
    </properties>
   </object>
   <object id="215" gid="242" x="2624" y="3520" width="64" height="64">
@@ -2196,7 +2238,7 @@
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Plumette, Pluma"/>
    </properties>
   </object>
   <object id="542" gid="242" x="3584" y="3392" width="64" height="64">
@@ -2210,28 +2252,28 @@
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox,Larvea, Cleaf"/>
    </properties>
   </object>
   <object id="544" gid="242" x="3520" y="3456" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Pouch, Pluma"/>
    </properties>
   </object>
   <object id="545" gid="242" x="3584" y="3456" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox,Larvea"/>
    </properties>
   </object>
   <object id="546" gid="242" x="3456" y="3520" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Pouch"/>
    </properties>
   </object>
   <object id="547" gid="242" x="3520" y="3520" width="64" height="64">
@@ -2245,14 +2287,14 @@
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox"/>
    </properties>
   </object>
   <object id="549" gid="242" x="3456" y="3200" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox"/>
    </properties>
   </object>
   <object id="550" gid="242" x="3520" y="3200" width="64" height="64">
@@ -2266,21 +2308,21 @@
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox,Larvea, Cleaf"/>
    </properties>
   </object>
   <object id="552" gid="242" x="3456" y="3264" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Pouch, Pluma"/>
    </properties>
   </object>
   <object id="553" gid="242" x="3520" y="3264" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox,Pouch, Ivieron"/>
    </properties>
   </object>
   <object id="554" gid="242" x="3584" y="3264" width="64" height="64">
@@ -2301,35 +2343,35 @@
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox,Larvea"/>
    </properties>
   </object>
   <object id="557" gid="242" x="3584" y="3328" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Cleaf, Cleaf, Cleaf"/>
    </properties>
   </object>
   <object id="558" gid="242" x="3648" y="3392" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Ivieron"/>
    </properties>
   </object>
   <object id="561" gid="242" x="3648" y="3456" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Pouch"/>
    </properties>
   </object>
   <object id="564" gid="242" x="3648" y="3520" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox,Larvea"/>
    </properties>
   </object>
   <object id="567" gid="242" x="3648" y="3200" width="64" height="64">
@@ -2343,21 +2385,21 @@
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Pouch, Ivieron"/>
    </properties>
   </object>
   <object id="569" gid="242" x="3776" y="3200" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Ivieron,Larvea"/>
    </properties>
   </object>
   <object id="570" gid="242" x="3648" y="3264" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox,Larvea"/>
    </properties>
   </object>
   <object id="571" gid="242" x="3712" y="3264" width="64" height="64">
@@ -2371,140 +2413,154 @@
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox"/>
    </properties>
   </object>
   <object id="573" gid="242" x="3648" y="3328" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Pouch"/>
    </properties>
   </object>
   <object id="574" gid="242" x="3712" y="3328" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox,Pouch, Pluma"/>
    </properties>
   </object>
   <object id="575" gid="242" x="3776" y="3328" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Ivieron,Larvea"/>
    </properties>
   </object>
   <object id="611" gid="242" x="4288" y="4096" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Ivieron"/>
    </properties>
   </object>
   <object id="612" gid="242" x="4224" y="4096" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Ivieron"/>
    </properties>
   </object>
   <object id="613" gid="242" x="4160" y="4096" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Ivieron, Cleaf"/>
+   </properties>
+  </object>
+  <object id="1259" gid="242" x="4160" y="4096" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+    <property name="level" type="int" value="10"/>
+    <property name="monsters" value="Ivieron, Cleaf"/>
    </properties>
   </object>
   <object id="614" gid="242" x="4160" y="4160" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Plumette"/>
+   </properties>
+  </object>
+  <object id="1255" gid="242" x="4160" y="4160" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+    <property name="level" type="int" value="10"/>
+    <property name="monsters" value="Plumette"/>
    </properties>
   </object>
   <object id="615" gid="242" x="4224" y="4160" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Plumette, Atrox"/>
    </properties>
   </object>
   <object id="616" gid="242" x="4288" y="4160" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Plumette, Larvea"/>
    </properties>
   </object>
   <object id="617" gid="242" x="4480" y="4096" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Ivieron, Pouch"/>
    </properties>
   </object>
   <object id="618" gid="242" x="4416" y="4096" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Ivieron, Cleaf"/>
    </properties>
   </object>
   <object id="619" gid="242" x="4352" y="4096" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Ivieron"/>
    </properties>
   </object>
   <object id="620" gid="242" x="4352" y="4160" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Plumette, Pouch"/>
    </properties>
   </object>
   <object id="621" gid="242" x="4416" y="4160" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Plumette"/>
    </properties>
   </object>
   <object id="622" gid="242" x="4480" y="4160" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Plumette, Atrox"/>
    </properties>
   </object>
   <object id="623" gid="242" x="4288" y="4032" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox,Cleaf"/>
    </properties>
   </object>
   <object id="624" gid="242" x="4480" y="4032" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox,Cleaf"/>
    </properties>
   </object>
   <object id="625" gid="242" x="4416" y="4032" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox,Cleaf, Pluma"/>
    </properties>
   </object>
   <object id="626" gid="242" x="4352" y="4032" width="64" height="64">
    <properties>
     <property name="biome" value="forest"/>
     <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="monsters" value="Atrox,Cleaf"/>
    </properties>
   </object>
   <object id="694" gid="243" x="2304" y="896" width="64" height="64">
@@ -3802,88 +3858,1623 @@
     <property name="monsters" value="Atrox,Pouch"/>
    </properties>
   </object>
-  <object id="1135" gid="244" x="3712" y="4352" width="64" height="64">
+  <object id="1269" gid="246" x="1792" y="4800" width="64" height="64">
    <properties>
-    <property name="biome" value="sand"/>
-    <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
    </properties>
   </object>
-  <object id="1136" gid="244" x="3776" y="4352" width="64" height="64">
+  <object id="1270" gid="246" x="1792" y="4864" width="64" height="64">
    <properties>
-    <property name="biome" value="sand"/>
-    <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
    </properties>
   </object>
-  <object id="1137" gid="244" x="3840" y="4352" width="64" height="64">
+  <object id="1271" gid="246" x="1792" y="4928" width="64" height="64">
    <properties>
-    <property name="biome" value="sand"/>
-    <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
    </properties>
   </object>
-  <object id="1138" gid="244" x="3904" y="4352" width="64" height="64">
+  <object id="1272" gid="246" x="1728" y="4928" width="64" height="64">
    <properties>
-    <property name="biome" value="sand"/>
-    <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
    </properties>
   </object>
-  <object id="1139" gid="244" x="3968" y="4352" width="64" height="64">
+  <object id="1273" gid="246" x="1728" y="4864" width="64" height="64">
    <properties>
-    <property name="biome" value="sand"/>
-    <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
    </properties>
   </object>
-  <object id="1140" gid="244" x="3968" y="4416" width="64" height="64">
+  <object id="1274" gid="246" x="1664" y="4864" width="64" height="64">
    <properties>
-    <property name="biome" value="sand"/>
-    <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
    </properties>
   </object>
-  <object id="1141" gid="244" x="3904" y="4416" width="64" height="64">
+  <object id="1275" gid="246" x="1664" y="4928" width="64" height="64">
    <properties>
-    <property name="biome" value="sand"/>
-    <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
    </properties>
   </object>
-  <object id="1142" gid="244" x="3840" y="4416" width="64" height="64">
+  <object id="1276" gid="246" x="1600" y="4928" width="64" height="64">
    <properties>
-    <property name="biome" value="sand"/>
-    <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
    </properties>
   </object>
-  <object id="1143" gid="244" x="3776" y="4416" width="64" height="64">
+  <object id="1277" gid="246" x="1600" y="4864" width="64" height="64">
    <properties>
-    <property name="biome" value="sand"/>
-    <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
    </properties>
   </object>
-  <object id="1144" gid="244" x="3712" y="4416" width="64" height="64">
+  <object id="1278" gid="246" x="1600" y="4800" width="64" height="64">
    <properties>
-    <property name="biome" value="sand"/>
-    <property name="level" type="int" value="10"/>
-    <property name="monsters" value="Atrox,Pouch"/>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1280" gid="246" x="1536" y="4800" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1281" gid="246" x="1472" y="4800" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1282" gid="246" x="1472" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1283" gid="246" x="1536" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1284" gid="246" x="1536" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1285" gid="246" x="1472" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1286" gid="246" x="1472" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1287" gid="246" x="1536" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1288" gid="246" x="1600" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1289" gid="246" x="1664" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1290" gid="246" x="1728" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1291" gid="246" x="1792" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1292" gid="246" x="1856" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1293" gid="246" x="1856" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1294" gid="246" x="1920" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1295" gid="246" x="1408" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1296" gid="246" x="1344" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1297" gid="246" x="1344" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1298" gid="246" x="1408" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1299" gid="246" x="1280" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1300" gid="246" x="1216" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1301" gid="246" x="1408" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1302" gid="246" x="1472" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1303" gid="246" x="1472" y="4352" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1304" gid="246" x="1536" y="4352" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1305" gid="246" x="1536" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1306" gid="246" x="1600" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1307" gid="246" x="1600" y="4352" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1308" gid="246" x="1600" y="4288" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1309" gid="246" x="1664" y="4352" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1310" gid="246" x="512" y="3136" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1311" gid="246" x="576" y="3136" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1312" gid="246" x="576" y="3072" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1313" gid="246" x="640" y="3136" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1314" gid="246" x="576" y="3200" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1315" gid="246" x="640" y="3200" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1316" gid="246" x="704" y="3200" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1317" gid="246" x="704" y="3136" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1318" gid="246" x="640" y="3136" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1319" gid="246" x="640" y="3072" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1320" gid="246" x="768" y="3200" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1321" gid="246" x="512" y="3200" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1322" gid="246" x="512" y="3264" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1323" gid="246" x="576" y="3264" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1324" gid="246" x="448" y="3200" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1325" gid="246" x="448" y="3264" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1326" gid="246" x="640" y="3264" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1327" gid="246" x="512" y="3072" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1328" gid="242" x="576" y="3008" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+   </properties>
+  </object>
+  <object id="1329" gid="242" x="640" y="3008" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+   </properties>
+  </object>
+  <object id="1330" gid="242" x="512" y="3008" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+   </properties>
+  </object>
+  <object id="1331" gid="242" x="640" y="2944" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+   </properties>
+  </object>
+  <object id="1332" gid="242" x="576" y="2944" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+   </properties>
+  </object>
+  <object id="1333" gid="242" x="704" y="3008" width="64" height="64">
+   <properties>
+    <property name="biome" value="forest"/>
+   </properties>
+  </object>
+  <object id="1334" gid="246" x="704" y="3072" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1339" gid="246" x="1984" y="3904" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1340" gid="246" x="1920" y="3904" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1341" gid="246" x="1984" y="3968" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1342" gid="246" x="2112" y="3904" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1343" gid="246" x="2048" y="3904" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1344" gid="246" x="2112" y="3968" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1345" gid="246" x="2048" y="3968" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1346" gid="246" x="2112" y="4032" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1347" gid="246" x="2048" y="4032" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1348" gid="246" x="2112" y="4096" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1349" gid="246" x="2176" y="3968" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1350" gid="246" x="2176" y="3904" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1351" gid="246" x="1984" y="4032" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1352" gid="246" x="1920" y="3968" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1353" gid="246" x="2048" y="4096" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1354" gid="246" x="1920" y="4032" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1355" gid="246" x="1984" y="3840" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1356" gid="246" x="2048" y="3840" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1357" gid="246" x="1984" y="3776" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1358" gid="246" x="4544" y="4672" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1359" gid="246" x="4608" y="4672" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1360" gid="246" x="4672" y="4608" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1361" gid="246" x="4672" y="4672" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1362" gid="246" x="4608" y="4736" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1363" gid="246" x="4544" y="4736" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1364" gid="246" x="4672" y="4736" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1365" gid="246" x="4672" y="4800" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1366" gid="246" x="4608" y="4800" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1367" gid="246" x="4736" y="4800" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1368" gid="246" x="4736" y="4736" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1372" gid="246" x="4736" y="4672" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1374" gid="246" x="4160" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1375" gid="246" x="4160" y="4480" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1376" gid="246" x="4096" y="4480" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1377" gid="246" x="4096" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1378" gid="246" x="4032" y="4480" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1379" gid="246" x="4032" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1380" gid="246" x="4096" y="4544" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1382" gid="246" x="4032" y="4544" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1383" gid="246" x="3968" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1384" gid="246" x="3968" y="4480" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1385" gid="246" x="4096" y="4352" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1386" gid="246" x="4160" y="4352" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1387" gid="246" x="4224" y="4352" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1388" gid="246" x="4224" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1389" gid="246" x="4032" y="4608" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1390" gid="246" x="3968" y="4544" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1391" gid="246" x="3904" y="4544" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1392" gid="246" x="3904" y="4480" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1393" gid="246" x="3904" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1394" gid="246" x="3840" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1395" gid="246" x="3840" y="4480" width="64" height="64">
+   <properties>
+    <property name="biome" value="desert"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1399" gid="244" x="1984" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1400" gid="244" x="2048" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1401" gid="244" x="2112" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1402" gid="244" x="2176" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1403" gid="244" x="2240" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1404" gid="244" x="2304" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1405" gid="244" x="2368" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1406" gid="244" x="2432" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1407" gid="244" x="2496" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1408" gid="244" x="2560" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1409" gid="244" x="2624" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1410" gid="244" x="2688" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1411" gid="244" x="2752" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1412" gid="244" x="2816" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1413" gid="244" x="2880" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1414" gid="244" x="2944" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1415" gid="244" x="3008" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1416" gid="244" x="3072" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1417" gid="244" x="3136" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1418" gid="244" x="3200" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1419" gid="244" x="3264" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1420" gid="244" x="3328" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1421" gid="244" x="3392" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1422" gid="244" x="3456" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1423" gid="244" x="3520" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1424" gid="244" x="3584" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1425" gid="244" x="3648" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1426" gid="244" x="3712" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1427" gid="244" x="3776" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1428" gid="244" x="3840" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1429" gid="244" x="3904" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1430" gid="244" x="3968" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1431" gid="244" x="4032" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1432" gid="244" x="4096" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1433" gid="244" x="4160" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1434" gid="244" x="4224" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1435" gid="244" x="4288" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1436" gid="244" x="4352" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1437" gid="244" x="4416" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1438" gid="244" x="4480" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1439" gid="244" x="4544" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1440" gid="244" x="4544" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1441" gid="244" x="4608" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1442" gid="244" x="4672" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1443" gid="244" x="4672" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1444" gid="244" x="4736" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1445" gid="244" x="4800" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1446" gid="244" x="4800" y="4800" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1447" gid="244" x="4800" y="4736" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1448" gid="244" x="4800" y="4672" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1449" gid="244" x="4800" y="4608" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1450" gid="244" x="4800" y="4544" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1451" gid="244" x="4800" y="4480" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1452" gid="244" x="4800" y="4352" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1453" gid="244" x="4800" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1454" gid="244" x="4864" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1455" gid="244" x="4864" y="4352" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1456" gid="244" x="4928" y="4352" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1457" gid="244" x="1152" y="4992" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1458" gid="244" x="1152" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1459" gid="244" x="1088" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1460" gid="244" x="1024" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1461" gid="244" x="960" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1462" gid="244" x="896" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1463" gid="244" x="832" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1464" gid="244" x="768" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1465" gid="244" x="704" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1466" gid="244" x="640" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1467" gid="244" x="704" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1468" gid="244" x="640" y="4800" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1469" gid="244" x="576" y="4800" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1470" gid="244" x="576" y="4736" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1471" gid="244" x="576" y="4672" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1472" gid="244" x="576" y="4608" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1473" gid="244" x="576" y="4544" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1474" gid="244" x="2688" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1475" gid="244" x="2752" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1476" gid="244" x="2816" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1477" gid="244" x="2816" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1478" gid="244" x="2880" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1479" gid="244" x="2880" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1480" gid="244" x="2944" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1481" gid="244" x="3008" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1482" gid="244" x="3136" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1483" gid="244" x="3200" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1484" gid="244" x="3200" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1485" gid="244" x="3264" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1486" gid="244" x="3264" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1487" gid="244" x="3328" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1488" gid="244" x="3328" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1489" gid="244" x="3392" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1490" gid="244" x="3392" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1491" gid="244" x="3456" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1492" gid="244" x="3520" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1493" gid="244" x="3584" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1494" gid="244" x="3584" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1495" gid="244" x="3648" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1496" gid="244" x="3648" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1497" gid="244" x="3712" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1498" gid="244" x="3712" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1499" gid="244" x="3776" y="4800" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1500" gid="244" x="3776" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1501" gid="244" x="3776" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1502" gid="244" x="3840" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1503" gid="244" x="3904" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1504" gid="244" x="3968" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1505" gid="244" x="3904" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1506" gid="244" x="4032" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1507" gid="244" x="4096" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1508" gid="244" x="4160" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1509" gid="244" x="4224" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1510" gid="244" x="4224" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1511" gid="244" x="4288" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1512" gid="244" x="4288" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1513" gid="244" x="4416" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1514" gid="244" x="4416" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1515" gid="244" x="4480" y="4928" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1516" gid="244" x="4480" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1517" gid="244" x="4544" y="4864" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1518" gid="244" x="4736" y="4608" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1519" gid="244" x="4736" y="4544" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1520" gid="244" x="4736" y="4480" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1521" gid="244" x="4736" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1522" gid="244" x="4800" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1523" gid="244" x="4800" y="4352" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1524" gid="244" x="4800" y="4288" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1525" gid="244" x="4736" y="4352" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1526" gid="244" x="4672" y="4352" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1527" gid="244" x="4672" y="4416" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1528" gid="244" x="4736" y="4288" width="64" height="64">
+   <properties>
+    <property name="biome" value="beach"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1539" gid="243" x="1472" y="1152" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1540" gid="243" x="1344" y="1152" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1541" gid="243" x="1408" y="1152" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1542" gid="243" x="1408" y="1216" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1543" gid="243" x="1472" y="1216" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1544" gid="243" x="1408" y="1280" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1545" gid="243" x="1472" y="1280" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1546" gid="243" x="1536" y="1216" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1547" gid="243" x="1536" y="1152" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1548" gid="243" x="1600" y="1152" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1549" gid="243" x="1664" y="1152" width="64" height="64">
+   <properties>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1550" gid="243" x="1600" y="1216" width="64" height="64">
+   <properties>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1551" gid="243" x="1600" y="1088" width="64" height="64">
+   <properties>
+    <property name="biome" value=""/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1552" gid="243" x="1536" y="1088" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1553" gid="243" x="1472" y="1088" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1554" gid="243" x="1536" y="1024" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1555" gid="243" x="1600" y="1024" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1556" gid="243" x="1664" y="1088" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1557" gid="243" x="1664" y="1152" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1558" gid="243" x="1728" y="1152" width="64" height="64">
+   <properties>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1559" gid="243" x="1664" y="1024" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
+   </properties>
+  </object>
+  <object id="1560" gid="243" x="1408" y="1088" width="64" height="64">
+   <properties>
+    <property name="biome" value="ice"/>
+    <property name="level" value="10"/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="2" name="Objects">
+ <objectgroup id="2" name="Objects" visible="0" locked="1">
   <object id="1" gid="211" x="4352" y="3776" width="320" height="320"/>
   <object id="2" gid="226" x="3455.33" y="3783.33" width="128" height="192"/>
   <object id="3" gid="226" x="3264" y="3712" width="128" height="192"/>
   <object id="4" gid="227" x="3264" y="3392" width="128" height="192"/>
-  <object id="7" gid="213" x="4424" y="4818" width="128" height="192"/>
+  <object id="7" gid="213" x="4410.67" y="4808.67" width="128" height="192"/>
   <object id="8" gid="215" x="4198.67" y="4640" width="64" height="128"/>
   <object id="10" gid="215" x="4574" y="4576" width="64" height="128"/>
   <object id="11" gid="213" x="4494.67" y="4545.33" width="128" height="192"/>
   <object id="19" gid="229" x="4096" y="3392" width="384" height="384"/>
-  <object id="40" gid="232" x="3776" y="3776" width="320" height="320"/>
+  <object id="40" gid="232" x="3784" y="3746" width="320" height="320"/>
   <object id="41" gid="227" x="3520" y="3712" width="128" height="192"/>
   <object id="42" gid="227" x="3956" y="3210" width="128" height="192"/>
   <object id="43" gid="227" x="3904" y="3328" width="128" height="192"/>
@@ -4148,7 +5739,7 @@
   <object id="1079" gid="227" x="4678" y="2170" width="128" height="192"/>
   <object id="1249" gid="227" x="1086" y="3132" width="128" height="192"/>
  </objectgroup>
- <objectgroup id="12" name="Collisions" visible="0">
+ <objectgroup id="12" name="Collisions" visible="0" locked="1">
   <object id="211" x="4832.33" y="1976.5" width="33.3333" height="702.045"/>
   <object id="700" x="4857" y="1952" width="67.5" height="22.5"/>
   <object id="701" x="4899" y="1203" width="25" height="744"/>
@@ -4399,7 +5990,7 @@
   <object id="1252" x="2247.5" y="115" width="53" height="90"/>
   <object id="1254" x="2244" y="-30.5" width="252" height="49"/>
  </objectgroup>
- <objectgroup id="5" name="Transition">
+ <objectgroup id="5" name="Transition" visible="0" locked="1">
   <object id="17" x="4421.09" y="3770.75" width="54.6667" height="3.83333">
    <properties>
     <property name="pos" value="world"/>
@@ -4437,7 +6028,7 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup id="10" name="Water" visible="0">
+ <objectgroup id="10" name="Water" visible="0" locked="1">
   <object id="136" x="0" y="5056" width="5504" height="320"/>
   <object id="161" x="3647.03" y="2496.3" width="203" height="193.333"/>
   <object id="162" x="3658.18" y="2560" width="693.818" height="128"/>
