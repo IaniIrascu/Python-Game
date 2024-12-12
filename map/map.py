@@ -49,7 +49,7 @@ class Map:
             Animated(self.frames['coast'][obj.properties['terrain']][obj.properties['side']], (obj.x, obj.y), group, 1)
 
         for obj in self.maps[map_name].get_layer_by_name("Monsters"):
-            Grass(obj.image, (obj.x, obj.y), group, 1 if obj.properties['biome'] == "sand" else 3)
+            Grass(obj.image, (obj.x, obj.y), group, 1 if obj.properties['biome'] == "beach" else 3)
 
         for obj in self.maps[map_name].get_layer_by_name("Objects"):
             if obj.name == "top":
@@ -82,12 +82,14 @@ class Map:
     def grass_count(self):
         if self.count > 300:
             self.count = 0
+        biome = None
         x = self.player.rect.centerx
         y = self.player.rect.centery
         for obj in self.maps[self.map_name].get_layer_by_name("Monsters"):
             if obj.x < x < obj.x + TILE_SIZE and obj.y < y < obj.y + TILE_SIZE:
                 self.count += 1
-        return self.count
+                biome = obj.properties['biome']
+        return [self.count, biome]
 
         
 

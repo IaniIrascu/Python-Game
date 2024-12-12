@@ -1,14 +1,8 @@
 from pokemon.ability_screen.ability_screen import *
 import random
+from utils.constants import *
 
 FONT = pg.font.Font("./main_menu/assets/minecraft.ttf", 24)
-
-BLEEDINGPROCENT = 0.1
-WEAKNESSPROCENT = 0.1
-MISSPROCENT = 0.05
-POISONPROCENT = 0.1
-RESTORATIONPROCENT = 0.05
-BURNEDPROCENT = 0.05
 
 def calculate_experience(enemies):
     for enemy in enemies:
@@ -25,10 +19,10 @@ def level_up_pokemon(pokemon):
         return
     while levels_experience[pokemon.get_level() - 1] <= pokemon.get_experience():
         pokemon.set_level(pokemon.get_level() + 1)
-        pokemon.set_maxHealth(pokemon.get_maxHealth() * (1 + 0.5))
-        pokemon.set_damage(pokemon.get_damage() * (1 + 0.3))
+        pokemon.set_maxHealth(pokemon.get_maxHealth() * HPUPPROCENT)
+        pokemon.set_damage(pokemon.get_damage() * DAMAGEUPPROCENT)
         pokemon.set_experience(pokemon.get_experience() - levels_experience[pokemon.get_level() - 1])
-        pokemon.set_maxEnergy(pokemon.get_maxEnergy() + 25)
+        pokemon.set_maxEnergy(pokemon.get_maxEnergy() + MANABONUS)
 
 def check_button_pressed(mouse_pos, ability_screen, ability_screen_position):
     buttons = ability_screen.get_buttons()
@@ -47,7 +41,7 @@ def change_health_bar(health_bar, bars_surface, percentage, text_surface):
     height = health_bar.get_height()
     health_bar.fill((0, 0, 0, 0))
     health_bar.fill(RED, (90, 37, width - 115 - removeFromBar, height / 3))
-    health_bar.blit(text_surface, (125, 45))
+    health_bar.blit(text_surface, (110, 45))
     health_bar.blit(bars_surface, (0, 0), (0, 0, width, height))
 
 def change_energy_bar(energy_bar, bars_surface, percentage, text_surface):
@@ -56,7 +50,7 @@ def change_energy_bar(energy_bar, bars_surface, percentage, text_surface):
     height = energy_bar.get_height()
     energy_bar.fill((0, 0, 0, 0))
     energy_bar.fill(BLUE, (90, 37, width - 115 - removeFromBar, height / 3))
-    energy_bar.blit(text_surface, (125, 45))
+    energy_bar.blit(text_surface, (110, 45))
     energy_bar.blit(bars_surface, (0, 0), (0, height, width, height))
 
 def remove_effects_turns(effects, effects_names):

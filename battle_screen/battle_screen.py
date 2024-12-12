@@ -1,11 +1,10 @@
 import pygame as pg
 import sys
+import os
 from pokemon.ability_screen import *
 from utils.colors import *
 from pokemon.effects.effect import Effect
 import random
-import math
-import builtins
 from pokemon.ability_screen.ability_screen import *
 from battle_screen.funtions import *
 
@@ -73,7 +72,7 @@ class Battle_screen:
         # Pozitia meniului cu abilitati
         ability_screen_position = (self.pokemons_surface.get_width() / 2 - 200, 100)
 
-        bars = pg.image.load('./battle_screen/assets/Bars.png')
+        bars = pg.image.load(os.path.join("battle_screen", "assets", "Bars.png"))
         bars.convert_alpha()
         bars = pg.transform.scale_by(bars, 1 / 4)
         bars_width = bars.get_width()
@@ -137,7 +136,7 @@ class Battle_screen:
                         change_health_bar(health_bar,
                                           bars,
                                           1 - percentage,
-                                          FONT.render(str(round(self.player_pokemons[active_pokemon_index].get_health(), 2)) + "/" + str(self.player_pokemons[active_pokemon_index].get_maxHealth()), True, WHITE, None))
+                                          FONT.render(str(round(self.player_pokemons[active_pokemon_index].get_health(), 2)) + "/" + str(round(self.player_pokemons[active_pokemon_index].get_maxHealth(), 2)), True, WHITE, None))
                         bar_changed[0][0] = False
                     # Adding energy bar
                     if bar_changed[0][1]:
@@ -145,7 +144,7 @@ class Battle_screen:
                         change_energy_bar(energy_bar,
                                           bars,
                                           1 - percentage,
-                                          FONT.render(str(round(self.player_pokemons[active_pokemon_index].get_energy(), 2)) + "/" + str(self.player_pokemons[active_pokemon_index].get_maxEnergy()), True, WHITE, None))
+                                          FONT.render(str(round(self.player_pokemons[active_pokemon_index].get_energy(), 2)) + "/" + str(round(self.player_pokemons[active_pokemon_index].get_maxEnergy(), 2)), True, WHITE, None))
                         bar_changed[0][1] = False
                     self.pokemons_surface.blit(health_bar,
                                                (self.positions_on_screen[0][0] + self.player_pokemons[active_pokemon_index].get_pokemon_frames().get_size()[0] /2 - 160,
@@ -418,7 +417,7 @@ class Battle_screen:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
-                    sys.quit()
+                    sys.exit()
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
                         # reset_pokemons(self.player_pokemons, self.enemies)

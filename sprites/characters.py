@@ -108,7 +108,7 @@ class Dialog:
         self.player = player
         self.group = group
         self.font = font
-        self.idx = 0
+        self.idx = -1
         self.dialog = Popup(self.npc, self.group, self.font, self.idx)
         self.start_time = pg.time.get_ticks()
         self.delay_duration = 300
@@ -116,22 +116,14 @@ class Dialog:
         self.end = False
 
     def change_dialog(self):
-        current_time = pg.time.get_ticks()
-        
-        if self.delay_active and (current_time - self.start_time) < self.delay_duration:
-            return
-        elif self.delay_active:
-            self.delay_active = False
-    
-        if pg.key.get_just_pressed()[pg.K_f]:
+        self.dialog.kill()
+        self.idx += 1
+        if self.idx < len(self.npc.data['dialog'][self.npc.dialog_key]):
+            self.dialog = Popup(self.npc, self.group, self.font, self.idx)
+        else:
             self.dialog.kill()
-            self.idx += 1
-            if self.idx < len(self.npc.data['dialog']['default']):
-                self.dialog = Popup(self.npc, self.group, self.font, self.idx)
-            else:
-                self.dialog.kill()
-                self.player.stop = False
-                self.end = True
+            self.player.stop = False
+            self.end = True
 
 
     def update(self):
@@ -143,6 +135,6 @@ class Popup(pg.sprite.Sprite):
         #  
         self.image = font.render(npc.speak()[idx % len(npc.data['dialog'][npc.dialog_key])], True, 'white')
         self.order = 4
-        self.rect = self.image.get_frect(midbottom = npc.rect.midtop)
+        self.rect = self.image.get_rect(midbottom = npc.rect.midtop)
 
     
