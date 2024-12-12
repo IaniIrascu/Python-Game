@@ -136,5 +136,3 @@ class Popup(pg.sprite.Sprite):
         self.image = font.render(npc.speak()[idx % len(npc.data['dialog'][npc.dialog_key])], True, 'white')
         self.order = 4
         self.rect = self.image.get_rect(midbottom = npc.rect.midtop)
-
-    
