@@ -16,6 +16,7 @@ from inventory.inventory import *
 from sprites.characters import Dialog
 from exit_menu.exit_menu import *
 from utils.constants import *
+from sprites.assets.npc_data import NPC_DATA
 
 
 def search(list, element_name):
@@ -97,10 +98,6 @@ class Game:
         mario = os.path.join("utils", "sounds", "mario.mp3")
         pg.init()
         clock = pg.time.Clock()
-
-        # pg.mixer.init()
-        # pg.mixer.music.load(metin)
-        # pg.mixer.music.play(-1)
 
         menu = MainMenu(self.display_surface)
         battle_screen = Battle_screen(self.display_surface)
@@ -201,9 +198,11 @@ class Game:
                     s = SaveLoadSystem("save", "./save_files")
                     # Se sterg fisierele de salvare vechi
                     if s.check_for_file("inventory"):
-                        os.remove("./save_files/inventory.save")
+                        os.remove(os.path.join("save_files", "inventory.save"))
                     if s.check_for_file("player_position"):
-                        os.remove("./save_files/player_position.save")
+                        os.remove(os.path.join("save_files", "player_position.save"))
+                    if s.check_for_file("npcs"):
+                        os.remove(os.path.join("save_files", "npcs.save"))
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
                     self.fade()
@@ -221,7 +220,7 @@ class Game:
                                                  inventory_data[i]["level"]))
                             inventory[i].set_experience(inventory_data[i]["experience"])
                             self.player.get_inventory().set_noOfPokemons(self.player.get_inventory().get_noOfPokemons() + 1)
-                        os.remove("./save_files/inventory.save")
+                        os.remove(os.path.join("save_files", "inventory.save"))
                         self.player.get_inventory().update_inventory(inventory)
                     else:
                         # Daca nu exista, se predefineste un pokemon de inceput
@@ -230,7 +229,12 @@ class Game:
                         self.player.get_inventory().set_noOfPokemons(1)
                     if s.check_for_file("player_position"):
                         self.player.rect.center = s.load_data("player_position")
-                        os.remove("./save_files/player_position.save")
+                        os.remove(os.path.join("save_files", "player_position.save"))
+                    if s.check_for_file("npcs"):
+                        self.npc_data = s.load_data("npcs")
+                        os.remove(os.path.join("save_files", "npcs.save"))
+                    else:
+                        self.npc_data = NPC_DATA
                     game_scenes_active["main_menu"] = False
                     game_scenes_active["map"] = True
                     self.fade()
@@ -358,6 +362,7 @@ class Game:
 
                         s.save_data(saved_inventory_data, "inventory")
                         s.save_data(self.player.rect.center, "player_position")
+                        s.save_data(npc_data, "npcs")
                     elif exit_res == "Menu":
                         mainMenuMusic.stop()
                         mainMenuMusic.play(pg.mixer.Sound(metin), -1)
@@ -373,6 +378,7 @@ class Game:
                             saved_inventory_data.append(saved_data)
                         s.save_data(saved_inventory_data, "inventory")
                         s.save_data(self.player.rect.center, "player_position")
+                        s.save_data(npc_data, "npcs")
                         self.fade()
                         pg.quit()
                         sys.exit()
